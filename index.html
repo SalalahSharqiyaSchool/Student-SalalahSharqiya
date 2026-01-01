@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>بوابة صلالة الشرقية للتميز</title>
+    <title>بوابة مدرسة صلالة الشرقية للتميز</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -29,7 +29,6 @@
             display: flex; flex-direction: column; min-height: 100vh;
         }
 
-        /* --- Header --- */
         header {
             padding: 20px 5%;
             display: flex; justify-content: space-between; align-items: center;
@@ -42,7 +41,6 @@
 
         .container { max-width: 900px; margin: 40px auto; padding: 20px; flex: 1; }
 
-        /* --- Search Card --- */
         .gateway-box {
             background: var(--glass);
             padding: 60px 30px; border-radius: 40px; text-align: center;
@@ -55,9 +53,7 @@
             color: white; font-size: 1.3rem; text-align: center; margin: 25px 0; outline: none;
             transition: 0.3s;
         }
-        .main-input:focus { border-color: var(--gold-primary); box-shadow: 0 0 20px rgba(197,160,89,0.2); }
 
-        /* --- Student Identity Card (Visual Focus) --- */
         .student-id-card {
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
             border-radius: 30px; padding: 35px; border: 1px solid var(--border);
@@ -65,26 +61,12 @@
             display: flex; align-items: center; gap: 30px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
-        .student-id-card::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(197,160,89,0.1) 0%, transparent 70%);
-            pointer-events: none;
-        }
         .avatar-box {
             width: 100px; height: 100px; border-radius: 20px;
             background: var(--gold-primary); display: flex; align-items: center;
             justify-content: center; font-size: 3rem; color: var(--deep-green);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        .id-content h2 { margin: 0; font-size: 1.8rem; color: var(--gold-soft); }
-        .id-content p { margin: 5px 0; opacity: 0.8; font-size: 1rem; }
-        .rank-badge {
-            position: absolute; top: 20px; left: 20px;
-            background: var(--gold-primary); color: var(--deep-green);
-            padding: 8px 15px; border-radius: 12px; font-weight: 800;
         }
 
-        /* --- Results Table --- */
         .results-wrapper {
             background: var(--glass); border-radius: 25px; overflow: hidden;
             border: 1px solid var(--border);
@@ -94,37 +76,33 @@
         td { padding: 18px; border-bottom: 1px solid var(--border); font-size: 1.1rem; }
         .grade-val { font-weight: 800; color: var(--gold-primary); font-size: 1.2rem; }
 
-        /* --- Buttons --- */
         .btn-gold {
             background: linear-gradient(135deg, #c5a059, #8e6d2e); color: #061f1c;
             padding: 16px 45px; border-radius: 12px; border: none; font-weight: 800;
             cursor: pointer; transition: 0.3s; font-size: 1.1rem;
         }
-        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(197,160,89,0.3); }
+
+        /* --- نافذة الدردشة المطورة --- */
+        .ai-fab { position: fixed; bottom: 30px; left: 30px; width: 65px; height: 65px; background: var(--gold-primary); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 1.8rem; color: var(--deep-green); cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 1000; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+        
+        .ai-chat-window { position: fixed; bottom: 110px; left: 30px; width: 350px; height: 500px; background: #0b2e2a; border: 1px solid var(--gold-primary); border-radius: 25px; display: none; flex-direction: column; overflow: hidden; z-index: 1000; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .ai-chat-header { background: var(--gold-primary); color: var(--deep-green); padding: 15px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
+        .ai-chat-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+        
+        .msg { padding: 12px 16px; border-radius: 18px; max-width: 85%; line-height: 1.5; font-size: 0.95rem; }
+        .bot-msg { background: rgba(255,255,255,0.1); color: var(--text); border-right: 4px solid var(--gold-primary); align-self: flex-start; }
+        .user-msg { background: var(--gold-primary); color: var(--deep-green); align-self: flex-end; font-weight: 700; }
+
+        .chat-input-area { padding: 15px; background: rgba(0,0,0,0.3); display: flex; gap: 10px; border-top: 1px solid var(--border); }
+        .chat-input-area input { flex: 1; background: transparent; border: 1px solid var(--border); border-radius: 10px; color: white; padding: 10px; outline: none; }
+        .chat-input-area button { background: var(--gold-primary); border: none; padding: 10px 15px; border-radius: 10px; cursor: pointer; color: var(--deep-green); }
 
         .view { display: none; }
-        .view.active { display: block; animation: zoomIn 0.5s ease-out; }
-        @keyframes zoomIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+        .view.active { display: block; }
 
-        /* --- إضافات جديدة: تصميم الروبوت وزر الأوائل --- */
-        .ai-fab { position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px; background: var(--gold-primary); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--deep-green); cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 1000; }
-        .ai-chat-window { position: fixed; bottom: 100px; left: 30px; width: 320px; background: var(--deep-green); border: 1px solid var(--gold-primary); border-radius: 20px; display: none; flex-direction: column; overflow: hidden; z-index: 1000; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-        .ai-chat-header { background: var(--gold-primary); color: var(--deep-green); padding: 15px; font-weight: 800; display: flex; justify-content: space-between; }
-        .ai-chat-body { height: 300px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; }
-        .msg { padding: 10px; border-radius: 10px; max-width: 80%; }
-        .bot-msg { background: var(--glass); border-right: 3px solid var(--gold-primary); }
-        
         .modal-tops { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: var(--deep-green); border: 2px solid var(--gold-primary); padding: 30px; border-radius: 30px; width: 90%; max-width: 450px; text-align: center; }
-        .tops-grid { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
-        .top-card { background: var(--glass); border: 1px solid var(--border); padding: 15px; border-radius: 15px; flex: 1; }
-
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white !important; color: black !important; }
-            .student-id-card { border: 2px solid #c5a059 !important; background: white !important; color: black !important; }
-            .id-content h2, .rank-badge { color: #8e6d2e !important; }
-        }
     </style>
 </head>
 <body>
@@ -135,17 +113,13 @@
         <h1>بوابة مدرسة صلالة الشرقية للنتائج</h1>
     </div>
     <button id="btnTops" class="btn-gold" style="padding: 8px 20px; font-size: 0.9rem; display: none;" onclick="showTops()">لوحة الأوائل 🏆</button>
-    <div style="color: var(--gold-soft); font-size: 1.2rem;"><i class="fa-solid fa-shield-halved"></i> 2026</div>
 </header>
 
 <div class="container">
-    
     <section id="searchView" class="view active">
         <div class="gateway-box">
             <i class="fa-solid fa-id-card" style="font-size: 4rem; color: var(--gold-primary); margin-bottom: 20px;"></i>
-            <h2 style="font-size: 2rem;">نظام استخراج السجل الرقمي</h2>
-            <p style="opacity: 0.7;">أدخل الرقم المدني المكون من 8 أرقام للمتابعة</p>
-            
+            <h2>نظام استخراج السجل الرقمي</h2>
             <input type="text" id="civilInput" class="main-input" placeholder="00000000">
             <br>
             <button class="btn-gold" onclick="processSearch()">عرض الملف الأكاديمي</button>
@@ -153,150 +127,173 @@
     </section>
 
     <section id="resultView" class="view">
-        
-        <div class="student-id-card" id="studentIdCard">
-            <div class="rank-badge" id="studentRank">المركز: -</div>
+        <div class="student-id-card">
+            <div class="rank-badge" id="studentRank"></div>
             <div class="avatar-box"><i class="fa-solid fa-user-graduate"></i></div>
             <div class="id-content">
-                <h2 id="studentName">اسم الطالب الثلاثي</h2>
-                <p id="studentClass">الصف الدراسي / الشعبة</p>
-                <p id="studentID" style="font-family: monospace; letter-spacing: 2px;">ID: 00000000</p>
+                <h2 id="studentName"></h2>
+                <p id="studentClass"></p>
+                <p id="studentID"></p>
             </div>
             <div style="margin-right: auto; text-align: center;">
                 <div style="font-size: 0.8rem; opacity: 0.6;">المعدل العام</div>
-                <div id="studentAvg" style="font-size: 2.2rem; font-weight: 900; color: var(--gold-primary);">0%</div>
+                <div id="studentAvg" style="font-size: 2.2rem; font-weight: 900; color: var(--gold-primary);"></div>
             </div>
         </div>
 
         <div class="results-wrapper">
             <table>
-                <thead>
-                    <tr>
-                        <th>المادة الدراسية</th>
-                        <th style="text-align: center;">الدرجة المستحقة</th>
-                        <th style="text-align: center;">التقدير</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>المادة الدراسية</th><th style="text-align:center;">الدرجة</th><th style="text-align:center;">التقدير</th></tr></thead>
                 <tbody id="resTableBody"></tbody>
             </table>
         </div>
-
-        <div style="text-align: center; margin-top: 40px;" class="no-print">
-            <button class="btn-gold" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة الشهادة</button>
-            <button style="background:transparent; color:white; border:none; cursor:pointer; margin-right:20px; text-decoration:underline;" onclick="location.reload()">بحث جديد</button>
+        <div style="text-align:center; margin-top:30px;" class="no-print">
+            <button class="btn-gold" onclick="window.print()">طباعة الشهادة</button>
+            <button style="background:transparent; color:white; border:none; text-decoration:underline; cursor:pointer;" onclick="location.reload()">بحث جديد</button>
         </div>
     </section>
 </div>
 
 <div class="ai-fab no-print" id="aiFab" onclick="toggleChat()"><i class="fa-solid fa-robot"></i></div>
 <div class="ai-chat-window no-print" id="aiChat">
-    <div class="ai-chat-header"><span>المحلل الذكي</span> <span onclick="toggleChat()" style="cursor:pointer">×</span></div>
+    <div class="ai-chat-header"><span>المحلل الأكاديمي الذكي</span> <span onclick="toggleChat()" style="cursor:pointer">×</span></div>
     <div class="ai-chat-body" id="chatBody"></div>
+    <div class="chat-input-area">
+        <input type="text" id="userInput" placeholder="اسأل المحلل عن مستواك..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <button onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
 </div>
 
 <div class="modal-tops no-print" id="topsModal">
     <div class="modal-content">
-        <h2 style="color: var(--gold-primary);">لوحة شرف الأوائل الثلاثة</h2>
-        <div class="tops-grid" id="topsGrid"></div>
-        <button class="btn-gold" style="margin-top: 25px;" onclick="document.getElementById('topsModal').style.display='none'">إغلاق</button>
+        <h2 style="color:var(--gold-primary)">أوائل الشعبة</h2>
+        <div id="topsGrid" style="display:flex; justify-content:space-around; margin:20px 0;"></div>
+        <button class="btn-gold" onclick="document.getElementById('topsModal').style.display='none'">إغلاق</button>
     </div>
 </div>
 
 <script>
-    let globalMates = []; // متغير جديد لحفظ الزملاء
+    let currentStudent = null;
+    let globalMates = [];
 
     async function processSearch() {
         const civil = document.getElementById('civilInput').value.trim();
-        if(!civil) return;
-
         const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
-        let student = null, mates = [];
+        let found = false;
 
         for(let f of files) {
             try {
-                const res = await fetch(f + "?cache=" + Math.random());
+                const res = await fetch(f + "?v=" + Math.random());
                 const data = await res.json();
-                student = data.find(s => s["رقم_مدني"].toString() === civil);
-                if(student) {
-                    mates = data.filter(m => m["الصف"] === student["الصف"] && m["الشعبة"] === student["الشعبة"]);
-                    globalMates = mates; // حفظ البيانات للأوائل
-                    break;
+                currentStudent = data.find(s => s["رقم_مدني"].toString() === civil);
+                if(currentStudent) {
+                    globalMates = data.filter(m => m["الصف"] === currentStudent["الصف"] && m["الشعبة"] === currentStudent["الشعبة"]);
+                    found = true; break;
                 }
-            } catch(e) { console.error("Error loading file"); }
+            } catch(e) {}
         }
 
-        if(student) {
-            displayUI(student, mates);
-            // إظهار زر الروبوت وزر الأوائل
+        if(found) {
+            displayUI();
             document.getElementById('aiFab').style.display = 'flex';
             document.getElementById('btnTops').style.display = 'block';
-        } else {
-            alert("الرقم المدني غير موجود في النظام.");
-        }
+            runInitialAnalysis(); // تشغيل التحليل التلقائي
+        } else { alert("الرقم المدني غير مسجل."); }
     }
 
-    function displayUI(student, mates) {
-        const subjects = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
-        const calcTotal = (s) => subjects.reduce((a, b) => a + parseFloat(s[b] || 0), 0);
+    function displayUI() {
+        const subjects = Object.keys(currentStudent).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        const calcSum = (s) => subjects.reduce((a, b) => a + parseFloat(s[b] || 0), 0);
         
-        const sorted = mates.map(m => ({
-            id: m["رقم_مدني"], total: calcTotal(m)
-        })).sort((a,b) => b.total - a.total);
+        const sorted = globalMates.map(m => ({id: m["رقم_مدني"], t: calcSum(m)})).sort((a,b) => b.t - a.t);
+        const rank = sorted.findIndex(x => x.id === currentStudent["رقم_مدني"]) + 1;
+        const avg = (calcSum(currentStudent) / subjects.length).toFixed(1);
 
-        const rank = sorted.findIndex(x => x.id.toString() === student["رقم_مدني"].toString()) + 1;
-        const totalScore = calcTotal(student);
-        const avg = (totalScore / subjects.length).toFixed(1);
-
-        document.getElementById('studentName').innerText = student["الاسم"];
-        document.getElementById('studentClass').innerText = `الصف: ${student["الصف"]} / الشعبة: ${student["الشعبة"]}`;
-        document.getElementById('studentID').innerText = `ID: ${student["رقم_مدني"]}`;
+        document.getElementById('studentName').innerText = currentStudent["الاسم"];
+        document.getElementById('studentClass').innerText = `الصف: ${currentStudent["الصف"]} / الشعبة: ${currentStudent["الشعبة"]}`;
+        document.getElementById('studentID').innerText = `ID: ${currentStudent["رقم_مدني"]}`;
         document.getElementById('studentRank').innerText = `المركز: ${rank}`;
         document.getElementById('studentAvg').innerText = avg + "%";
 
         let rows = '';
         subjects.forEach(sub => {
-            const v = parseFloat(student[sub]);
-            rows += `
-                <tr>
-                    <td style="font-weight:700;">${sub}</td>
-                    <td style="text-align:center;" class="grade-val">${v}</td>
-                    <td style="text-align:center;">${v >= 90 ? 'ممتاز' : v >= 80 ? 'جيد جداً' : v >= 50 ? 'مقبول' : 'ضعيف'}</td>
-                </tr>`;
+            const v = parseFloat(currentStudent[sub]);
+            rows += `<tr><td>${sub}</td><td style="text-align:center;" class="grade-val">${v}</td><td style="text-align:center;">${v>=90?'ممتاز':v>=80?'جيد جداً':'مقبول'}</td></tr>`;
         });
         document.getElementById('resTableBody').innerHTML = rows;
-
         document.getElementById('searchView').classList.remove('active');
         document.getElementById('resultView').classList.add('active');
-
-        // تجهيز رسالة الروبوت الأولى
-        const firstName = student["الاسم"].split(' ')[0];
-        document.getElementById('chatBody').innerHTML = `<div class="msg bot-msg">أهلاً ${firstName}! لقد قمت بتحليل نتائجك، معدلك هو ${avg}% وأنت في المركز ${rank}. استمر في التميز!</div>`;
     }
 
-    // --- دوال الإضافات الجديدة ---
+    // --- نظام المحلل الذكي والدردشة ---
+    function runInitialAnalysis() {
+        const subjects = Object.keys(currentStudent).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        const chat = document.getElementById('chatBody');
+        
+        let strength = [], weak = [];
+        subjects.forEach(s => {
+            if(parseFloat(currentStudent[s]) >= 90) strength.push(s);
+            else if(parseFloat(currentStudent[s]) < 70) weak.push(s);
+        });
+
+        let analysisHTML = `مرحباً ${currentStudent["الاسم"].split(' ')[0]}! أنا محللك الذكي، إليك تقريرك الدراسي:<br><br>`;
+        analysisHTML += `✅ <b>نقاط القوة:</b> أنت مبدع في ${strength.length > 0 ? strength.join(' و ') : 'كل المواد مستواها متوازن'}.<br>`;
+        if(weak.length > 0) {
+            analysisHTML += `⚠️ <b>نصيحة:</b> مادة (${weak.join(' و ')}) تحتاج منك تركيزاً أكثر في الفصل القادم لرفع معدلك.`;
+        } else {
+            analysisHTML += `⭐ <b>نصيحة:</b> حافظ على هذا المستوى الرائع، فأنت تسير في طريق الأوائل!`;
+        }
+
+        addChatMessage(analysisHTML, 'bot');
+    }
+
+    function addChatMessage(text, sender) {
+        const chat = document.getElementById('chatBody');
+        const div = document.createElement('div');
+        div.className = `msg ${sender}-msg`;
+        div.innerHTML = text;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('userInput');
+        if(!input.value.trim()) return;
+
+        addChatMessage(input.value, 'user');
+        const q = input.value;
+        input.value = '';
+
+        setTimeout(() => {
+            let response = "سؤال ممتاز! بناءً على بياناتك، أنصحك بالاستمرار في تنظيم وقتك والتركيز على الواجبات اليومية.";
+            if(q.includes("درجتي") || q.includes("معدلي")) response = `معدلك الحالي هو ${document.getElementById('studentAvg').innerText}.`;
+            if(q.includes("مركز") || q.includes("ترتيب")) response = `أنت الآن في ${document.getElementById('studentRank').innerText}.`;
+            
+            addChatMessage(response, 'bot');
+        }, 800);
+    }
+
     function toggleChat() {
-        const chat = document.getElementById('aiChat');
-        chat.style.display = (chat.style.display === 'flex') ? 'none' : 'flex';
+        const win = document.getElementById('aiChat');
+        win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
     }
 
     function showTops() {
-        if(globalMates.length === 0) return;
-        const subjects = Object.keys(globalMates[0]).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
-        const calcTotal = (s) => subjects.reduce((a, b) => a + parseFloat(s[b] || 0), 0);
-        
+        const subjects = Object.keys(currentStudent).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
         const sorted = globalMates.map(m => ({
-            name: m["الاسم"].split(' ')[0], total: calcTotal(m)
-        })).sort((a,b) => b.total - a.total).slice(0, 3);
+            name: m["الاسم"].split(' ')[0], 
+            t: subjects.reduce((a,b)=>a+parseFloat(m[b]||0),0)
+        })).sort((a,b)=>b.t-a.t).slice(0,3);
 
-        const medals = ['🥇', '🥈', '🥉'];
-        let html = '';
-        sorted.forEach((s, i) => {
-            html += `<div class="top-card"><div>${medals[i]}</div><div style="font-size:0.8rem; margin:5px 0;">${s.name}</div><div style="color:var(--gold-primary); font-weight:bold;">${s.total.toFixed(1)}</div></div>`;
-        });
-        document.getElementById('topsGrid').innerHTML = html;
+        document.getElementById('topsGrid').innerHTML = sorted.map((s,i)=>`
+            <div style="text-align:center; background:var(--glass); padding:10px; border-radius:15px; border:1px solid var(--gold-primary)">
+                <div style="font-size:1.5rem">${['🥇','🥈','🥉'][i]}</div>
+                <div style="font-size:0.8rem">${s.name}</div>
+                <div style="color:var(--gold-primary); font-weight:bold">${s.t.toFixed(1)}</div>
+            </div>
+        `).join('');
         document.getElementById('topsModal').style.display = 'flex';
     }
 </script>
-
 </body>
 </html>
