@@ -2,202 +2,320 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>بوابة صلالة الشرقية | المحلل الذكي</title>
+    <title>منصة صلالة الشرقية الرقمية | الهوية الوطنية</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
-        :root { --main: #062a24; --gold: #c5a059; --glass: rgba(255, 255, 255, 0.95); }
+        :root {
+            --oman-green: #0b4d42; /* الأخضر العماني العميق */
+            --oman-gold: #b38e44;  /* الذهبي الملكي */
+            --sand-bg: #fdfaf5;    /* خلفية رملية فاتحة جداً */
+            --text-dark: #2d3436;
+            --white: #ffffff;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Almarai', sans-serif; }
-        body { background: #f4f7f6; color: #1a202c; }
 
-        .official-header {
-            background: var(--main); color: white; padding: 12px 5%; 
-            display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; 
-            border-bottom: 4px solid var(--gold);
+        body { 
+            background-color: var(--sand-bg); 
+            color: var(--text-dark);
+            background-image: url('https://www.transparenttextures.com/patterns/islamic-art.png'); /* زخرفة خفيفة */
+            background-attachment: fixed;
         }
-        .h-logo img { height: 55px; }
 
-        .container { width: 92%; max-width: 850px; margin: 20px auto; }
-
-        /* واجهة البحث */
-        #searchCard {
-            max-width: 400px; margin: 100px auto; text-align: center;
-            background: white; padding: 40px; border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        /* الهيدر بتصميم ملكي */
+        .main-header {
+            background: linear-gradient(135deg, var(--oman-green) 0%, #052c26 100%);
+            color: var(--white);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 5px solid var(--oman-gold);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        input { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #eee; text-align: center; font-size: 1.2rem; outline: none; margin-bottom: 20px; }
-        .btn-entry { width: 100%; padding: 15px; background: var(--main); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; }
 
-        /* منطقة النتائج (مخفية في البداية) */
-        #resultArea { display: none; animation: slideUp 0.8s ease; }
-        .student-card {
-            background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-right: 6px solid var(--gold); box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+        .header-title h1 { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; }
+        .header-title p { font-size: 0.75rem; color: var(--oman-gold); margin-top: 5px; }
+        .school-logo img { height: 75px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3)); }
+
+        .container { width: 90%; max-width: 900px; margin: 30px auto; }
+
+        /* واجهة البحث العصرية */
+        .search-section {
+            background: var(--white);
+            padding: 50px 30px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border: 1px solid rgba(179, 142, 68, 0.2);
         }
-        .table-box { border: 2px solid var(--gold); border-radius: 15px; overflow: hidden; background: white; }
+
+        .search-section i { color: var(--oman-gold); font-size: 3rem; margin-bottom: 20px; }
+
+        input {
+            width: 100%; max-width: 400px;
+            padding: 18px;
+            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+            text-align: center;
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            transition: 0.3s;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--oman-gold); box-shadow: 0 0 10px rgba(179, 142, 68, 0.2); }
+
+        .btn-primary {
+            background: var(--oman-green);
+            color: white;
+            padding: 16px 50px;
+            border: none;
+            border-radius: 15px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 8px 20px rgba(11, 77, 66, 0.3);
+        }
+
+        .btn-primary:hover { background: var(--oman-gold); transform: translateY(-3px); }
+
+        /* بطاقة الطالب الراقية */
+        #resultView { display: none; animation: fadeIn 1s ease; }
+
+        .student-profile {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-right: 8px solid var(--oman-gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        }
+
+        .profile-info h2 { color: var(--oman-green); font-size: 1.5rem; margin-bottom: 8px; }
+        .avg-badge {
+            background: linear-gradient(45deg, var(--oman-gold), #d4af37);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        /* جدول النتائج بتنسيق فخم */
+        .results-card {
+            background: var(--white);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            border: 1px solid #eee;
+        }
+
         table { width: 100%; border-collapse: collapse; }
-        th { background: #f8f9fa; padding: 15px; text-align: right; font-size: 0.8rem; color: var(--main); }
-        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-weight: 700; }
+        th { background: #f8f9fa; padding: 20px; text-align: right; color: var(--oman-green); font-weight: 800; border-bottom: 2px solid var(--oman-gold); }
+        td { padding: 18px 20px; border-bottom: 1px solid #f2f2f2; font-weight: 700; }
 
-        /* --- الروبوت الصغير جداً --- */
-        #aiTrigger {
-            position: fixed; bottom: 20px; left: 20px; z-index: 9999;
+        .score-box {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 10px;
+            font-weight: 800;
+            background: #e9f5f2;
+            color: var(--oman-green);
+        }
+
+        /* الروبوت الصغير المتطور */
+        #botTrigger {
+            position: fixed; bottom: 30px; left: 30px; z-index: 9999;
             display: none; flex-direction: column; align-items: center;
         }
-        .robot-mini {
-            width: 55px; height: 55px; background: var(--main); border: 2px solid var(--gold);
-            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2); animation: float 3s infinite ease-in-out;
-        }
-        .robot-mini img { width: 80%; height: 80%; object-fit: contain; }
-        
-        .hint-bubble {
-            background: var(--main); color: white; font-size: 0.7rem; padding: 5px 10px;
-            border-radius: 10px; margin-bottom: 8px; font-weight: bold;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1); position: relative;
+
+        .bot-icon {
+            width: 65px; height: 65px;
+            background: var(--oman-green);
+            border: 3px solid var(--oman-gold);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: float 3s infinite ease-in-out;
         }
 
-        /* نافذة الدردشة */
-        .chat-box {
-            position: fixed; bottom: 85px; left: 20px; width: 300px; height: 400px;
-            background: var(--glass); backdrop-filter: blur(10px); border-radius: 20px;
-            border: 1px solid var(--gold); box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        .bot-icon img { width: 75%; height: 75%; }
+
+        /* نافذة المحادثة العصرية */
+        .chat-window {
+            position: fixed; bottom: 110px; left: 30px;
+            width: 320px; height: 450px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 1px solid var(--oman-gold);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
             display: none; flex-direction: column; z-index: 10000;
         }
-        .chat-h { background: var(--main); color: white; padding: 12px; font-size: 0.8rem; font-weight: bold; border-radius: 19px 19px 0 0; }
-        .chat-b { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.85rem; }
-        .chat-f { padding: 10px; display: flex; gap: 5px; background: white; border-radius: 0 0 19px 19px; }
-        .chat-f input { margin: 0; padding: 8px; font-size: 0.8rem; border-radius: 10px; }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @media print { .no-print, #aiTrigger, .chat-box { display: none !important; } }
+        .chat-h { background: var(--oman-green); color: white; padding: 15px; border-radius: 24px 24px 0 0; font-weight: 800; }
+        .chat-b { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.9rem; line-height: 1.6; }
+        .ai-msg { background: #f1f2f6; padding: 12px; border-radius: 15px 15px 15px 0; margin-bottom: 15px; border-right: 4px solid var(--oman-gold); }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media print { .no-print, #botTrigger, .chat-window { display: none !important; } }
     </style>
 </head>
 <body>
 
-<header class="official-header">
-    <div class="h-info" style="text-align: right; font-size: 0.7rem;"><b>سلطنة عُمان</b>وزارة التربية والتعليم</div>
-    <div class="h-logo"><img src="logo.png" alt="Logo"></div>
-    <div class="h-info" style="text-align: left; font-size: 0.7rem;"><b>مدرسة صلالة الشرقية</b>المحلل الذكي</div>
+<header class="main-header">
+    <div class="header-title">
+        <h1>سلطنة عُمان</h1>
+        <p>وزارة التربية والتعليم</p>
+    </div>
+    <div class="school-logo">
+        <img src="logo.png" alt="مدرسة صلالة الشرقية">
+    </div>
+    <div class="header-title" style="text-align: left;">
+        <h1>مدرسة صلالة الشرقية</h1>
+        <p>بوابة التميز الرقمية</p>
+    </div>
 </header>
 
 <div class="container">
-    <section id="searchCard" class="no-print">
-        <h2 style="margin-bottom:20px; color: var(--main);">نتائج الطلاب</h2>
-        <input type="text" id="civilIn" placeholder="أدخل الرقم المدني">
-        <button class="btn-entry" onclick="processSearch()">استعلام</button>
+    <section id="searchView" class="search-section no-print">
+        <i class="fa-solid fa-mosque"></i>
+        <h2 style="margin-bottom:10px; color: var(--oman-green);">نظام تحليل النتائج الذكي</h2>
+        <p style="margin-bottom:30px; color: #7f8c8d;">يرجى إدخال الرقم المدني للطالب للبدء</p>
+        <input type="text" id="civilID" placeholder="00000000">
+        <br>
+        <button class="btn-primary" onclick="handleSearch()">استعراض النتيجة</button>
     </section>
 
-    <div id="resultArea">
-        <div class="student-card">
-            <div>
-                <h2 id="resName" style="color:var(--main);"></h2>
-                <p id="resClass" style="color: #666; font-size: 0.9rem;"></p>
+    <div id="resultView">
+        <div class="student-profile">
+            <div class="profile-info">
+                <h2 id="stName">اسم الطالب الثلاثي</h2>
+                <p id="stClass" style="font-weight:bold; color: var(--oman-gold);"></p>
             </div>
-            <div style="text-align:center">
-                <div id="resAvg" style="font-size: 1.5rem; font-weight: 900; color: var(--gold);"></div>
-                <div style="font-size:0.6rem; font-weight:bold;">المعدل العام</div>
+            <div class="avg-badge">
+                <div style="font-size: 0.7rem; font-weight: bold;">المعدل التراكمي</div>
+                <div id="stAvg" style="font-size: 1.8rem; font-weight: 900;">0%</div>
             </div>
         </div>
-        <div class="table-box">
+
+        <div class="results-card">
             <table>
-                <thead><tr><th>المادة الدراسية</th><th style="text-align:center">الدرجة</th><th>الحالة</th></tr></thead>
-                <tbody id="resTable"></tbody>
+                <thead>
+                    <tr>
+                        <th>المادة الدراسية</th>
+                        <th style="text-align:center">الدرجة النهائية</th>
+                        <th>المستوى</th>
+                    </tr>
+                </thead>
+                <tbody id="stTable"></tbody>
             </table>
         </div>
-        <div style="text-align:center; margin-top:20px;">
-            <button onclick="window.print()" class="no-print" style="background:none; border:none; color:var(--main); font-weight:bold; cursor:pointer;">طباعة الشهادة</button>
+        
+        <div style="text-align:center; margin-top:30px;" class="no-print">
+            <button onclick="window.print()" style="background:none; border:2px solid var(--oman-green); color:var(--oman-green); padding:10px 30px; border-radius:10px; cursor:pointer; font-weight:bold;">حفظ كملف PDF</button>
         </div>
     </div>
 </div>
 
-<div id="aiTrigger" class="no-print">
-    <div class="hint-bubble" id="botHint">اضغط عليّ لإظهار نتيجتك</div>
-    <div class="robot-mini" onclick="activateRobot()">
-        <img src="https://pollinations.ai/p/cute%20small%20robot%20head,%20friendly%20eyes,%20hi-tech%20minimalist?width=100&height=100&nologo=true" alt="Bot">
+<div id="botTrigger" class="no-print">
+    <div style="background:var(--oman-green); color:white; font-size:0.6rem; padding:4px 10px; border-radius:10px; margin-bottom:5px;">المحلل الذكي</div>
+    <div class="bot-icon" onclick="openBot()">
+        <img src="https://pollinations.ai/p/friendly%20robot%20face%20with%20traditional%20omani%20elements,%20minimalist,%20white%20background?width=100&height=100&nologo=true" alt="Bot">
     </div>
 </div>
 
-<div class="chat-box no-print" id="chatWin">
-    <div class="chat-h">المحلل الذكي - صلالة الشرقية</div>
+<div class="chat-window no-print" id="chatWindow">
+    <div class="chat-h">مساعدك الأكاديمي</div>
     <div class="chat-b" id="chatLogs"></div>
-    <div class="chat-f">
-        <input type="text" id="userIn" placeholder="اسأل المحلل..." onkeypress="if(event.key==='Enter') userTalk()">
+    <div style="padding:10px; display:flex; border-top:1px solid #eee;">
+        <input type="text" id="chatInput" placeholder="اكتب سؤالك..." style="margin:0; font-size:0.8rem; padding:10px; border-radius:10px;" onkeypress="if(event.key==='Enter') sendMessage()">
     </div>
 </div>
 
 <script>
-    let currentStudent = null;
+    let studentData = null;
 
-    async function processSearch() {
-        const id = document.getElementById('civilIn').value.trim();
-        if(!id) return;
-        
+    async function handleSearch() {
+        const id = document.getElementById('civilID').value.trim();
         const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
+        
         for(let f of files) {
             try {
                 const r = await fetch(f);
                 const data = await r.json();
-                currentStudent = data.find(s => s["رقم_مدني"].toString() === id);
-                if(currentStudent) {
-                    // إخفاء البحث وإظهار الروبوت فقط
-                    document.getElementById('searchCard').style.display = 'none';
-                    document.getElementById('aiTrigger').style.display = 'flex';
+                studentData = data.find(s => s["رقم_مدني"].toString() === id);
+                if(studentData) {
+                    document.getElementById('searchView').style.display = 'none';
+                    document.getElementById('botTrigger').style.display = 'flex';
                     return;
                 }
             } catch(e) {}
         }
-        alert("الرقم المدني غير موجود.");
+        alert("عذراً، الرقم المدني غير مسجل في قاعدة البيانات.");
     }
 
-    function activateRobot() {
-        // إظهار النتائج الآن عند الضغط على الروبوت
-        const subs = Object.keys(currentStudent).filter(k => !["رقم_مدني", "الاسم", "الاسم", "الصف", "الشعبة"].includes(k));
-        const scores = subs.map(s => parseFloat(currentStudent[s]));
+    function openBot() {
+        const resView = document.getElementById('resultView');
+        resView.style.display = 'block';
+        
+        const subs = Object.keys(studentData).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        const scores = subs.map(s => parseFloat(studentData[s]));
         const avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
 
-        document.getElementById('resName').innerText = currentStudent["الاسم"];
-        document.getElementById('resClass').innerText = `الصف ${currentStudent["الصف"]} / الشعبة ${currentStudent["الشعبة"]}`;
-        document.getElementById('resAvg').innerText = avg + "%";
+        document.getElementById('stName').innerText = studentData["الاسم"];
+        document.getElementById('stClass').innerText = `الصف ${studentData["الصف"]} - الشعبة ${studentData["الشعبة"]}`;
+        document.getElementById('stAvg').innerText = avg + "%";
         
-        document.getElementById('resTable').innerHTML = subs.map(s => `
+        document.getElementById('stTable').innerHTML = subs.map(s => `
             <tr>
                 <td>${s}</td>
-                <td align="center" style="color:var(--main)">${currentStudent[s]}</td>
-                <td style="font-size:0.7rem; color:#888;">${currentStudent[s]>=90?'ممتاز':'جيد'}</td>
+                <td align="center"><span class="score-box">${studentData[s]}</span></td>
+                <td><span style="color:${studentData[s]>=90?'#27ae60':'#7f8c8d'}">${studentData[s]>=90?'امتياز':studentData[s]>=80?'جيد جداً':'جيد'}</span></td>
             </tr>`).join('');
 
-        document.getElementById('resultArea').style.display = 'block';
-        document.getElementById('chatWin').style.display = 'flex';
-        document.getElementById('botHint').innerText = "أنا هنا لمساعدتك";
-        
-        addLog(`مرحباً ${currentStudent["الاسم"].split(' ')[0]}! لقد قمت بسحب نتيجتك بنجاح. معدلك هو ${avg}%. هل تريدني أن أحلل لك مادة معينة؟`, 'ai');
+        document.getElementById('chatWindow').style.display = 'flex';
+        if(document.getElementById('chatLogs').innerHTML === "") {
+            analyzeStepByStep(subs);
+        }
     }
 
-    function addLog(txt, type) {
+    function analyzeStepByStep(subs) {
+        addMsg(`مرحباً بك يا ${studentData["الاسم"].split(' ')[0]}. قمت بتحليل نتيجتك، إليك التفاصيل مادة بمادة:`);
+        subs.forEach((s, i) => {
+            setTimeout(() => {
+                const score = studentData[s];
+                addMsg(`في ${s} درجتك هي ${score}. ${score >= 90 ? 'أحسنت، استمر!' : 'مستوى طيب وبإمكانك الأفضل.'}`);
+            }, (i + 1) * 1500);
+        });
+    }
+
+    function addMsg(txt) {
         const logs = document.getElementById('chatLogs');
         const d = document.createElement('div');
-        d.style.marginBottom = "10px";
-        d.style.padding = "10px";
-        d.style.borderRadius = "10px";
-        d.style.background = type === 'ai' ? "#f0f4f8" : "var(--gold)";
-        d.style.color = type === 'ai' ? "#333" : "white";
+        d.className = 'ai-msg';
         d.innerText = txt;
         logs.appendChild(d);
         logs.scrollTop = logs.scrollHeight;
     }
 
-    function userTalk() {
-        const i = document.getElementById('userIn');
-        if(!i.value) return;
-        addLog(i.value, 'user');
-        const q = i.value;
-        i.value = '';
-        setTimeout(() => addLog("تحليل ذكي: درجاتك في المواد العلمية ممتازة جداً، استمر على هذا النهج!", 'ai'), 1000);
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        if(!input.value) return;
+        const logs = document.getElementById('chatLogs');
+        logs.innerHTML += `<div style="text-align:left; margin-bottom:15px;"><span style="background:var(--oman-gold); color:white; padding:10px; border-radius:15px; font-size:0.8rem;">${input.value}</span></div>`;
+        input.value = '';
+        setTimeout(() => addMsg("شكراً لسؤالك. سيتم تحليل استفسارك وتقديم النصيحة التربوية المناسبة لك قريباً."), 1000);
     }
 </script>
 </body>
