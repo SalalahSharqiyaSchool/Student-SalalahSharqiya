@@ -2,210 +2,192 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>بوابة صلالة الشرقية الرقمية | 2026</title>
+    <title>بوابة صلالة الشرقية للتميز</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
         :root {
-            --emerald-deep: #004d40; /* أخضر زمردي عميق */
-            --emerald-light: #00796b;
-            --navy-dark: #102a43; /* أزرق بحري وقور */
-            --gold-muted: #af9164; /* ذهبي مطفي */
-            --off-white: #f8fafc;
-            --glass: rgba(255, 255, 255, 0.95);
-            --shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            --deep-emerald: #061f1c;
+            --mid-emerald: #0a3d34;
+            --gold-glow: #c5a059;
+            --text-light: #e0e6e6;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --border-line: rgba(255, 255, 255, 0.1);
+            --gold-gradient: linear-gradient(135deg, #c5a059 0%, #8e6d2e 100%);
         }
 
         body {
-            font-family: 'Noto Kufi Arabic', sans-serif;
+            font-family: 'Almarai', sans-serif;
             margin: 0;
-            background-color: var(--off-white);
-            color: var(--navy-dark);
-            background-image: linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%);
+            background: var(--deep-emerald);
+            /* خلفية بتدرج عميق ونمط هندسي راقي */
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(10, 61, 52, 0.6) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(197, 160, 89, 0.05) 0%, transparent 40%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30L30 60 0 30z' fill='%23ffffff' fill-opacity='0.02'/%3E%3C/svg%3E");
+            background-attachment: fixed;
+            color: var(--text-light);
             min-height: 100vh;
         }
 
-        /* --- Navbar الاحترافية --- */
-        nav {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            padding: 1rem 8%;
+        header {
+            padding: 20px 8%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid var(--emerald-deep);
-            box-shadow: var(--shadow);
-            position: sticky; top: 0; z-index: 1000;
-        }
-        .nav-logo { display: flex; align-items: center; gap: 15px; }
-        .nav-logo img { height: 65px; border-radius: 10px; }
-        .nav-title h1 { font-size: 1.3rem; margin: 0; color: var(--emerald-deep); font-weight: 900; }
-        .nav-title span { font-size: 0.8rem; color: var(--gold-muted); font-weight: 700; text-transform: uppercase; }
-
-        .container { max-width: 1200px; margin: 50px auto; padding: 0 25px; }
-        .view { display: none; }
-        .view.active { display: block; animation: slideIn 0.7s cubic-bezier(0.23, 1, 0.32, 1); }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: scale(0.98) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-line);
         }
 
-        /* --- واجهة البحث (Minimal & Bold) --- */
-        .search-hero {
-            background: white;
+        .logo-section { display: flex; align-items: center; gap: 15px; }
+        .logo-section img { height: 60px; filter: drop-shadow(0 0 10px rgba(197,160,89,0.3)); }
+        .logo-section h1 { font-size: 1.2rem; margin: 0; color: var(--gold-glow); font-weight: 800; }
+
+        .container { max-width: 1100px; margin: 50px auto; padding: 0 20px; }
+
+        /* --- واجهة البحث --- */
+        .gateway-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-line);
+            padding: 70px 30px;
             border-radius: 40px;
-            padding: 80px 40px;
             text-align: center;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(0, 77, 64, 0.05);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
-        .search-hero h2 { font-size: 2.2rem; margin-bottom: 15px; color: var(--navy-dark); }
-        .search-hero p { color: #64748b; margin-bottom: 40px; font-size: 1.1rem; }
 
-        .input-group {
-            position: relative; max-width: 550px; margin: 0 auto;
+        .search-input-group {
+            position: relative; max-width: 500px; margin: 40px auto;
         }
-        .input-group input {
+
+        .search-input-group input {
             width: 100%; padding: 22px 30px; border-radius: 20px;
-            border: 2px solid #e2e8f0; font-size: 1.2rem; outline: none;
-            transition: 0.3s; box-sizing: border-box;
-            background: #fdfdfd;
+            border: 1px solid var(--border-line); background: rgba(255,255,255,0.05);
+            color: white; font-size: 1.2rem; outline: none; transition: 0.3s;
+            text-align: center;
         }
-        .input-group input:focus { border-color: var(--emerald-light); box-shadow: 0 0 20px rgba(0, 121, 107, 0.1); }
-        
-        .btn-glow {
-            margin-top: 30px; background: var(--emerald-deep); color: white;
-            padding: 18px 60px; border: none; border-radius: 18px;
-            font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.4s;
-            box-shadow: 0 10px 25px rgba(0, 77, 64, 0.2);
-        }
-        .btn-glow:hover { background: var(--navy-dark); transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
 
-        /* --- لوحة الشرف (The Podium 2026) --- */
-        .podium-wrap { display: flex; justify-content: center; align-items: flex-end; gap: 20px; margin-bottom: 60px; padding-top: 40px; }
-        .podium-card {
-            background: white; border-radius: 25px; padding: 25px; text-align: center;
-            box-shadow: var(--shadow); border: 1px solid #f1f5f9; transition: 0.3s; width: 280px;
+        .search-input-group input:focus {
+            border-color: var(--gold-glow);
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.2);
         }
-        .podium-card:hover { transform: translateY(-5px); }
-        .podium-card.first { height: 320px; border: 2px solid var(--gold-muted); z-index: 2; }
-        .podium-card.second { height: 280px; }
-        .podium-card.third { height: 260px; }
-        
-        .medal { font-size: 3rem; margin-bottom: 15px; display: block; }
-        .podium-card h4 { margin: 10px 0; font-size: 1rem; color: var(--navy-dark); }
-        .podium-card .total-score { font-size: 1.8rem; font-weight: 900; color: var(--emerald-deep); }
 
-        /* --- تفاصيل الطالب (The Identity Card) --- */
-        .id-badge {
-            background: linear-gradient(45deg, var(--navy-dark), var(--emerald-deep));
-            color: white; border-radius: 30px; padding: 35px; margin-bottom: 30px;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px; position: relative; overflow: hidden;
+        .btn-gold {
+            background: var(--gold-gradient); color: var(--deep-emerald);
+            padding: 18px 60px; border-radius: 15px; border: none;
+            font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 1.1rem;
         }
-        .id-badge::before {
-            content: "\f19d"; font-family: "Font Awesome 6 Free"; font-weight: 900;
-            position: absolute; left: -20px; bottom: -20px; font-size: 10rem; opacity: 0.05;
-        }
-        .id-info label { font-size: 0.85rem; opacity: 0.7; display: block; margin-bottom: 5px; }
-        .id-info span { font-size: 1.3rem; font-weight: 700; }
 
-        /* --- جدول البيانات (Clean Table) --- */
-        .results-box { background: white; border-radius: 30px; overflow: hidden; box-shadow: var(--shadow); }
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(197,160,89,0.3); }
+
+        /* --- لوحة الشرف (The Podium) --- */
+        .podium {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 50px;
+        }
+
+        .podium-item {
+            background: var(--glass-bg); padding: 25px; border-radius: 25px;
+            text-align: center; border: 1px solid var(--border-line); transition: 0.4s;
+        }
+
+        .podium-item:hover { background: rgba(255,255,255,0.1); }
+        .first { border: 2px solid var(--gold-glow); transform: scale(1.05); }
+
+        .podium-rank { font-size: 2.5rem; margin-bottom: 10px; display: block; }
+
+        /* --- النتائج --- */
+        .results-table {
+            background: var(--glass-bg); border-radius: 30px; overflow: hidden;
+            border: 1px solid var(--border-line);
+        }
+
         table { width: 100%; border-collapse: collapse; }
-        th { background: #f8fafc; padding: 20px; text-align: right; color: #475569; font-weight: 700; border-bottom: 1px solid #eee; }
-        td { padding: 20px; border-bottom: 1px solid #f1f5f9; font-weight: 500; }
-        
-        .grade-pill {
-            padding: 8px 16px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;
-            display: inline-block; min-width: 80px; text-align: center;
+        th { background: rgba(255,255,255,0.05); padding: 25px; text-align: right; color: var(--gold-glow); }
+        td { padding: 20px; border-bottom: 1px solid var(--border-line); font-size: 1.1rem; }
+
+        .badge {
+            padding: 6px 15px; border-radius: 10px; font-weight: bold; font-size: 0.9rem;
+        }
+
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeInUp 0.8s ease; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 768px) {
-            .podium-wrap { flex-direction: column; align-items: center; }
-            .podium-card { width: 100%; height: auto !important; }
-            nav { padding: 1rem 5%; }
+            .podium { grid-template-columns: 1fr; }
+            header { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="nav-logo">
+<header>
+    <div class="logo-section">
         <img src="logo.png" alt="شعار المدرسة">
-        <div class="nav-title">
-            <h1>مدرسة صلالة الشرقية (5-10)</h1>
-            <span>نظام الذكاء التربوي المتكامل</span>
-        </div>
+        <h1>منصة التميز الرقمي</h1>
     </div>
-    <div style="font-size: 1.5rem; color: var(--emerald-deep); cursor: pointer;"><i class="fa-solid fa-bars-staggered"></i></div>
-</nav>
+    <div style="color: var(--gold-glow); font-weight: bold;"><i class="fa-solid fa-mosque"></i> صلالة الشرقية</div>
+</header>
 
 <div class="container">
     
-    <section id="searchSection" class="view active">
-        <div class="search-hero">
-            <i class="fa-solid fa-fingerprint" style="font-size: 4rem; color: var(--gold-muted); margin-bottom: 20px;"></i>
-            <h2>بوابة التميز الرقمية</h2>
-            <p>سجل دخولك بالرقم المدني للطالب لاستعراض النتائج والتحليلات الأكاديمية</p>
+    <section id="searchView" class="view-section active">
+        <div class="gateway-card">
+            <h2 style="font-size: 2.2rem; color: white;">بوابة النتائج الأكاديمية</h2>
+            <p style="color: #a0b0b0;">أدخل الرقم المدني للطالب للولوج إلى السجل الأكاديمي</p>
             
-            <div class="input-group">
-                <input type="text" id="civilInput" placeholder="أدخل الرقم المدني">
+            <div class="search-input-group">
+                <input type="text" id="civilInput" placeholder="00000000">
             </div>
             
-            <button class="btn-glow" onclick="executeSearch()">عرض السجل الأكاديمي</button>
+            <button class="btn-gold" onclick="startSearch()">استخراج السجل</button>
         </div>
     </section>
 
-    <section id="resultSection" class="view">
+    <section id="resultView" class="view-section">
         
-        <div class="podium-wrap" id="honorPodium">
+        <div class="podium" id="podiumArea"></div>
+
+        <div id="studentCard" style="background: var(--gold-gradient); color: var(--deep-emerald); padding: 30px; border-radius: 25px; margin-bottom: 30px;">
             </div>
 
-        <div class="id-badge" id="studentDetails">
-            </div>
-
-        <div class="results-box">
+        <div class="results-table">
             <table>
                 <thead>
                     <tr>
-                        <th>المادة الدراسية</th>
-                        <th style="text-align: center;">الدرجة النهائية</th>
-                        <th style="text-align: center;">المستوى الأكاديمي</th>
+                        <th>المادة</th>
+                        <th style="text-align: center;">الدرجة</th>
+                        <th style="text-align: center;">التقدير</th>
                     </tr>
                 </thead>
                 <tbody id="resultsBody"></tbody>
             </table>
         </div>
 
-        <div style="text-align: center; margin-top: 50px;">
-            <button class="btn-glow" style="background: var(--navy-dark);" onclick="location.reload()">استعلام جديد</button>
+        <div style="text-align: center; margin-top: 40px;">
+            <button class="btn-gold" style="background: transparent; color: var(--gold-glow); border: 1px solid var(--gold-glow);" onclick="location.reload()">استعلام جديد</button>
         </div>
     </section>
-
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script src="firebase-config.js"></script>
-
 <script>
-    async function executeSearch() {
+    async function startSearch() {
         const civil = document.getElementById('civilInput').value.trim();
-        if(!civil) return alert("يرجى إدخال الرقم المدني");
+        if(!civil) return;
 
-        document.querySelector('.btn-glow').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> جاري التحميل...';
-        
         const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
         let student = null, mates = [];
 
-        for (let f of files) {
+        for(let f of files) {
             try {
-                const res = await fetch(f + "?v=" + Date.now());
+                const res = await fetch(f);
                 const data = await res.json();
                 student = data.find(s => s["رقم_مدني"].toString() === civil);
                 if(student) {
@@ -216,76 +198,67 @@
         }
 
         if(student) {
-            buildUI(student, mates);
+            showResults(student, mates);
         } else {
-            alert("لم يتم العثور على بيانات بهذا الرقم المدني");
-            document.querySelector('.btn-glow').innerText = 'عرض السجل الأكاديمي';
+            alert("الرقم المدني غير موجود");
         }
     }
 
-    function buildUI(student, mates) {
-        const keys = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
-        const calcTotal = (s) => keys.reduce((a, b) => a + parseFloat(s[b] || 0), 0);
+    function showResults(student, mates) {
+        const subjects = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        const calcTotal = (s) => subjects.reduce((a, b) => a + parseFloat(s[b] || 0), 0);
         
-        const sorted = mates.map(m => ({
+        const sortedMates = mates.map(m => ({
             name: m["الاسم"], total: calcTotal(m), id: m["رقم_مدني"]
         })).sort((a,b) => b.total - a.total);
 
-        const rank = sorted.findIndex(s => s.id.toString() === student["رقم_مدني"].toString()) + 1;
+        const rank = sortedMates.findIndex(s => s.id.toString() === student["رقم_مدني"].toString()) + 1;
 
-        // 1. الأوائل
-        const top3 = sorted.slice(0, 3);
-        const medals = ['🥈', '🥇', '🥉'];
-        const classes = ['second', 'first', 'third'];
+        // بناء الأوائل
+        const top3 = sortedMates.slice(0, 3);
+        const icons = ['🥇', '🥈', '🥉'];
         let podHtml = '';
-        
-        [top3[1], top3[0], top3[2]].forEach((s, i) => {
-            if(!s) return;
-            const actualIdx = sorted.indexOf(s);
+        top3.forEach((s, i) => {
             podHtml += `
-                <div class="podium-card ${classes[i]}">
-                    <span class="medal">${medals[i]}</span>
-                    <h4>${s.name}</h4>
-                    <div class="total-score">${s.total}</div>
-                    <small style="color:#888">المركز ${actualIdx + 1}</small>
+                <div class="podium-item ${i === 0 ? 'first' : ''}">
+                    <span class="podium-rank">${icons[i]}</span>
+                    <h4 style="margin:5px 0;">${s.name}</h4>
+                    <div style="color:var(--gold-glow); font-weight:800;">${s.total} درجة</div>
                 </div>`;
         });
-        document.getElementById('honorPodium').innerHTML = podHtml;
+        document.getElementById('podiumArea').innerHTML = podHtml;
 
-        // 2. كرت الهوية
-        document.getElementById('studentDetails').innerHTML = `
-            <div class="id-info"><label>الاسم الكامل</label><span>${student["الاسم"]}</span></div>
-            <div class="id-info"><label>الصف / الشعبة</label><span>${student["الصف"]} / ${student["الشعبة"]}</span></div>
-            <div class="id-info"><label>الترتيب على الشعبة</label><span>${rank} من ${mates.length}</span></div>
-            <div class="id-info"><label>المعدل العام</label><span>${(calcTotal(student)/keys.length).toFixed(1)}%</span></div>
+        // كرت الطالب
+        document.getElementById('studentCard').innerHTML = `
+            <h2 style="margin:0;">${student["الاسم"]}</h2>
+            <div style="margin-top:10px; font-weight:bold; opacity:0.8;">
+                الصف: ${student["الصف"]} / ${student["الشعبة"]} | الترتيب: ${rank} من ${mates.length}
+            </div>
         `;
 
-        // 3. الجدول
-        let tableRows = '';
-        keys.forEach(k => {
-            const val = parseFloat(student[k]);
-            const st = getStatus(val);
-            tableRows += `
+        // الجدول
+        let tableHtml = '';
+        subjects.forEach(sub => {
+            const val = parseFloat(student[sub]);
+            const status = getGradeStatus(val);
+            tableHtml += `
                 <tr>
-                    <td style="font-weight:700;">${k}</td>
-                    <td style="text-align:center; font-size:1.2rem;">${val}</td>
-                    <td style="text-align:center;"><span class="grade-pill" style="background:${st.bg}; color:${st.color}">${st.label}</span></td>
+                    <td>${sub}</td>
+                    <td style="text-align:center; font-weight:800; font-size:1.3rem;">${val}</td>
+                    <td style="text-align:center;"><span class="badge" style="background:${status.bg}; color:${status.color}">${status.label}</span></td>
                 </tr>`;
         });
-        document.getElementById('resultsBody').innerHTML = tableRows;
+        document.getElementById('resultsBody').innerHTML = tableHtml;
 
-        document.getElementById('searchSection').classList.remove('active');
-        document.getElementById('resultSection').classList.add('active');
+        document.getElementById('searchView').classList.remove('active');
+        document.getElementById('resultView').classList.add('active');
     }
 
-    function getStatus(v) {
-        if(v >= 90) return { label: 'ممتاز', color: '#004d40', bg: '#e0f2f1' };
-        if(v >= 80) return { label: 'جيد جداً', color: '#0277bd', bg: '#e1f5fe' };
-        if(v >= 50) return { label: 'مقبول', color: '#ef6c00', bg: '#fff3e0' };
-        return { label: 'ضعيف', color: '#c62828', bg: '#ffebee' };
+    function getGradeStatus(v) {
+        if(v >= 90) return { label: 'ممتاز', color: '#061f1c', bg: '#c5a059' };
+        if(v >= 80) return { label: 'جيد جداً', color: '#e0e6e6', bg: 'rgba(255,255,255,0.1)' };
+        return { label: 'مقبول', color: '#ff8a80', bg: 'rgba(255,0,0,0.1)' };
     }
-
-    firebase.auth().onAuthStateChanged(user => { if(!user) window.location="index.html"; });
 </script>
 
 </body>
