@@ -2,144 +2,134 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>بوابة صلالة الشرقية | نظام المحلل المطور</title>
+    <title>بوابة صلالة الشرقية | المحلل الذكي التفاعلي</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         :root { --bg: #fdfdfd; --primary: #062a24; --accent: #c5a059; --white: #ffffff; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Almarai', sans-serif; }
-        body { background-color: var(--bg); color: #1a202c; }
+        body { background-color: var(--bg); color: #1a202c; overflow-x: hidden; }
 
-        /* الهيدر الرسمي */
+        /* الهيدر */
         .official-header {
             background: var(--primary); color: white; padding: 15px 5%; 
             display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; 
             border-bottom: 4px solid var(--accent);
         }
         .h-info { font-size: 0.75rem; line-height: 1.5; }
-        .h-info b { color: var(--accent); display: block; font-size: 0.85rem; }
-        .h-logo img { height: 65px; }
+        .h-logo img { height: 60px; }
 
         .container { width: 92%; max-width: 900px; margin: 20px auto; }
 
         /* بطاقة بيانات الطالب */
         .student-profile-card {
-            background: white; border: 1px solid #e2e8f0; border-right: 6px solid var(--accent);
+            background: white; border-right: 6px solid var(--accent);
             border-radius: 12px; padding: 20px; margin-bottom: 25px; 
             display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
-        .info-label { font-size: 0.7rem; color: #718096; font-weight: 700; text-transform: uppercase; }
-        .info-value { font-size: 1rem; color: var(--primary); font-weight: 800; margin-top: 2px; }
+        .info-label { font-size: 0.7rem; color: #718096; font-weight: 700; }
+        .info-value { font-size: 1rem; color: var(--primary); font-weight: 800; }
 
-        /* جدول المواد المطور بالإطار الذهبي */
+        /* الجدول بالإطار الذهبي */
         .results-wrapper {
-            border: 3px solid var(--accent); /* الإطار الذهبي */
-            border-radius: 15px; overflow: hidden; background: white;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 3px solid var(--accent); border-radius: 15px; overflow: hidden; 
+            background: white; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        th { background: #f8f9fa; text-align: right; padding: 15px; color: var(--primary); font-weight: 800; border-bottom: 2px solid var(--accent); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8f9fa; text-align: right; padding: 15px; color: var(--primary); border-bottom: 2px solid var(--accent); }
         td { padding: 14px 15px; border-bottom: 1px solid #edf2f7; font-weight: 700; }
         
-        /* تنسيق الدرجات الملونة */
-        .score-badge {
-            display: inline-block; padding: 5px 12px; border-radius: 8px;
-            font-size: 1rem; font-weight: 800; min-width: 45px; text-align: center;
-        }
-        .excellent { background: #e6fffa; color: #234e52; border: 1px solid #b2f5ea; }
-        .good { background: #fffaf0; color: #7b341e; border: 1px solid #fbd38d; }
+        .score-badge { display: inline-block; padding: 4px 10px; border-radius: 8px; font-weight: 800; }
+        .excellent { background: #e6fffa; color: #234e52; }
+        .good { background: #fffaf0; color: #7b341e; }
 
-        /* --- أيقونة المحلل الصغيرة والمطورة --- */
-        .analyst-icon-wrapper {
-            position: fixed; bottom: 25px; left: 25px; z-index: 2000;
-            display: none; flex-direction: column; align-items: center;
+        /* أيقونة الروبوت الصغيرة */
+        .robot-trigger {
+            position: fixed; bottom: 20px; left: 20px; z-index: 2000;
+            display: none; flex-direction: column; align-items: center; cursor: pointer;
         }
-        .analyst-thumb {
-            width: 65px; height: 65px; border-radius: 50%; /* حجم صغير ورشيق */
-            border: 2px solid var(--accent); background: white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            cursor: pointer; overflow: hidden; transition: 0.3s;
+        .robot-img-container {
+            width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--accent);
+            background: white; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             animation: float 3s infinite ease-in-out;
         }
-        .analyst-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .analyst-label {
-            background: var(--primary); color: white; font-size: 0.65rem;
-            padding: 2px 8px; border-radius: 10px; margin-top: 5px; font-weight: bold;
-        }
+        .robot-img-container img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* نافذة الدردشة */
-        .chat-box {
-            position: fixed; bottom: 105px; left: 25px; width: 290px; height: 380px;
-            background: white; border-radius: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        /* نافذة المحادثة الذكية */
+        .chat-win {
+            position: fixed; bottom: 90px; left: 20px; width: 310px; height: 450px;
+            background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             display: none; flex-direction: column; border: 1px solid var(--accent); z-index: 2001;
         }
-        .chat-header { background: var(--primary); color: white; padding: 12px; font-size: 0.85rem; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .chat-head { background: var(--primary); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; }
+        .chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #fdfdfd; scroll-behavior: smooth; }
+        .msg-ai { background: #f1f5f9; padding: 10px; border-radius: 12px; margin-bottom: 12px; border-right: 4px solid var(--accent); font-size: 0.85rem; line-height: 1.5; }
+        .msg-user { text-align: left; margin-bottom: 10px; }
+        .msg-user span { background: var(--accent); color: white; padding: 8px 12px; border-radius: 12px; display: inline-block; font-size: 0.85rem; }
+        
+        .chat-foot { padding: 12px; border-top: 1px solid #eee; display: flex; gap: 8px; }
+        .chat-foot input { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 8px 15px; outline: none; font-size: 0.85rem; }
+        .chat-foot button { background: var(--primary); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; }
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        @media print { .no-print, .analyst-icon-wrapper, .chat-box, .chart-container { display: none !important; } }
+        @media print { .no-print, .robot-trigger, .chat-win { display: none !important; } }
     </style>
 </head>
 <body>
 
 <header class="official-header">
     <div class="h-info" style="text-align: right;"><b>سلطنة عُمان</b>وزارة التربية والتعليم<br>محافظة ظفار</div>
-    <div class="h-logo"><img src="logo.png" alt="شعار"></div>
-    <div class="h-info" style="text-align: left;"><b>مدرسة صلالة الشرقية</b>بوابة المحلل الذكي<br>2026/2025</div>
+    <div class="h-logo"><img src="logo.png" alt="Logo"></div>
+    <div class="h-info" style="text-align: left;"><b>مدرسة صلالة الشرقية</b>بوابة المحلل الذكي</div>
 </header>
 
 <div class="container">
-    <section id="searchView" class="no-print" style="max-width:400px; margin: 80px auto; text-align:center;">
-        <h2 style="margin-bottom:20px; color: var(--primary);">استعلام النتائج</h2>
+    <section id="searchView" class="no-print" style="max-width:400px; margin: 100px auto; text-align:center;">
+        <h2 style="margin-bottom:20px;">استعلام النتائج الرقمية</h2>
         <input type="text" id="civilInput" placeholder="أدخل الرقم المدني" style="width:100%; padding:15px; border-radius:10px; border:2px solid #ddd; text-align:center; font-size:1.2rem; outline:none;">
-        <button onclick="searchStudent()" style="width:100%; margin-top:15px; padding:15px; background:var(--primary); color:white; border:none; border-radius:10px; font-weight:800; cursor:pointer;">عرض النتيجة</button>
+        <button onclick="searchStudent()" style="width:100%; margin-top:15px; padding:15px; background:var(--primary); color:white; border:none; border-radius:10px; font-weight:800; cursor:pointer;">دخول النظام</button>
     </section>
 
     <section id="resultView" style="display:none;">
         <div class="student-profile-card">
             <div class="group"><span class="info-label">اسم الطالب</span><span class="info-value" id="resName">-</span></div>
-            <div class="group"><span class="info-label">الصف / الشعبة</span><span class="info-value" id="resClass">-</span></div>
+            <div class="group"><span class="info-label">الصف الدراسي</span><span class="info-value" id="resClass">-</span></div>
             <div class="group"><span class="info-label">المعدل العام</span><span class="info-value" id="resAvg" style="color:var(--accent)">0%</span></div>
         </div>
 
         <div class="results-wrapper">
             <table>
-                <thead>
-                    <tr><th>المادة الدراسية</th><th style="text-align:center">الدرجة</th><th>التقدير الرسمي</th></tr>
-                </thead>
+                <thead><tr><th>المادة الدراسية</th><th style="text-align:center">الدرجة</th><th>التقدير</th></tr></thead>
                 <tbody id="resTable"></tbody>
             </table>
         </div>
-
-        <div style="text-align:center; margin-top:30px;" class="no-print">
-            <button class="btn-print" onclick="window.print()" style="padding:12px 50px; background:var(--accent); border:none; border-radius:10px; font-weight:800; cursor:pointer; color:var(--primary);"><i class="fa-solid fa-print"></i> طباعة الشهادة</button>
+        <div style="text-align:center; margin-top:25px;" class="no-print">
+            <button onclick="window.print()" style="padding:12px 40px; background:var(--accent); border:none; border-radius:10px; font-weight:800; cursor:pointer; color:var(--primary);">طباعة الشهادة الرسمية</button>
         </div>
     </section>
 </div>
 
-<div class="analyst-icon-wrapper no-print" id="robotBox">
-    <div class="analyst-thumb" onclick="toggleChat()">
-        <img src="https://pollinations.ai/p/professional%20cybernetic%20analyst%20face,%20tech%20expert,%20minimalist%20avatar,%20clean%203d%20render,%20white%20background?width=150&height=150&nologo=true" alt="Analyst">
+<div class="robot-trigger no-print" id="robotBox" onclick="toggleChat()">
+    <div class="robot-img-container">
+        <img src="https://pollinations.ai/p/small%20cute%20friendly%20robot%20avatar,%20hi-tech%20digital%20assistant,%203d%20render,%20white%20background?width=100&height=100&nologo=true" alt="Robot">
     </div>
-    <div class="analyst-label">المحلل الذكي</div>
 </div>
 
-<div class="chat-box no-print" id="chatBox">
-    <div class="chat-header"><span>مساعدك التحليلي</span><i class="fa-solid fa-xmark" onclick="toggleChat()" style="cursor:pointer"></i></div>
-    <div style="flex:1; padding:15px; background:#f9f9f9; font-size:0.8rem; overflow-y:auto;" id="chatLogs">
-        <div style="background:#e2e8f0; padding:10px; border-radius:10px; margin-bottom:10px;">أهلاً بك! لقد انتهيت من مراجعة درجاتك. هل تود معرفة النصيحة الأكاديمية لهذا الفصل؟</div>
-    </div>
-    <div style="border-top:1px solid #eee; padding:10px; display:flex;">
-        <input type="text" placeholder="اسأل المحلل..." style="flex:1; border:1px solid #ddd; border-radius:15px; padding:8px 12px; outline:none; font-size:0.8rem;">
+<div class="chat-win no-print" id="chatWin">
+    <div class="chat-head"><span>المحلل الذكي</span><i class="fa-solid fa-chevron-down" onclick="toggleChat()" style="cursor:pointer"></i></div>
+    <div class="chat-body" id="chatLogs"></div>
+    <div class="chat-foot">
+        <input type="text" id="chatInput" placeholder="اكتب سؤالك هنا..." onkeypress="if(event.key==='Enter') sendUserMsg()">
+        <button onclick="sendUserMsg()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
 </div>
 
 <script>
+    let studentData = null;
+
     async function searchStudent() {
         const id = document.getElementById('civilInput').value.trim();
         const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
@@ -147,41 +137,88 @@
             try {
                 const r = await fetch(f);
                 const data = await r.json();
-                const student = data.find(s => s["رقم_مدني"].toString() === id);
-                if(student) { renderUI(student); return; }
+                studentData = data.find(s => s["رقم_مدني"].toString() === id);
+                if(studentData) { showUI(); return; }
             } catch(e) {}
         }
-        alert("لم يتم العثور على بيانات.");
+        alert("لم يتم العثور على الرقم المدني.");
     }
 
-    function renderUI(student) {
-        const subs = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
-        const scores = subs.map(s => parseFloat(student[s]));
+    function showUI() {
+        const subs = Object.keys(studentData).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        const scores = subs.map(s => parseFloat(studentData[s]));
         const avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
 
-        document.getElementById('resName').innerText = student["الاسم"];
-        document.getElementById('resClass').innerText = `${student["الصف"]} / ${student["الشعبة"]}`;
+        document.getElementById('resName').innerText = studentData["الاسم"];
+        document.getElementById('resClass').innerText = `${studentData["الصف"]} / ${studentData["الشعبة"]}`;
         document.getElementById('resAvg').innerText = avg + "%";
         
         document.getElementById('resTable').innerHTML = subs.map(s => {
-            const v = parseFloat(student[s]);
-            const type = v >= 90 ? 'excellent' : 'good';
-            const app = v >= 90 ? 'امتياز' : v >= 80 ? 'جيد جداً' : v >= 65 ? 'جيد' : 'مقبول';
-            return `<tr>
-                <td>${s}</td>
-                <td align="center"><span class="score-badge ${type}">${v}</span></td>
-                <td style="color:#718096; font-size:0.85rem;">${app}</td>
-            </tr>`;
+            const v = parseFloat(studentData[s]);
+            return `<tr><td>${s}</td><td align="center"><span class="score-badge ${v>=90?'excellent':'good'}">${v}</span></td><td>${v>=90?'امتياز':v>=80?'جيد جداً':'جيد'}</td></tr>`;
         }).join('');
 
         document.getElementById('searchView').style.display = 'none';
         document.getElementById('resultView').style.display = 'block';
         document.getElementById('robotBox').style.display = 'flex';
+        
+        // بدء التحليل التلقائي مادة بمادة
+        startAnalysis(subs);
     }
 
     function toggleChat() {
-        const chat = document.getElementById('chatBox');
-        chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
+        const win = document.getElementById('chatWin');
+        win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function addAiMsg(text) {
+        const logs = document.getElementById('chatLogs');
+        const div = document.createElement('div');
+        div.className = 'msg-ai';
+        div.innerText = text;
+        logs.appendChild(div);
+        logs.scrollTop = logs.scrollHeight;
+    }
+
+    function startAnalysis(subs) {
+        setTimeout(() => {
+            toggleChat();
+            addAiMsg(`أهلاً يا ${studentData["الاسم"].split(' ')[0]}، أنا المحلل الذكي. دعنا نراجع نتائجك مادة بمادة...`);
+            
+            subs.forEach((sub, index) => {
+                setTimeout(() => {
+                    const score = studentData[sub];
+                    let comment = score >= 90 ? "أداء مبهر!" : score >= 80 ? "أداء رائع جداً." : "أداء جيد ويمكنك التحسن.";
+                    addAiMsg(`في مادة ${sub} حصلت على ${score}، ${comment}`);
+                    
+                    if(index === subs.length - 1) {
+                        setTimeout(() => {
+                            addAiMsg("لقد انتهيت من تحليلي الشامل. هل لديك أي استفسار عن مادة معينة أو تريد نصيحة؟ أنا هنا لأجيبك!");
+                        }, 1000);
+                    }
+                }, (index + 1) * 2000); // مادة مادة كل ثانيتين
+            });
+        }, 1000);
+    }
+
+    function sendUserMsg() {
+        const input = document.getElementById('chatInput');
+        if(!input.value) return;
+        
+        const logs = document.getElementById('chatLogs');
+        const userDiv = document.createElement('div');
+        userDiv.className = 'msg-user';
+        userDiv.innerHTML = `<span>${input.value}</span>`;
+        logs.appendChild(userDiv);
+        
+        const q = input.value;
+        input.value = '';
+        logs.scrollTop = logs.scrollHeight;
+
+        // محاكاة إجابة المحلل
+        setTimeout(() => {
+            addAiMsg("سؤال رائع! سأقوم بدراسة هذا الجزء وتزويدك بخطة تطوير دراسية مخصصة لك بالتعاون مع معلمك.");
+        }, 1000);
     }
 </script>
 </body>
