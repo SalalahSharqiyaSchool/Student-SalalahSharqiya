@@ -24,7 +24,7 @@
 
         .container { width: 95%; max-width: 1000px; margin: 15px auto; }
 
-        /* --- هيدر الطباعة الرسمي (مخفي في الموقع) --- */
+        /* --- هيدر الطباعة الرسمي --- */
         #printHeader { 
             display: none; 
             text-align: center; 
@@ -51,14 +51,17 @@
         td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 1rem; }
         .grade-badge { background: var(--gold); color: var(--deep-green); padding: 3px 8px; border-radius: 5px; font-weight: 800; }
 
-        /* --- نظام المحلل والدردشة --- */
+        /* --- نظام المحلل والدردشة المستمر --- */
         #ai-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold); color: var(--deep-green); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 28px; border: none; cursor: pointer; z-index: 1000; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
-        #ai-window { position: fixed; bottom: 90px; right: 10px; left: 10px; height: 500px; background: #0a1a18; border: 2px solid var(--gold); border-radius: 20px; display: none; flex-direction: column; z-index: 1000; overflow: hidden; }
-        .ai-header { background: var(--gold); color: var(--deep-green); padding: 15px; font-weight: 800; display: flex; justify-content: space-between; }
-        .ai-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: rgba(0,0,0,0.2); }
-        .bubble { padding: 12px 15px; border-radius: 15px; max-width: 85%; font-size: 0.95rem; line-height: 1.8; white-space: pre-wrap; }
-        .bot { background: rgba(255,255,255,0.06); border-right: 4px solid var(--gold); align-self: flex-start; }
+        
+        #ai-window { position: fixed; bottom: 90px; right: 10px; left: 10px; height: 500px; background: #0a1a18; border: 2px solid var(--gold); border-radius: 20px; display: none; flex-direction: column; z-index: 1000; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .ai-header { background: var(--gold); color: var(--deep-green); padding: 15px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
+        .ai-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: rgba(0,0,0,0.2); scroll-behavior: smooth; }
+        
+        .bubble { padding: 12px 15px; border-radius: 15px; max-width: 85%; font-size: 0.95rem; line-height: 1.8; white-space: pre-wrap; word-wrap: break-word; }
+        .bot { background: rgba(255,255,255,0.06); border-right: 4px solid var(--gold); align-self: flex-start; color: #fff; }
         .user { background: var(--gold); color: var(--deep-green); align-self: flex-end; font-weight: 800; }
+
         .ai-footer { padding: 10px; background: #061f1c; display: flex; gap: 8px; border-top: 1px solid var(--border); }
         .ai-footer input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: #fff; outline: none; }
         .ai-footer button { background: var(--gold); border: none; width: 50px; border-radius: 10px; cursor: pointer; color: var(--deep-green); }
@@ -138,7 +141,7 @@
     </div>
     <div id="ai-body" class="ai-body"></div>
     <div class="ai-footer">
-        <input type="text" id="aiInput" placeholder="اسأل المحلل عن درجاتك..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <input type="text" id="aiInput" placeholder="اسأل المحلل عن أي مادة..." onkeypress="if(event.key==='Enter') sendMessage()">
         <button onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
 </div>
@@ -191,29 +194,37 @@
     }
 
     async function callAI(prompt, el) {
+        // تم تحديث النظام ليكون أسرع في الاستجابة (GET)
         const encodedPrompt = encodeURIComponent(prompt);
-        const system = encodeURIComponent("أنت مساعد مدرسة صلالة الشرقية. حلل النتائج مادة بمادة بوضوح. أجب على الأسئلة بتشجيع وتباعد أسطر مريح.");
+        const system = encodeURIComponent("أنت مساعد مدرسة صلالة الشرقية. حلل النتائج مادة بمادة أولاً باختصار شديد. ثم أجب على أي سؤال يطرحه الطالب بناءً على درجاته بأسلوب تربوي مشجع.");
         try {
             const resp = await fetch(`https://text.pollinations.ai/${encodedPrompt}?model=openai&system=${system}`);
             el.innerText = await resp.text();
-        } catch(e) { el.innerText = "تعذر الاتصال بالمحلل."; }
+        } catch(e) { el.innerText = "عذراً، لم أستطع الرد حالياً. حاول مجدداً."; }
     }
 
     function autoAnalyze() {
-        const el = addMsg("أهلاً بك! جاري تحليل نتيجتك مادة بمادة... 🚀", "bot");
+        const el = addMsg("أهلاً بك يا بطل! جاري قراءة درجاتك وتحليلها مادة بمادة... 🚀", "bot");
         const subs = Object.keys(studentData).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
         let summary = subs.map(s => `${s}: ${studentData[s]}`).join(', ');
-        callAI(`حلل هذه المواد مادة بمادة باختصار مشجع: ${summary}`, el);
+        // الطلب الأول يكون تحليلي مادة بمادة
+        callAI(`حلل نتيجتي مادة بمادة باختصار شديد ومحفز: ${summary}`, el);
     }
 
     function sendMessage() {
         const inp = document.getElementById('aiInput');
         const txt = inp.value.trim();
         if(!txt) return;
+        
         inp.value = '';
         addMsg(txt, "user");
-        const el = addMsg("جاري التفكير... 🧠", "bot");
-        callAI(`${txt} (درجاتي: ${JSON.stringify(studentData)})`, el);
+        const el = addMsg("تفكير... 🧠", "bot");
+        
+        // تضمين بيانات الطالب في كل سؤال لضمان دقة الإجابة
+        const subs = Object.keys(studentData).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        let gradesContext = subs.map(s => `${s}:${studentData[s]}`).join(' ');
+        
+        callAI(`سؤال الطالب: "${txt}". درجاته الحالية: [${gradesContext}]. أجب بذكاء.`, el);
     }
 </script>
 </body>
