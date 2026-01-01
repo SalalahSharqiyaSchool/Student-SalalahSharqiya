@@ -6,164 +6,122 @@
     <title>منصة التميز | مدرسة صلالة الشرقية</title>
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         :root { --emerald: #04241f; --gold: #af9164; --white: #ffffff; }
         * { box-sizing: border-box; }
         body { font-family: 'Almarai', sans-serif; background: var(--emerald); margin: 0; padding: 0; color: #fff; overflow-x: hidden; }
 
-        /* --- صفحة الترحيب الموزعة --- */
-        #welcomeView { 
-            height: 100vh; display: flex; flex-direction: column; justify-content: space-between; 
-            align-items: center; text-align: center; padding: 60px 20px;
-            background: radial-gradient(circle at center, #064b3e 0%, var(--emerald) 100%);
-        }
-        .logos-area img { max-height: 120px; margin-bottom: 15px; }
-        .platform-title { font-size: clamp(2rem, 8vw, 3.5rem); color: var(--gold); font-weight: 800; margin: 0; }
-        .exciting-btn { 
-            background: linear-gradient(135deg, var(--gold), #d4af37); color: white; border: none; 
-            padding: 18px 50px; border-radius: 50px; font-weight: 800; cursor: pointer; 
-            transition: 0.3s; animation: pulse 2s infinite; font-size: 1.2rem; 
-        }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(175, 145, 100, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(175, 145, 100, 0); } 100% { box-shadow: 0 0 0 0 rgba(175, 145, 100, 0); } }
+        /* --- شريط التنقل --- */
+        #topNav { position: fixed; top: 0; width: 100%; padding: 10px 5%; display: none; justify-content: space-between; align-items: center; background: rgba(4,36,31,0.98); border-bottom: 2px solid var(--gold); z-index: 1000; }
 
-        /* --- واجهة الدخول --- */
-        #loginView { display: none; height: 100vh; justify-content: center; align-items: center; padding: 20px; }
-        .login-card { 
-            background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); padding: 40px; 
-            border-radius: 30px; border: 1px solid var(--gold); text-align: center; width: 100%; max-width: 420px; 
-        }
-        .login-card input { 
-            width: 100%; padding: 15px; margin: 25px 0; border-radius: 12px; border: 2px solid var(--gold); 
-            font-size: 1.3rem; text-align: center; outline: none; background: white; color: #333;
-        }
+        /* --- واجهات العرض --- */
+        .view { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        #welcomeView { background: radial-gradient(circle, #064b3e, var(--emerald)); text-align: center; }
+        #loginView { display: none; }
+        #resultView { display: none; background: #f4f4f4; padding-top: 80px; color: #333; }
 
-        /* --- شريط التنقل العلوي --- */
-        #topNav { 
-            position: fixed; top: 0; width: 100%; padding: 10px 5%; display: none; 
-            justify-content: space-between; align-items: center; background: rgba(4,36,31,0.98); 
-            border-bottom: 2px solid var(--gold); z-index: 1000; 
-        }
+        .exciting-btn { background: linear-gradient(135deg, var(--gold), #d4af37); color: white; border: none; padding: 15px 45px; border-radius: 50px; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 
-        /* --- الشهادة (نسخة الطباعة A4) --- */
-        #resultView { display: none; background: #f4f4f4; padding: 80px 10px 40px; min-height: 100vh; color: #333; }
-        .a4-page { 
-            background: white; width: 100%; max-width: 195mm; margin: 0 auto; 
-            padding: 15mm; border: 10px double var(--gold); position: relative;
-        }
-        .header-section { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--emerald); padding-bottom: 10px; margin-bottom: 20px; }
-        
-        .std-data-grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
-            background: #fdfaf3; padding: 15px; border-radius: 10px; border: 1px solid var(--gold); margin-bottom: 20px;
-        }
-        .std-data-grid div { font-size: 0.95rem; line-height: 1.6; text-align: right; }
-        .std-data-grid b { color: var(--emerald); }
-
-        .grades-table { width: 100%; border-collapse: collapse; }
-        .grades-table th { background: var(--emerald); color: var(--gold); padding: 10px; border: 2px solid var(--gold); font-size: 0.9rem; }
-        .grades-table td { padding: 8px; border: 2px solid var(--gold); text-align: center; font-weight: 700; }
-
-        /* --- الروبوت الذكي المطور --- */
+        /* --- المحلل الذكي المطور --- */
         .ai-float { position: fixed; bottom: 25px; left: 25px; z-index: 2000; display: none; }
         .ai-icon { width: 65px; height: 65px; background: var(--emerald); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 2rem; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
-        .ai-window { position: absolute; bottom: 80px; left: 0; width: 320px; background: white; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); display: none; flex-direction: column; border: 2px solid var(--gold); overflow: hidden; }
-        .ai-header { background: var(--emerald); color: var(--gold); padding: 15px; font-weight: 800; display: flex; justify-content: space-between; }
-        .ai-body { padding: 15px; height: 280px; overflow-y: auto; font-size: 0.9rem; }
-        .ai-msg { background: #f0f4f3; padding: 12px; border-radius: 12px; border-right: 4px solid var(--gold); margin-bottom: 15px; color: #333; line-height: 1.5; }
-
-        /* --- لوحة الأوائل العائمة --- */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; z-index: 3000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 450px; text-align: center; border: 5px solid var(--gold); }
-        .podium { display: flex; justify-content: space-around; align-items: flex-end; margin-top: 30px; gap: 10px; }
-        .rank-item { background: #fdfaf3; padding: 15px; border-radius: 15px; border: 2px solid #eee; flex: 1; text-align: center; }
-
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white; }
-            #resultView { display: block !important; padding: 0; }
-            .a4-page { border: 5px double var(--gold); margin: 0; width: 100%; max-width: 100%; }
-            @page { size: A4; margin: 10mm; }
+        
+        .ai-window { 
+            position: absolute; bottom: 80px; left: 0; width: 350px; background: white; 
+            border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); display: none; 
+            flex-direction: column; border: 2px solid var(--gold); overflow: hidden; 
         }
+        .ai-header { background: var(--emerald); color: var(--gold); padding: 15px; font-weight: 800; display: flex; justify-content: space-between; }
+        .ai-content { padding: 15px; height: 400px; overflow-y: auto; background: #fdfaf3; }
+        
+        /* فقاعات الدردشة */
+        .chat-msg { margin-bottom: 15px; padding: 10px; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; max-width: 85%; }
+        .bot-msg { background: #e8f0fe; color: #333; border-right: 4px solid var(--gold); align-self: flex-start; }
+        .user-msg { background: var(--emerald); color: white; align-self: flex-end; margin-left: auto; text-align: left; }
+
+        /* منطقة الرسم البياني داخل المحلل */
+        .chart-container { background: white; border-radius: 10px; padding: 10px; margin: 10px 0; border: 1px solid #ddd; }
+
+        .ai-input-area { display: flex; padding: 10px; border-top: 1px solid #ddd; background: #fff; }
+        .ai-input-area input { flex: 1; border: 1px solid #ddd; padding: 8px; border-radius: 8px; outline: none; }
+        .ai-input-area button { background: var(--emerald); color: var(--gold); border: none; padding: 8px 15px; margin-right: 5px; border-radius: 8px; cursor: pointer; }
+
+        /* --- تنسيق الشهادة --- */
+        .a4-page { background: white; width: 100%; max-width: 195mm; margin: 0 auto; padding: 15mm; border: 10px double var(--gold); }
+        .std-card { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #fdfaf3; padding: 15px; border-radius: 10px; border: 1px solid var(--gold); margin-bottom: 20px; }
+        .grades-table { width: 100%; border-collapse: collapse; text-align: center; }
+        .grades-table th { background: var(--emerald); color: var(--gold); border: 1px solid var(--gold); padding: 8px; }
+        .grades-table td { border: 1px solid var(--gold); padding: 8px; font-weight: 700; }
+
+        @media print { .no-print { display: none !important; } .a4-page { border: 5px double var(--gold); width: 100%; } }
     </style>
 </head>
 <body>
 
-<div id="welcomeView" class="no-print">
-    <div class="logos-area">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Oman_Ministry_of_Education_Logo.svg/1200px-Oman_Ministry_of_Education_Logo.svg.png" alt="شعار الوزارة">
-        <div class="platform-title">بوابة التميز الرقمية</div>
-        <p style="font-size: 1.3rem; color: #ccc;">مدرسة صلالة الشرقية (5-10)</p>
-    </div>
-    <button class="exciting-btn" onclick="showLogin()">دخول المنصة</button>
-    <div style="font-size: 0.9rem; color: var(--gold); border-top: 1px solid rgba(175,145,100,0.3); padding-top: 20px; width: 80%;">
-        الفصل الدراسي الأول | العام الدراسي 2025/2026 م<br>
-        تصميم الأستاذ: <b>فيصل العريبي</b>
-    </div>
-</div>
-
-<div id="loginView" class="no-print">
-    <div class="login-card">
-        <h2 style="color: white; margin-bottom: 10px;">الاستعلام الذكي</h2>
-        <input type="text" id="stdId" placeholder="أدخل الرقم المدني">
-        <button class="exciting-btn" style="width:100%;" onclick="startApp()">تحليل البيانات</button>
-    </div>
-</div>
-
 <nav id="topNav" class="no-print">
-    <div style="color:var(--gold); font-weight:800;">مدرسة صلالة الشرقية</div>
-    <button onclick="openTops()" style="background:var(--gold); color:white; border:none; padding:10px 25px; border-radius:50px; cursor:pointer; font-weight:800;">الأوائل 🏆</button>
+    <div style="color:var(--gold); font-weight:800;">صلالة الشرقية الذكية</div>
+    <button onclick="openTops()" style="background:var(--gold); color:white; border:none; padding:8px 20px; border-radius:50px; cursor:pointer;">الأوائل 🏆</button>
 </nav>
+
+<div id="welcomeView" class="view no-print">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Oman_Ministry_of_Education_Logo.svg/1200px-Oman_Ministry_of_Education_Logo.svg.png" height="100">
+    <h1 class="platform-title">محلل التميز الذكي</h1>
+    <p>مدرسة صلالة الشرقية - الجيل الرابع</p>
+    <button class="exciting-btn" onclick="showLogin()">ابدأ التحليل الآن</button>
+</div>
+
+<div id="loginView" class="view no-print">
+    <div style="background:rgba(255,255,255,0.05); padding:40px; border-radius:30px; border:1px solid var(--gold); text-align:center; width:100%; max-width:400px;">
+        <h2>تسجيل الدخول</h2>
+        <input type="text" id="stdId" placeholder="الرقم المدني" style="width:100%; padding:15px; margin:20px 0; border-radius:10px; border:none; text-align:center; font-size:1.2rem;">
+        <button class="exciting-btn" style="width:100%" onclick="startApp()">تحليل النتيجة</button>
+    </div>
+</div>
 
 <div class="ai-float no-print" id="aiBot">
     <div class="ai-window" id="aiWin">
         <div class="ai-header">
-            <span>المحلل الذكي (صلالة)</span><span style="cursor:pointer" onclick="toggleAI()">×</span>
+            <span>المحلل الذكي (صلالة)</span>
+            <span style="cursor:pointer" onclick="toggleAI()">×</span>
         </div>
-        <div class="ai-body" id="aiChat"></div>
+        <div class="ai-content" id="chatBox">
+            <div class="chat-msg bot-msg">مرحباً! جاري تحليل بياناتك...</div>
+            <div class="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
+            <div id="aiAnalysisResult" class="chat-msg bot-msg"></div>
+        </div>
+        <div class="ai-input-area">
+            <input type="text" id="aiInput" placeholder="اسأل المحلل عن درجاتك...">
+            <button onclick="askAI()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
     </div>
-    <div class="ai-icon" onclick="toggleAI()"><i class="fa-solid fa-robot"></i></div>
+    <div class="ai-icon" onclick="toggleAI()"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
 </div>
 
 <div id="resultView">
     <div class="a4-page">
-        <div class="header-section">
-            <div style="font-size: 0.85rem;">سلطنة عمان<br>وزارة التربية والتعليم<br><b>مدرسة صلالة الشرقية</b></div>
-            <img src="logo.png" height="70" onerror="this.style.display='none'">
-            <div style="text-align: left; font-size: 0.85rem;">كشف درجات الطالب<br>الفصل الدراسي الأول<br>2025/2026 م</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--emerald); padding-bottom:10px; margin-bottom:20px;">
+            <div style="font-size:0.8rem;">سلطنة عمان<br>وزارة التربية والتعليم<br><b>مدرسة صلالة الشرقية</b></div>
+            <div style="text-align:left; font-size:0.8rem;">تقرير أداء الطالب<br>2025/2026 م</div>
         </div>
-        
-        <div class="std-data-grid" id="stdInfo"></div>
-        
+        <div class="std-card" id="stdInfo"></div>
         <table class="grades-table">
-            <thead>
-                <tr><th style="text-align: right;">المادة الدراسية</th><th>الدرجة النهائية</th><th>التقدير</th></tr>
-            </thead>
+            <thead><tr><th style="text-align:right;">المادة</th><th>الدرجة</th><th>التقدير</th></tr></thead>
             <tbody id="tableBody"></tbody>
         </table>
-
-        <div style="margin-top: 40px; display: flex; justify-content: space-between; font-size: 0.9rem;">
-            <div>توقيع ولي الأمر: ...................</div>
-            <div style="text-align: center;">يعتمد مدير المدرسة<br><br>...........................</div>
-        </div>
     </div>
-    <div class="no-print" style="text-align: center; margin-top: 30px;">
-        <button onclick="window.print()" class="exciting-btn">طباعة الشهادة</button>
-        <button onclick="location.reload()" style="background:transparent; color:white; border:none; display:block; margin: 20px auto; cursor:pointer; text-decoration:underline;">بحث جديد</button>
-    </div>
-</div>
-
-<div class="modal" id="topsModal">
-    <div class="modal-content">
-        <h3 style="color:var(--emerald); border-bottom: 2px solid var(--gold); padding-bottom: 10px;">🥇 أوائل الصف الدراسي 🥇</h3>
-        <div class="podium" id="podiumList"></div>
-        <button onclick="document.getElementById('topsModal').style.display='none'" class="exciting-btn" style="margin-top:30px; font-size:1rem; padding:10px 40px;">إغلاق</button>
+    <div style="text-align:center; margin-top:20px;" class="no-print">
+        <button class="exciting-btn" onclick="window.print()">طباعة التقرير</button>
     </div>
 </div>
 
 <script>
     let student = null;
     let classmates = [];
+    let myChartInstance = null;
 
     function showLogin() {
         document.getElementById('welcomeView').style.display = 'none';
@@ -172,100 +130,99 @@
 
     async function startApp() {
         const id = document.getElementById('stdId').value.trim();
-        if(!id) return;
-        
         const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
-        let found = false;
-        
         for (let f of files) {
             try {
                 const res = await fetch(f + "?v=" + Date.now());
                 const data = await res.json();
                 student = data.find(s => s["رقم_مدني"].toString() === id);
-                if(student) { 
-                    classmates = data.filter(c => c["الصف"] === student["الصف"]); 
-                    found = true; 
-                    break; 
-                }
+                if(student) { classmates = data; break; }
             } catch(e) {}
         }
 
-        if(found) {
+        if(student) {
             document.getElementById('loginView').style.display = 'none';
             document.getElementById('topNav').style.display = 'flex';
             document.getElementById('resultView').style.display = 'block';
             document.getElementById('aiBot').style.display = 'block';
-            renderData();
-        } else { alert("عذراً، الرقم المدني غير مسجل في النظام."); }
+            renderResult();
+            initAIChart();
+        } else { alert("الرقم غير موجود"); }
     }
 
-    function renderData() {
-        const exclude = ["رقم_مدني", "الاسم", "الصف", "الشعبة"];
-        const subs = Object.keys(student).filter(k => !exclude.includes(k));
+    function renderResult() {
+        const subs = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        const sum = subs.reduce((a,b)=> a + parseFloat(student[b]||0), 0);
+        const perc = (sum / (subs.length*100)*100).toFixed(1);
         
-        const getSum = (s) => subs.reduce((a, b) => a + parseFloat(s[b]||0), 0);
-        const studentSum = getSum(student);
-        const percentage = (studentSum / (subs.length * 100) * 100).toFixed(1);
-        
-        const rankings = classmates
-            .map(c => ({ id: c["رقم_مدني"], total: getSum(c) }))
-            .sort((a, b) => b.total - a.total);
-        const rank = rankings.findIndex(r => r.id === student["رقم_مدني"]) + 1;
-
         document.getElementById('stdInfo').innerHTML = `
-            <div>اسم الطالب: <b>${student["الاسم"]}</b></div>
-            <div>الصف / الشعبة: <b>${student["الصف"]} / ${student["الشعبة"]}</b></div>
-            <div>المركز على الصف: <b>${rank}</b></div>
-            <div>النسبة المئوية: <b>${percentage}%</b></div>
+            <div>الاسم: <b>${student["الاسم"]}</b></div>
+            <div>الصف: <b>${student["الصف"]} / ${student["الشعبة"]}</b></div>
+            <div>المعدل: <b>${perc}%</b></div>
+            <div>الحالة: <b>${perc >= 50 ? 'ناجح' : 'مكمل'}</b></div>
         `;
 
         let html = "";
-        subs.forEach(sub => {
-            const v = parseFloat(student[sub]);
-            html += `<tr><td style="text-align:right;">${sub}</td><td>${v}</td><td>${v>=90?'ممتاز':(v>=80?'جيد جداً':'جيد')}</td></tr>`;
+        subs.forEach(s => {
+            let v = parseFloat(student[s]);
+            html += `<tr><td style="text-align:right">${s}</td><td>${v}</td><td>${v>=90?'امتياز':'جيد'}</td></tr>`;
         });
         document.getElementById('tableBody').innerHTML = html;
     }
 
-    function toggleAI() {
-        const win = document.getElementById('aiWin');
-        if (win.style.display === 'none' || win.style.display === '') {
-            const subs = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
-            const sum = subs.reduce((a, b) => a + parseFloat(student[b]||0), 0);
-            const avg = (sum / (subs.length * 100) * 100).toFixed(1);
-            
-            const messages = [
-                `مرحباً ${student["الاسم"].split(' ')[0]}! لقد حللت نتائجك، ونسبتك (${avg}%) تدل على وعي واجتهاد كبيرين. استمر في التميز!`,
-                `جلسة تحليل جديدة: مستواك في مدرسة صلالة الشرقية رائع جداً. هل تطمح للمركز الأول في الفصل القادم؟`,
-                `نصيحة المحلل الذكي: درجاتك متوازنة، ركز قليلاً على المواد التي حصلت فيها على أقل من 90 لرفع ترتيبك.`
-            ];
-            
-            document.getElementById('aiChat').innerHTML = `<div class="ai-msg">${messages[Math.floor(Math.random()*messages.length)]}</div>`;
-            win.style.display = 'flex';
-        } else { win.style.display = 'none'; }
+    function initAIChart() {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const subs = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        const scores = subs.map(s => student[s]);
+
+        if(myChartInstance) myChartInstance.destroy();
+        
+        myChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: subs,
+                datasets: [{
+                    label: 'درجات الطالب',
+                    data: scores,
+                    backgroundColor: '#af9164',
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { min: 0, max: 100 } }
+            }
+        });
+
+        document.getElementById('aiAnalysisResult').innerHTML = `
+            <b>تحليل Gemini:</b> مرحباً ${student["الاسم"].split(' ')[0]}، 
+            أداءك في مادة (${subs[scores.indexOf(Math.max(...scores))]}) ممتاز جداً. 
+            تحتاج للتركيز أكثر على مادة (${subs[scores.indexOf(Math.min(...scores))]}).
+        `;
     }
 
-    function openTops() {
-        const exclude = ["رقم_مدني", "الاسم", "الصف", "الشعبة"];
-        const subs = Object.keys(classmates[0]).filter(k => !exclude.includes(k));
-        const getSum = (s) => subs.reduce((a, b) => a + parseFloat(s[b]||0), 0);
-        
-        const tops = classmates
-            .map(c => ({ name: c["الاسم"].split(' ')[0], total: getSum(c) }))
-            .sort((a, b) => b.total - a.total).slice(0, 3);
+    function toggleAI() {
+        const win = document.getElementById('aiWin');
+        win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
+    }
 
-        const medals = ['🥇', '🥈', '🥉'];
-        const colors = ['#FFD700', '#C0C0C0', '#CD7F32'];
+    function askAI() {
+        const input = document.getElementById('aiInput');
+        const box = document.getElementById('chatBox');
+        if(!input.value) return;
 
-        document.getElementById('podiumList').innerHTML = tops.map((t, i) => `
-            <div class="rank-item" style="border: 2px solid ${colors[i]};">
-                <div style="font-size:2rem;">${medals[i]}</div>
-                <div style="font-weight:800; font-size:0.85rem; margin:8px 0;">${t.name}</div>
-                <div style="color:var(--emerald); font-weight:800;">${t.total}</div>
-                <div style="font-size:0.7rem; color:#666;">مجموع النقاط</div>
-            </div>`).join('');
+        box.innerHTML += `<div class="chat-msg user-msg">${input.value}</div>`;
         
-        document.getElementById('topsModal').style.display = 'flex';
+        let response = "عذراً، لم أفهم السؤال. حاول أن تسألني عن درجاتك أو نصيحة للدراسة.";
+        if(input.value.includes("درجتي")) response = `درجاتك في معظم المواد فوق الـ 90، أنت بطل!`;
+        if(input.value.includes("نصيحة")) response = `أنصحك بمراجعة مادة ${Object.keys(student)[4]} لمدة ساعة يومياً.`;
+
+        setTimeout(() => {
+            box.innerHTML += `<div class="chat-msg bot-msg">${response}</div>`;
+            box.scrollTop = box.scrollHeight;
+        }, 500);
+        
+        input.value = "";
     }
 </script>
 </body>
