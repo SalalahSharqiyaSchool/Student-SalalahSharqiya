@@ -4,241 +4,254 @@
     <meta charset="UTF-8">
     <title>بوابة صلالة الشرقية الرقمية</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
         :root {
-            --oman-green: #0b4d42;
-            --oman-gold: #b38e44;
-            --bg-sand: #fcf9f2;
+            --deep-green: #061f1c;
+            --gold-primary: #c5a059;
+            --gold-soft: #e3c08d;
+            --glass: rgba(255, 255, 255, 0.07);
+            --border: rgba(255, 255, 255, 0.15);
+            --text: #e0e6e6;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Almarai', sans-serif; }
-
-        body { background-color: var(--bg-sand); color: #2d3436; }
-
-        /* --- تنسيقات الواجهة الرقمية (للهاتف والكمبيوتر) --- */
-        header.digital-header {
-            background: var(--oman-green); color: white; padding: 15px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 4px solid var(--oman-gold);
+        body {
+            font-family: 'Almarai', sans-serif;
+            margin: 0;
+            background: var(--deep-green);
+            background-image: radial-gradient(circle at 10% 20%, rgba(10, 61, 52, 0.8) 0%, transparent 50%);
+            color: var(--text);
+            min-height: 100vh;
         }
 
-        .container { padding: 20px; max-width: 800px; margin: 0 auto; }
+        header { padding: 20px 8%; border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); }
+        .container { max-width: 900px; margin: 40px auto; padding: 20px; }
 
-        .search-card {
-            background: white; border-radius: 20px; padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center;
+        /* --- تصميم البطاقة الأصلي --- */
+        .student-id-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+            border-radius: 25px; padding: 30px; border: 1px solid var(--border);
+            display: flex; align-items: center; gap: 25px; position: relative; margin-bottom: 25px;
         }
 
-        input {
-            width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #eee;
-            font-size: 1.2rem; text-align: center; margin-bottom: 20px;
+        .avatar-box {
+            width: 80px; height: 80px; border-radius: 15px; background: var(--gold-primary);
+            display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: var(--deep-green);
         }
 
-        .btn-action {
-            width: 100%; padding: 16px; border-radius: 12px; border: none;
-            background: var(--oman-green); color: white; font-weight: 800; cursor: pointer;
+        .results-wrapper { background: var(--glass); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: rgba(255,255,255,0.05); padding: 15px; text-align: right; color: var(--gold-soft); border-bottom: 2px solid var(--gold-primary); }
+        td { padding: 15px; border-bottom: 1px solid var(--border); }
+
+        .btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 35px; }
+        .btn-premium {
+            background: linear-gradient(135deg, #c5a059, #8e6d2e); color: #061f1c;
+            padding: 14px 35px; border-radius: 12px; border: none; font-weight: 800;
+            cursor: pointer; transition: 0.3s; font-size: 1rem; display: flex; align-items: center; gap: 8px;
         }
 
-        /* --- الهيدر الرسمي المخصص للطباعة فقط --- */
-        #printHeader { display: none; }
+        .view { display: none; }
+        .view.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- قوانين الطباعة الرسمية --- */
+        /* --- الهيدر الرسمي للطباعة (مخفي في الموقع) --- */
+        #officialPrintHeader { display: none; }
+
+        /* --- نظام الطباعة المطور (Official Print Logic) --- */
         @media print {
-            @page { size: A4; margin: 1cm; }
-            body { background: white !important; color: black !important; }
-            .no-print { display: none !important; }
-
-            #printHeader {
+            body { background: white !important; color: black !important; padding: 0; margin: 0; }
+            .no-print, header, .btn-group { display: none !important; }
+            .container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            
+            /* إظهار هيدر الوزارة */
+            #officialPrintHeader {
                 display: block !important;
                 width: 100%;
-                margin-bottom: 30px;
                 border-bottom: 2px solid #000;
+                margin-bottom: 20px;
                 padding-bottom: 10px;
             }
 
-            .header-top {
+            .p-header-grid {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 text-align: center;
-                font-size: 14px;
+                font-size: 12px;
                 font-weight: bold;
             }
 
-            .header-side { width: 30%; line-height: 1.8; }
-            .header-center { width: 30%; }
-            .header-center img { height: 80px; }
+            .p-logo img { height: 70px; }
 
-            .report-title {
+            .p-title {
                 text-align: center;
-                margin-top: 20px;
-                font-size: 18px;
-                text-decoration: underline;
+                font-size: 16px;
                 font-weight: 800;
+                margin: 15px 0;
+                text-decoration: underline;
             }
 
-            .student-info-print {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-                margin: 20px 0;
-                padding: 15px;
-                border: 1px solid #000;
-                border-radius: 10px;
+            /* تحويل البطاقة لشكل رسمي */
+            .student-id-card { 
+                background: none !important; border: 1px solid #000 !important; 
+                border-radius: 10px !important; color: black !important;
+                margin-bottom: 20px !important; padding: 15px !important;
             }
+            .avatar-box { border: 1px solid #000 !important; background: none !important; color: black !important; }
+            .st-info-grid { color: black !important; }
+            .st-info-grid b { color: black !important; }
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 20px;
-            }
-
-            th, td {
-                border: 1px solid #000 !important;
-                padding: 10px;
-                text-align: center;
-                color: black !important;
-            }
-
-            th { background-color: #f2f2f2 !important; }
-
+            /* تنسيق الجدول للطباعة */
+            .results-wrapper { background: none !important; border: 1px solid #000 !important; border-radius: 0 !important; }
+            th { background: #f2f2f2 !important; color: black !important; border-bottom: 1px solid #000 !important; border-left: 1px solid #000 !important; }
+            td { border-bottom: 1px solid #000 !important; border-left: 1px solid #000 !important; color: black !important; text-align: center; }
+            
             .official-footer {
-                margin-top: 50px;
-                display: flex;
+                display: flex !important;
                 justify-content: space-between;
+                margin-top: 40px;
                 font-weight: bold;
+                font-size: 13px;
             }
         }
-
-        /* تنسيق الجدول في المتصفح */
-        #resultView { display: none; background: white; padding: 20px; border-radius: 20px; }
-        .web-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .web-table th { background: var(--oman-green); color: white; padding: 12px; }
-        .web-table td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<header class="digital-header no-print">
-    <h1 style="font-size: 1rem;">بوابة صلالة الشرقية الرقمية</h1>
-    <img src="logo.png" alt="Logo">
+<header class="no-print">
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <img src="logo.png" alt="Logo" style="height: 50px;">
+        <h1 style="color: var(--gold-soft); font-size: 1.2rem; margin: 0;">بوابة صلالة الشرقية الرقمية</h1>
+    </div>
 </header>
 
 <div class="container">
-    <div id="printHeader">
-        <div class="header-top">
-            <div class="header-side" style="text-align: right;">
+    
+    <div id="officialPrintHeader">
+        <div class="p-header-grid">
+            <div style="text-align: right; width: 35%;">
                 سلطنة عُمان<br>
                 وزارة التربية والتعليم<br>
                 المديرية العامة للتربية والتعليم بمحافظة ظفار<br>
                 مدرسة صلالة الشرقية (5-10)
             </div>
-            <div class="header-center">
-                <img src="logo.png" alt="شعار الوزارة">
+            <div class="p-logo" style="width: 30%;">
+                <img src="logo.png" alt="شعار">
             </div>
-            <div class="header-side" style="text-align: left;">
+            <div style="text-align: left; width: 35%;">
                 العام الدراسي: 2025 / 2026 م<br>
                 الفصل الدراسي الأول<br>
                 كشف درجات الطالب
             </div>
         </div>
-        <div class="report-title">تقرير الأداء الأكاديمي المبدئي</div>
+        <div class="p-title">إشعار نتيجة طالب</div>
     </div>
 
-    <section id="searchView" class="no-print">
-        <div class="search-card">
-            <h2 style="margin-bottom: 20px; color: var(--oman-green);">استعلام نتائج الطلاب</h2>
-            <input type="number" id="civilID" placeholder="أدخل الرقم المدني">
-            <button class="btn-action" onclick="handleSearch()">عرض وتحليل النتيجة</button>
+    <section id="searchView" class="view active no-print">
+        <div style="background: var(--glass); padding: 50px; border-radius: 30px; text-align: center; border: 1px solid var(--border);">
+            <h2 style="margin-bottom: 25px;">الاستعلام عن النتائج</h2>
+            <input type="text" id="civilInput" placeholder="أدخل الرقم المدني" style="width: 80%; padding: 15px; border-radius: 10px; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white; text-align: center; font-size: 1.2rem;">
+            <div class="btn-group">
+                <button class="btn-premium" onclick="processSearch()">
+                    <i class="fa-solid fa-magnifying-glass"></i> عرض السجل الأكاديمي
+                </button>
+            </div>
         </div>
     </section>
 
-    <section id="resultView">
-        <div class="student-info-print">
-            <div><b>اسم الطالب:</b> <span id="stName"></span></div>
-            <div><b>الرقم المدني:</b> <span id="stCivil"></span></div>
-            <div><b>الصف الدراسي:</b> <span id="stGrade"></span></div>
-            <div><b>الشعبة:</b> <span id="stClass"></span></div>
+    <section id="resultView" class="view">
+        <div class="student-id-card">
+            <div class="avatar-box no-print"><i class="fa-solid fa-user-tie"></i></div>
+            <div style="flex-grow: 1;">
+                <h2 id="stName" style="margin: 0; font-size: 1.5rem; color: var(--gold-soft);">اسم الطالب</h2>
+                <div class="st-info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; font-size: 0.95rem;">
+                    <span>الرقم المدني: <b id="stCivil">-</b></span>
+                    <span>الصف الدراسي: <b id="stGrade">-</b></span>
+                    <span>الشعبة: <b id="stClass">-</b></span>
+                    <span style="color: var(--gold-primary);">المعدل العام: <b id="stAvg">-</b></span>
+                </div>
+            </div>
         </div>
 
-        <table class="web-table">
-            <thead>
-                <tr>
-                    <th>المادة الدراسية</th>
-                    <th>الدرجة النهائية (100)</th>
-                    <th>التقدير</th>
-                </tr>
-            </thead>
-            <tbody id="stData"></tbody>
-            <tfoot>
-                <tr style="background: #f9f9f9; font-weight: 800;">
-                    <td>المعدل العام</td>
-                    <td id="stAvg" colspan="2"></td>
-                </tr>
-            </tfoot>
-        </table>
+        <div class="results-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align: right;">المادة الدراسية</th>
+                        <th style="text-align: center;">الدرجة النهائية</th>
+                        <th style="text-align: center;">التقدير</th>
+                    </tr>
+                </thead>
+                <tbody id="tableContent"></tbody>
+            </table>
+        </div>
 
-        <div class="official-footer" style="display: none;" id="printFooter">
+        <div class="official-footer" style="display: none;">
             <div>يعتمد / مدير المدرسة</div>
             <div>ختم المدرسة</div>
             <div>تاريخ الاستخراج: <span id="printDate"></span></div>
         </div>
 
-        <div class="no-print" style="margin-top: 30px; display: flex; gap: 10px;">
-            <button class="btn-action" onclick="window.print()">طباعة التقرير الرسمي</button>
-            <button class="btn-action" onclick="location.reload()" style="background: #666;">بحث جديد</button>
+        <div class="btn-group no-print">
+            <button class="btn-premium" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> طباعة كشف الدرجات
+            </button>
+            <button class="btn-premium" onclick="location.reload()" style="background: rgba(255,255,255,0.1); color: var(--gold-soft); border: 1px solid var(--gold-soft);">
+                <i class="fa-solid fa-rotate-right"></i> بحث جديد
+            </button>
         </div>
     </section>
 </div>
 
 <script>
-    async function handleSearch() {
-        const id = document.getElementById('civilID').value.trim();
+    async function processSearch() {
+        const civil = document.getElementById('civilInput').value.trim();
+        if(!civil) return alert("يرجى إدخال الرقم المدني");
+
         const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
-        let student = null;
+        let found = null;
 
         for(let f of files) {
             try {
-                const r = await fetch(f);
-                const data = await r.json();
-                student = data.find(s => s["رقم_مدني"].toString() === id);
-                if(student) break;
+                const res = await fetch(f + "?v=" + Math.random());
+                const data = await res.json();
+                found = data.find(s => s["رقم_مدني"].toString() === civil);
+                if(found) break;
             } catch(e) {}
         }
 
-        if(student) {
-            const keys = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
-            const scores = keys.map(k => parseFloat(student[k]));
-            const avg = (scores.reduce((a,b)=>a+b,0) / keys.length).toFixed(1);
-
-            document.getElementById('stName').innerText = student["الاسم"];
-            document.getElementById('stCivil').innerText = student["رقم_مدني"];
-            document.getElementById('stGrade').innerText = student["الصف"];
-            document.getElementById('stClass').innerText = student["الشعبة"];
-            document.getElementById('stAvg').innerText = avg + "%";
+        if(found) {
+            const keys = Object.keys(found).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+            const total = keys.reduce((a, b) => a + parseFloat(found[b] || 0), 0);
+            
+            document.getElementById('stName').innerText = found["الاسم"];
+            document.getElementById('stCivil').innerText = found["رقم_مدني"];
+            document.getElementById('stGrade').innerText = found["الصف"];
+            document.getElementById('stClass').innerText = found["الشعبة"];
+            document.getElementById('stAvg').innerText = (total / keys.length).toFixed(1) + "%";
             document.getElementById('printDate').innerText = new Date().toLocaleDateString('ar-OM');
 
-            let html = '';
+            let rows = '';
             keys.forEach(k => {
-                const v = student[k];
-                html += `<tr>
-                            <td>${k}</td>
-                            <td>${v}</td>
-                            <td>${v>=90?'امتياز':v>=80?'جيد جداً':v>=65?'جيد':v>=50?'مقبول':'ضعيف'}</td>
-                         </tr>`;
+                const v = parseFloat(found[k]);
+                rows += `<tr>
+                    <td style="text-align:right;">${k}</td>
+                    <td style="text-align:center; font-weight:800;">${v}</td>
+                    <td style="text-align:center;">${v >= 90 ? 'امتياز' : v >= 80 ? 'جيد جداً' : v >= 50 ? 'مقبول' : 'ضعيف'}</td>
+                </tr>`;
             });
-            document.getElementById('stData').innerHTML = html;
+            document.getElementById('tableContent').innerHTML = rows;
 
-            document.getElementById('searchView').style.display = 'none';
-            document.getElementById('resultView').style.display = 'block';
-            document.getElementById('printFooter').style.display = 'flex';
+            document.getElementById('searchView').classList.remove('active');
+            document.getElementById('resultView').classList.add('active');
         } else {
-            alert("لم يتم العثور على بيانات الطالب.");
+            alert("لم يتم العثور على طالب بهذا الرقم");
         }
     }
 </script>
+
 </body>
 </html>
