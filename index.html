@@ -2,250 +2,255 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>بوابة صلالة الشرقية الرقمية | 2026</title>
+    <title>بوابة النتائج الرسمية | مدرسة صلالة الشرقية</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
         :root {
-            --bg: #040d0c;
-            --primary: #c5a059; /* الذهبي الملكي */
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
-            --text: #e0e7e6;
+            --official-blue: #0a3d34; /* أخضر ملكي غامق */
+            --official-gold: #b08d48; /* ذهبي مطفي رسمي */
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --border-color: #e2e8f0;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Almarai', sans-serif;
-            background: var(--bg);
-            background-image: 
-                radial-gradient(circle at top right, rgba(10, 61, 52, 0.5), transparent 40%),
-                radial-gradient(circle at bottom left, rgba(197, 160, 89, 0.05), transparent 40%);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
         }
 
-        /* --- الهيدر الرسمي المدمج (Pattern 3) --- */
-        .slim-header {
+        /* --- الهيدر الرسمي الكامل --- */
+        .official-header {
+            background: #fff;
+            border-bottom: 3px solid var(--official-blue);
+            padding: 20px 0;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr auto 1fr;
             align-items: center;
-            padding: 10px 5%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 1000;
         }
 
-        .h-info { font-size: 0.7rem; line-height: 1.4; opacity: 0.8; }
-        .h-info.right { text-align: right; border-right: 2px solid var(--primary); padding-right: 10px; }
-        .h-info.left { text-align: left; border-left: 2px solid var(--primary); padding-left: 10px; }
-        .h-info b { color: var(--primary); font-size: 0.8rem; display: block; }
+        .gov-info { font-size: 0.9rem; font-weight: 700; color: var(--official-blue); }
+        .gov-info.right { text-align: right; }
+        .gov-info.left { text-align: left; }
+        .gov-info span { display: block; font-weight: 400; font-size: 0.8rem; color: #64748b; }
+
+        .logo-main img { height: 90px; }
+
+        /* --- حاوية المحتوى --- */
+        .main-wrapper { width: 90%; max-width: 900px; margin: 0 auto; }
+
+        /* --- واجهة البحث البسيطة --- */
+        .search-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .search-card h2 { color: var(--official-blue); margin-bottom: 25px; font-size: 1.5rem; }
         
-        .h-logo img { height: 50px; padding: 0 15px; filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.2)); }
-
-        .wrapper { width: 92%; max-width: 1100px; margin: 30px auto; }
-
-        /* --- واجهة البحث العصرية (Pattern 2) --- */
-        .search-section {
-            padding: 80px 20px; text-align: center;
-            animation: fadeIn 1s ease;
-        }
-        .search-box {
-            background: var(--glass);
-            border: 1px solid var(--border);
-            padding: 40px; border-radius: 30px;
-            max-width: 420px; margin: auto;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
-        }
-        .search-box h2 { font-weight: 800; margin-bottom: 25px; color: var(--primary); font-size: 1.6rem; }
-        .search-box input {
-            width: 100%; padding: 18px; border-radius: 15px; border: 1px solid var(--border);
-            background: rgba(0,0,0,0.4); color: #fff; text-align: center; font-size: 1.4rem; outline: none; margin-bottom: 20px;
-        }
-        .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(197, 160, 89, 0.2); }
-        .search-box button {
-            width: 100%; padding: 18px; border-radius: 15px; border: none;
-            background: linear-gradient(45deg, var(--primary), #edc988);
-            color: #040d0c; font-weight: 800; cursor: pointer; font-size: 1.1rem;
+        .input-field {
+            width: 100%;
+            max-width: 350px;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.3s;
         }
 
-        /* --- نظام بطاقات البينتو التحليلي (Pattern 1) --- */
-        .bento-grid {
+        .input-field:focus { border-color: var(--official-gold); }
+
+        .btn-submit {
+            background: var(--official-blue);
+            color: #fff;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover { background: #062621; }
+
+        /* --- لوحة النتائج الرسمية --- */
+        .student-profile {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 15px; margin-bottom: 25px;
-            animation: slideUp 0.8s ease;
-        }
-        .bento-card {
-            background: var(--glass);
-            border: 1px solid var(--border);
-            padding: 20px; border-radius: 24px;
-            display: flex; align-items: center; gap: 15px;
-            position: relative; overflow: hidden;
-        }
-        .bento-card i { font-size: 1.8rem; color: var(--primary); opacity: 0.7; }
-        .bento-card .label { font-size: 0.7rem; opacity: 0.5; display: block; text-transform: uppercase; letter-spacing: 1px; }
-        .bento-card .value { font-size: 1.1rem; font-weight: 800; color: #fff; }
-        
-        /* مؤشر النسبة المئوية الدائري الصغير */
-        .mini-chart {
-            width: 50px; height: 50px; border-radius: 50%;
-            border: 4px solid var(--border); border-top-color: var(--primary);
-            display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
 
-        /* --- الجدول الذكي --- */
-        .results-container {
-            background: var(--glass);
-            border-radius: 28px; border: 1px solid var(--border);
-            overflow: hidden; backdrop-filter: blur(10px);
+        .profile-item { border-right: 3px solid var(--official-gold); padding-right: 15px; }
+        .profile-item:first-child { border: none; }
+        .profile-label { font-size: 0.8rem; color: #64748b; display: block; }
+        .profile-value { font-size: 1.1rem; font-weight: 700; color: var(--official-blue); }
+
+        /* --- جدول الدرجات الصارم --- */
+        .table-official {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
         }
+
         table { width: 100%; border-collapse: collapse; }
-        th { padding: 22px; background: rgba(255,255,255,0.02); text-align: right; color: var(--primary); font-size: 0.85rem; font-weight: 800; }
-        td { padding: 18px 22px; border-bottom: 1px solid var(--border); font-size: 1.05rem; }
-        tr:hover { background: rgba(197, 160, 89, 0.05); }
-        .status-pill {
-            padding: 6px 14px; border-radius: 10px; font-size: 0.85rem; font-weight: 800;
-            background: rgba(197, 160, 89, 0.1); color: var(--primary); border: 1px solid rgba(197, 160, 89, 0.2);
-        }
+        th { background: var(--official-blue); color: #fff; padding: 15px; text-align: right; font-size: 0.9rem; }
+        td { padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 1rem; }
+        tr:last-child td { border: none; }
+        tr:nth-child(even) { background: #f8fafc; }
 
-        /* --- نظام الطباعة الرسمي --- */
+        .grade-box { font-weight: 700; color: var(--official-blue); }
+
+        /* --- التذييل والطباعة --- */
+        .actions { margin-top: 30px; text-align: center; }
+        .btn-print { background: #fff; border: 2px solid var(--official-blue); color: var(--official-blue); padding: 12px 30px; border-radius: 6px; font-weight: 700; cursor: pointer; margin: 0 10px; }
+        .btn-print:hover { background: var(--official-blue); color: #fff; }
+
         @media print {
-            body { background: white !important; color: black !important; padding: 0 !important; }
             .no-print { display: none !important; }
-            .slim-header { 
-                background: none !important; color: black !important; border-bottom: 2px solid #000 !important;
-                grid-template-columns: 1fr auto 1fr !important; padding: 10px 0 !important;
-            }
-            .h-info, .h-info b { color: black !important; }
-            .h-logo img { filter: grayscale(1) brightness(0.5); height: 60px !important; }
-            .bento-card { border: 1px solid #000 !important; background: none !important; color: black !important; }
-            .bento-card .value, .bento-card i { color: black !important; }
-            table, th, td { border: 1px solid #000 !important; color: black !important; }
-            .status-pill { border: none !important; background: none !important; padding: 0 !important; }
+            .official-header { box-shadow: none; margin-bottom: 20px; }
+            .main-wrapper { width: 100%; }
+            body { background: #fff; }
+            .search-card, .student-profile, .table-official { border: 1px solid #000 !important; box-shadow: none !important; }
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-        @media (max-width: 768px) {
-            .slim-header { grid-template-columns: 1fr; gap: 10px; text-align: center; }
-            .h-info { border: none !important; padding: 0 !important; text-align: center !important; }
-            .h-logo { order: -1; }
+        @media (max-width: 700px) {
+            .header-container { grid-template-columns: 1fr; text-align: center; gap: 15px; }
+            .gov-info { text-align: center !important; border: none !important; padding: 0 !important; }
+            .student-profile { grid-template-columns: 1fr; }
+            .profile-item { border-right: none; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
         }
     </style>
 </head>
 <body>
 
-<header class="slim-header">
-    <div class="h-info right">
-        <b>سلطنة عُمان</b>
-        وزارة التربية والتعليم<br>مديرية التربية بمحافظة ظفار
-    </div>
-    <div class="h-logo">
-        <img src="logo.png" alt="School Logo">
-    </div>
-    <div class="h-info left">
-        <b>مدرسة صلالة الشرقية (5-9)</b>
-        بوابة النتائج الذكية<br>الفصل الدراسي الأول 2026/2025
+<header class="official-header">
+    <div class="header-container">
+        <div class="gov-info right">
+            سلطنة عُمان
+            <span>وزارة التربية والتعليم</span>
+            <span>المديرية العامة للتربية والتعليم بمحافظة ظفار</span>
+        </div>
+        <div class="logo-main">
+            <img src="logo.png" alt="شعار الوزارة">
+        </div>
+        <div class="gov-info left">
+            مدرسة صلالة الشرقية (5-9)
+            <span>بوابة استخراج النتائج التحصيلية</span>
+            <span>الفصل الدراسي الأول 2026/2025</span>
+        </div>
     </div>
 </header>
 
-<div class="wrapper">
-    <section id="searchView" class="search-section no-print">
-        <div class="search-box">
-            <h2>الاستعلام الرقمي</h2>
-            <input type="text" id="civilInput" inputmode="numeric" placeholder="الرقم المدني للطالب">
-            <button onclick="searchStudent()">استعراض النتيجة <i class="fa-solid fa-chevron-left" style="margin-right:8px"></i></button>
-        </div>
+<main class="main-wrapper">
+    <section id="searchView" class="search-card no-print">
+        <h2>نظام الاستعلام عن نتائج الطلاب</h2>
+        <input type="text" id="civilInput" class="input-field" placeholder="أدخل الرقم المدني للطالب" inputmode="numeric">
+        <br>
+        <button class="btn-submit" onclick="searchStudent()">عرض كشف الدرجات</button>
     </section>
 
     <section id="resultView" style="display:none;">
-        <div class="bento-grid">
-            <div class="bento-card">
-                <i class="fa-solid fa-user-graduate"></i>
-                <div class="dash-content">
-                    <span class="label">اسم الطالب</span>
-                    <span class="value" id="resName">-</span>
-                </div>
+        <div class="student-profile">
+            <div class="profile-item">
+                <span class="profile-label">اسم الطالب الثلاثي</span>
+                <span class="profile-value" id="resName">-</span>
             </div>
-            <div class="bento-card">
-                <i class="fa-solid fa-chalkboard-user"></i>
-                <div class="dash-content">
-                    <span class="label">الصف / الشعبة</span>
-                    <span class="value" id="resClass">-</span>
-                </div>
+            <div class="profile-item">
+                <span class="profile-label">الصف الدراسي / الشعبة</span>
+                <span class="profile-value" id="resClass">-</span>
             </div>
-            <div class="bento-card">
-                <div class="mini-chart" id="resAvgChart">0%</div>
-                <div class="dash-content">
-                    <span class="label">المعدل العام</span>
-                    <span class="value" id="resAvg">0%</span>
-                </div>
+            <div class="profile-item">
+                <span class="profile-label">النسبة المئوية (المعدل)</span>
+                <span class="profile-value" id="resAvg">0%</span>
             </div>
         </div>
 
-        <div class="results-container">
+        <div class="table-official">
             <table>
                 <thead>
                     <tr>
                         <th>المادة الدراسية</th>
-                        <th style="text-align:center">الدرجة</th>
-                        <th style="text-align:center">التقدير</th>
+                        <th style="text-align:center">الدرجة النهائية</th>
+                        <th style="text-align:center">التقدير الوصفي</th>
                     </tr>
                 </thead>
                 <tbody id="resTable"></tbody>
             </table>
         </div>
 
-        <div class="no-print" style="margin-top: 40px; display: flex; gap: 15px; justify-content: center;">
-            <button onclick="window.print()" style="padding: 18px 45px; border-radius: 15px; border: none; background: var(--primary); color: #000; font-weight: 800; cursor: pointer;">
-                <i class="fa-solid fa-print"></i> طباعة الشهادة
-            </button>
-            <button onclick="location.reload()" style="padding: 18px 45px; border-radius: 15px; border: 1px solid var(--primary); background: transparent; color: #fff; font-weight: 800; cursor: pointer;">
-                خروج
-            </button>
+        <div class="actions no-print">
+            <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة النسخة الرسمية</button>
+            <button class="btn-print" onclick="location.reload()" style="border-color: #64748b; color: #64748b;">عودة للبحث</button>
         </div>
     </section>
-</div>
+</main>
 
 <script>
     let studentData = null;
 
     async function searchStudent() {
         const id = document.getElementById('civilInput').value.trim();
-        const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
+        if(!id) { alert("يرجى إدخال الرقم المدني"); return; }
         
+        const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
+        let found = false;
+
         for(let f of files) {
             try {
                 const r = await fetch(f);
+                if(!r.ok) continue;
                 const data = await r.json();
                 studentData = data.find(s => s["رقم_مدني"].toString() === id);
-                if(studentData) { renderResult(); return; }
-            } catch(e) {}
+                if(studentData) { found = true; renderResult(); break; }
+            } catch(e) { console.error("Error loading file:", f); }
         }
-        alert("تأكد من الرقم المدني، لم يتم العثور على النتيجة.");
+        if(!found) alert("لم يتم العثور على طالب بهذا الرقم المدني.");
     }
 
     function renderResult() {
         const subs = Object.keys(studentData).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
-        const avg = (subs.reduce((a, b) => a + parseFloat(studentData[b] || 0), 0) / subs.length).toFixed(1);
+        const total = subs.reduce((a, b) => a + parseFloat(studentData[b] || 0), 0);
+        const avg = (total / subs.length).toFixed(1);
         
         document.getElementById('resName').innerText = studentData["الاسم"];
         document.getElementById('resClass').innerText = `الصف ${studentData["الصف"]} / ${studentData["الشعبة"]}`;
         document.getElementById('resAvg').innerText = avg + "%";
-        document.getElementById('resAvgChart').innerText = Math.round(avg) + "%";
         
         document.getElementById('resTable').innerHTML = subs.map(s => {
             const v = parseFloat(studentData[s]);
             let appraisal = v>=90?'امتياز':v>=80?'جيد جداً':v>=65?'جيد':'مقبول';
-            return `<tr><td>${s}</td><td align="center"><span class="status-pill">${v}</span></td><td align="center">${appraisal}</td></tr>`;
+            return `<tr>
+                <td>${s}</td>
+                <td align="center" class="grade-box">${v}</td>
+                <td align="center">${appraisal}</td>
+            </tr>`;
         }).join('');
         
         document.getElementById('searchView').style.display = 'none';
