@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>بوابة مدرسة صلالة الشرقية</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -20,80 +20,87 @@
             font-family: 'Almarai', sans-serif;
             margin: 0; background: var(--deep-green);
             background-image: radial-gradient(circle at top right, #0a3d34 0%, var(--deep-green) 70%);
-            color: var(--text); min-height: 100vh;
+            color: var(--text); min-height: 100vh; overflow-x: hidden;
         }
 
-        .container { width: 95%; max-width: 1100px; margin: 20px auto; padding: 10px; }
+        .container { width: 95%; max-width: 1100px; margin: 15px auto; padding: 5px; }
 
-        /* --- بطاقات عرض البيانات (Dashboard) --- */
+        /* --- بطاقات البيانات (توزيع ذكي) --- */
         .student-dashboard {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* للحاسوب 4 أعمدة */
-            gap: 15px; margin-bottom: 25px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px; margin-bottom: 20px;
         }
 
         .info-card {
             background: var(--glass);
             border: 1px solid var(--border);
-            padding: 20px 10px; border-radius: 20px;
+            padding: 15px 5px; border-radius: 15px;
             text-align: center; backdrop-filter: blur(10px);
         }
 
-        .info-card i { color: var(--gold-primary); font-size: 1.5rem; margin-bottom: 8px; display: block; }
-        .info-card .label { font-size: 0.8rem; opacity: 0.7; display: block; margin-bottom: 5px; }
-        .info-card .value { font-size: 1.1rem; font-weight: 800; color: #fff; }
+        .info-card i { color: var(--gold-primary); font-size: 1.2rem; margin-bottom: 5px; display: block; }
+        .info-card .label { font-size: 0.7rem; opacity: 0.7; display: block; }
+        .info-card .value { font-size: 0.9rem; font-weight: 800; color: #fff; }
 
-        .highlight-card { border: 1px solid var(--gold-primary); background: rgba(197, 160, 89, 0.05); }
-        .highlight-card .value { color: var(--gold-primary); font-size: 1.6rem; }
+        .highlight-card { border: 1px solid var(--gold-primary); background: rgba(197, 160, 89, 0.1); }
+        .highlight-card .value { color: var(--gold-primary); font-size: 1.2rem; }
 
-        /* --- الجدول العريض --- */
+        /* --- الجدول العريض (مناسب للهاتف) --- */
         .table-container {
-            background: var(--glass); border-radius: 25px; 
-            border: 1px solid var(--border); overflow-x: auto; margin-top: 20px;
+            background: var(--glass); border-radius: 15px; 
+            border: 1px solid var(--border); overflow: hidden; margin-top: 15px;
         }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th { background: rgba(255,255,255,0.05); padding: 20px; text-align: right; color: var(--gold-soft); font-weight: 700; border-bottom: 2px solid var(--border); }
-        td { padding: 18px 20px; border-bottom: 1px solid var(--border); font-size: 1.1rem; }
-        .grade-badge { background: var(--gold-primary); color: var(--deep-green); padding: 5px 12px; border-radius: 8px; font-weight: 800; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        th { background: rgba(255,255,255,0.05); padding: 12px 8px; text-align: right; color: var(--gold-soft); font-size: 0.85rem; border-bottom: 1px solid var(--border); }
+        td { padding: 12px 8px; border-bottom: 1px solid var(--border); font-size: 0.9rem; word-wrap: break-word; }
+        
+        /* تضييق أعمدة الدرجات والتقدير لترك مساحة لاسم المادة */
+        th:nth-child(1), td:nth-child(1) { width: 45%; }
+        th:nth-child(2), td:nth-child(2) { width: 25%; text-align: center; }
+        th:nth-child(3), td:nth-child(3) { width: 30%; text-align: center; }
+
+        .grade-badge { background: var(--gold-primary); color: var(--deep-green); padding: 3px 8px; border-radius: 5px; font-weight: 800; font-size: 0.85rem; }
+
+        /* --- استعلامات الهاتف (لجعل الجدول يظهر كاملاً) --- */
+        @media (max-width: 600px) {
+            .student-dashboard { grid-template-columns: repeat(2, 1fr); }
+            th, td { padding: 10px 5px; font-size: 0.8rem; }
+            .container { width: 98%; }
+            h2 { font-size: 1.1rem; }
+            .info-card .value { font-size: 0.85rem; }
+            .highlight-card .value { font-size: 1.1rem; }
+        }
 
         /* --- المحلل الذكي --- */
-        #ai-btn { position: fixed; bottom: 25px; right: 25px; width: 65px; height: 65px; background: var(--gold-primary); color: var(--deep-green); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; border: none; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
-        #ai-window { position: fixed; bottom: 100px; right: 25px; width: 350px; height: 500px; background: #0a1a18; border: 1px solid var(--gold-primary); border-radius: 20px; display: none; flex-direction: column; z-index: 1000; overflow: hidden; }
-        .ai-header { background: var(--gold-primary); color: var(--deep-green); padding: 15px; font-weight: 800; display: flex; justify-content: space-between; }
-        .ai-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.2); }
-        .bubble { padding: 12px; border-radius: 15px; max-width: 85%; font-size: 0.9rem; line-height: 1.4; }
-        .bot { background: var(--glass); align-self: flex-start; border: 1px solid var(--border); }
+        #ai-btn { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; background: var(--gold-primary); color: var(--deep-green); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 25px; cursor: pointer; border: none; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        #ai-window { position: fixed; bottom: 85px; right: 10px; left: 10px; height: 400px; background: #0a1a18; border: 1px solid var(--gold-primary); border-radius: 15px; display: none; flex-direction: column; z-index: 1000; overflow: hidden; }
+        .ai-header { background: var(--gold-primary); color: var(--deep-green); padding: 12px; font-weight: 800; display: flex; justify-content: space-between; }
+        .ai-body { flex: 1; padding: 10px; overflow-y: auto; background: rgba(0,0,0,0.2); }
+        .bubble { padding: 10px; border-radius: 12px; max-width: 85%; font-size: 0.85rem; margin-bottom: 8px; }
+        .bot { background: var(--glass); border: 1px solid var(--border); }
         .user { background: var(--gold-primary); color: var(--deep-green); align-self: flex-end; }
 
+        .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 800; cursor: pointer; font-size: 0.9rem; margin: 5px; }
+        .btn-gold { background: var(--gold-primary); color: var(--deep-green); }
         .view { display: none; }
         .view.active { display: block; }
-
-        /* استعلامات الهاتف */
-        @media (max-width: 768px) {
-            .student-dashboard { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .info-card { padding: 15px 5px; }
-            .info-card .value { font-size: 0.9rem; }
-            #ai-window { width: 90%; right: 5%; }
-        }
-
-        .no-print { display: flex; justify-content: center; gap: 15px; margin-top: 30px; }
-        .btn { padding: 12px 25px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; font-size: 1rem; }
-        .btn-gold { background: var(--gold-primary); color: var(--deep-green); }
+        @media print { .no-print { display: none; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <section id="searchView" class="view active" style="text-align:center; padding-top: 100px;">
-        <h1 style="color:var(--gold-soft)">بوابة النتائج الرقمية</h1>
-        <div style="background:var(--glass); padding:40px; border-radius:30px; border:1px solid var(--border); max-width:450px; margin:auto;">
-            <input type="text" id="civilInput" style="width:100%; padding:15px; border-radius:10px; border:1px solid var(--border); background:rgba(0,0,0,0.2); color:white; font-size:1.2rem; text-align:center;" placeholder="أدخل الرقم المدني">
-            <button class="btn btn-gold" style="width:100%; margin-top:20px;" onclick="searchStudent()">عرض النتيجة</button>
+    <section id="searchView" class="view active" style="text-align:center; padding-top: 80px;">
+        <h1 style="color:var(--gold-soft); font-size: 1.5rem;">بوابة النتائج الرقمية</h1>
+        <div style="background:var(--glass); padding:30px 15px; border-radius:20px; border:1px solid var(--border); max-width:350px; margin:auto;">
+            <input type="text" id="civilInput" inputmode="numeric" style="width:90%; padding:12px; border-radius:10px; border:none; background:rgba(0,0,0,0.3); color:white; font-size:1.1rem; text-align:center; outline:none;" placeholder="أدخل الرقم المدني">
+            <button class="btn btn-gold" style="width:90%; margin-top:15px;" onclick="searchStudent()">عرض النتيجة</button>
         </div>
     </section>
 
     <section id="resultView" class="view">
-        <h2 style="text-align:center; color:var(--gold-primary);">بيانات الطالب الأكاديمية</h2>
+        <h2 style="text-align:center; color:var(--gold-primary); margin-bottom:15px;">السجل الأكاديمي</h2>
         
         <div class="student-dashboard">
             <div class="info-card">
@@ -103,7 +110,7 @@
             </div>
             <div class="info-card">
                 <i class="fa-solid fa-school"></i>
-                <span class="label">الصف / الشعبة</span>
+                <span class="label">الصف</span>
                 <span class="value" id="resClass">-</span>
             </div>
             <div class="info-card highlight-card">
@@ -122,16 +129,16 @@
             <table>
                 <thead>
                     <tr>
-                        <th>المادة الدراسية</th>
-                        <th style="text-align:center;">الدرجة</th>
-                        <th style="text-align:center;">التقدير</th>
+                        <th>المادة</th>
+                        <th>الدرجة</th>
+                        <th>التقدير</th>
                     </tr>
                 </thead>
                 <tbody id="resTable"></tbody>
             </table>
         </div>
 
-        <div class="no-print">
+        <div class="no-print" style="text-align:center; display:flex; justify-content:center; flex-wrap:wrap; margin-top:20px;">
             <button class="btn btn-gold" onclick="window.print()">طباعة</button>
             <button class="btn" style="background:transparent; border:1px solid var(--gold-soft); color:#fff;" onclick="location.reload()">بحث جديد</button>
         </div>
@@ -143,8 +150,8 @@
     <div class="ai-header">المحلل الذكي <span onclick="toggleChat()" style="cursor:pointer">×</span></div>
     <div id="ai-body" class="ai-body"></div>
     <div style="padding:10px; display:flex; gap:5px; border-top:1px solid var(--border);">
-        <input type="text" id="aiInput" style="flex:1; background:transparent; border:1px solid var(--border); color:white; border-radius:8px; padding:8px;" placeholder="اسأل المحلل...">
-        <button onclick="sendAiMsg()" style="background:var(--gold-primary); border:none; padding:8px; border-radius:8px;"><i class="fa-solid fa-paper-plane"></i></button>
+        <input type="text" id="aiInput" style="flex:1; background:transparent; border:1px solid var(--border); color:white; border-radius:8px; padding:8px; font-size:0.8rem;" placeholder="اسأل المحلل...">
+        <button onclick="sendAiMsg()" style="background:var(--gold-primary); border:none; padding:8px 12px; border-radius:8px;"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
 </div>
 
@@ -160,10 +167,7 @@
                 const r = await fetch(f);
                 const data = await r.json();
                 student = data.find(s => s["رقم_مدني"].toString() === id);
-                if(student) {
-                    showResult();
-                    break;
-                }
+                if(student) { showResult(); break; }
             } catch(e) {}
         }
         if(!student) alert("عذراً، الرقم غير موجود.");
@@ -173,8 +177,8 @@
         const subs = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
         const avg = (subs.reduce((a, b) => a + parseFloat(student[b]), 0) / subs.length).toFixed(1);
         
-        document.getElementById('resName').innerText = student["الاسم"];
-        document.getElementById('resClass').innerText = `${student["الصف"]} / ${student["الشعبة"]}`;
+        document.getElementById('resName').innerText = student["الاسم"].split(' ')[0] + ' ' + (student["الاسم"].split(' ')[1] || '');
+        document.getElementById('resClass').innerText = `${student["الصف"]}/${student["الشعبة"]}`;
         document.getElementById('resRank').innerText = "متفوق";
         document.getElementById('resAvg').innerText = avg + "%";
         
@@ -194,7 +198,7 @@
         const body = document.getElementById('ai-body');
         const div = document.createElement('div');
         div.className = "bubble bot";
-        div.innerText = "جاري تحليل درجاتك مادة مادة...";
+        div.innerText = "أهلاً بك! جاري تحليل نتيجتك مادة بمادة...";
         body.appendChild(div);
 
         try {
@@ -203,8 +207,8 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: [
-                        { role: 'system', content: 'أنت محلل أكاديمي لمدرسة صلالة الشرقية. حلل الدرجات مادة مادة بأسلوب ChatGPT.' },
-                        { role: 'user', content: `حلل درجاتي: ${JSON.stringify(student)}` }
+                        { role: 'system', content: 'أنت محلل نتائج طلاب مدرسة صلالة الشرقية. حلل الدرجات مادة مادة باختصار وبذكاء.' },
+                        { role: 'user', content: `حلل هذه الدرجات: ${JSON.stringify(student)}` }
                     ],
                     model: 'openai'
                 })
