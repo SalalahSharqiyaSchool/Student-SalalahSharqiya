@@ -106,6 +106,19 @@
         .view.active { display: block; animation: zoomIn 0.5s ease-out; }
         @keyframes zoomIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
 
+        /* --- إضافات جديدة: تصميم الروبوت وزر الأوائل --- */
+        .ai-fab { position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px; background: var(--gold-primary); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--deep-green); cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 1000; }
+        .ai-chat-window { position: fixed; bottom: 100px; left: 30px; width: 320px; background: var(--deep-green); border: 1px solid var(--gold-primary); border-radius: 20px; display: none; flex-direction: column; overflow: hidden; z-index: 1000; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .ai-chat-header { background: var(--gold-primary); color: var(--deep-green); padding: 15px; font-weight: 800; display: flex; justify-content: space-between; }
+        .ai-chat-body { height: 300px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; }
+        .msg { padding: 10px; border-radius: 10px; max-width: 80%; }
+        .bot-msg { background: var(--glass); border-right: 3px solid var(--gold-primary); }
+        
+        .modal-tops { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: var(--deep-green); border: 2px solid var(--gold-primary); padding: 30px; border-radius: 30px; width: 90%; max-width: 450px; text-align: center; }
+        .tops-grid { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+        .top-card { background: var(--glass); border: 1px solid var(--border); padding: 15px; border-radius: 15px; flex: 1; }
+
         @media print {
             .no-print { display: none !important; }
             body { background: white !important; color: black !important; }
@@ -121,6 +134,7 @@
         <img src="logo.png" alt="Oman Logo">
         <h1>بوابة مدرسة صلالة الشرقية للنتائج</h1>
     </div>
+    <button id="btnTops" class="btn-gold" style="padding: 8px 20px; font-size: 0.9rem; display: none;" onclick="showTops()">لوحة الأوائل 🏆</button>
     <div style="color: var(--gold-soft); font-size: 1.2rem;"><i class="fa-solid fa-shield-halved"></i> 2026</div>
 </header>
 
@@ -174,7 +188,23 @@
     </section>
 </div>
 
+<div class="ai-fab no-print" id="aiFab" onclick="toggleChat()"><i class="fa-solid fa-robot"></i></div>
+<div class="ai-chat-window no-print" id="aiChat">
+    <div class="ai-chat-header"><span>المحلل الذكي</span> <span onclick="toggleChat()" style="cursor:pointer">×</span></div>
+    <div class="ai-chat-body" id="chatBody"></div>
+</div>
+
+<div class="modal-tops no-print" id="topsModal">
+    <div class="modal-content">
+        <h2 style="color: var(--gold-primary);">لوحة شرف الأوائل الثلاثة</h2>
+        <div class="tops-grid" id="topsGrid"></div>
+        <button class="btn-gold" style="margin-top: 25px;" onclick="document.getElementById('topsModal').style.display='none'">إغلاق</button>
+    </div>
+</div>
+
 <script>
+    let globalMates = []; // متغير جديد لحفظ الزملاء
+
     async function processSearch() {
         const civil = document.getElementById('civilInput').value.trim();
         if(!civil) return;
@@ -189,6 +219,7 @@
                 student = data.find(s => s["رقم_مدني"].toString() === civil);
                 if(student) {
                     mates = data.filter(m => m["الصف"] === student["الصف"] && m["الشعبة"] === student["الشعبة"]);
+                    globalMates = mates; // حفظ البيانات للأوائل
                     break;
                 }
             } catch(e) { console.error("Error loading file"); }
@@ -196,6 +227,9 @@
 
         if(student) {
             displayUI(student, mates);
+            // إظهار زر الروبوت وزر الأوائل
+            document.getElementById('aiFab').style.display = 'flex';
+            document.getElementById('btnTops').style.display = 'block';
         } else {
             alert("الرقم المدني غير موجود في النظام.");
         }
@@ -213,14 +247,12 @@
         const totalScore = calcTotal(student);
         const avg = (totalScore / subjects.length).toFixed(1);
 
-        // تعبئة البطاقة
         document.getElementById('studentName').innerText = student["الاسم"];
         document.getElementById('studentClass').innerText = `الصف: ${student["الصف"]} / الشعبة: ${student["الشعبة"]}`;
         document.getElementById('studentID').innerText = `ID: ${student["رقم_مدني"]}`;
         document.getElementById('studentRank').innerText = `المركز: ${rank}`;
         document.getElementById('studentAvg').innerText = avg + "%";
 
-        // تعبئة الجدول
         let rows = '';
         subjects.forEach(sub => {
             const v = parseFloat(student[sub]);
@@ -235,6 +267,34 @@
 
         document.getElementById('searchView').classList.remove('active');
         document.getElementById('resultView').classList.add('active');
+
+        // تجهيز رسالة الروبوت الأولى
+        const firstName = student["الاسم"].split(' ')[0];
+        document.getElementById('chatBody').innerHTML = `<div class="msg bot-msg">أهلاً ${firstName}! لقد قمت بتحليل نتائجك، معدلك هو ${avg}% وأنت في المركز ${rank}. استمر في التميز!</div>`;
+    }
+
+    // --- دوال الإضافات الجديدة ---
+    function toggleChat() {
+        const chat = document.getElementById('aiChat');
+        chat.style.display = (chat.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function showTops() {
+        if(globalMates.length === 0) return;
+        const subjects = Object.keys(globalMates[0]).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        const calcTotal = (s) => subjects.reduce((a, b) => a + parseFloat(s[b] || 0), 0);
+        
+        const sorted = globalMates.map(m => ({
+            name: m["الاسم"].split(' ')[0], total: calcTotal(m)
+        })).sort((a,b) => b.total - a.total).slice(0, 3);
+
+        const medals = ['🥇', '🥈', '🥉'];
+        let html = '';
+        sorted.forEach((s, i) => {
+            html += `<div class="top-card"><div>${medals[i]}</div><div style="font-size:0.8rem; margin:5px 0;">${s.name}</div><div style="color:var(--gold-primary); font-weight:bold;">${s.total.toFixed(1)}</div></div>`;
+        });
+        document.getElementById('topsGrid').innerHTML = html;
+        document.getElementById('topsModal').style.display = 'flex';
     }
 </script>
 
