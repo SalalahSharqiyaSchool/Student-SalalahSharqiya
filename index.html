@@ -4,158 +4,137 @@
     <meta charset="UTF-8">
     <title>منصة التميز | مدرسة صلالة الشرقية</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
-        :root { --emerald: #04241f; --gold: #af9164; --gemini-blue: #1a73e8; }
-        
+        :root { --emerald: #04241f; --gold: #af9164; --gemini: #1a73e8; }
         * { box-sizing: border-box; }
-        body { font-family: 'Almarai', sans-serif; background: var(--emerald); margin: 0; padding: 0; color: #fff; overflow-x: hidden; }
+        body { font-family: 'Almarai', sans-serif; background: var(--emerald); margin: 0; padding: 0; color: #fff; }
 
-        /* --- صفحة الترحيب (Responsive Welcome) --- */
-        .welcome-screen { 
-            min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; 
-            align-items: center; text-align: center; padding: 40px 20px;
-            background: radial-gradient(circle at center, #064b3e 0%, var(--emerald) 100%);
-        }
-        .logos-area img { max-height: 100px; width: auto; }
-        .platform-intro h1 { font-size: clamp(2rem, 8vw, 3.5rem); color: var(--gold); margin: 15px 0; }
-        .platform-intro p { font-size: clamp(1rem, 4vw, 1.4rem); color: #ced4da; max-width: 700px; margin: 0 auto; }
-
-        .exciting-btn {
-            background: linear-gradient(135deg, var(--gold), #d4af37); color: white; border: none; 
-            padding: 15px 40px; border-radius: 50px; font-weight: 800; font-size: 1.2rem; 
-            cursor: pointer; transition: 0.4s; box-shadow: 0 0 15px rgba(175, 145, 100, 0.4);
-            animation: pulse 2s infinite; margin-top: 30px;
-        }
+        /* --- شاشة الترحيب --- */
+        .welcome-screen { height: 100vh; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center; padding: 50px 20px; background: radial-gradient(circle, #064b3e, var(--emerald)); }
+        .platform-title { font-size: clamp(2rem, 5vw, 3rem); color: var(--gold); font-weight: 800; margin: 10px 0; }
+        .exciting-btn { background: linear-gradient(135deg, var(--gold), #d4af37); color: white; border: none; padding: 15px 45px; border-radius: 50px; font-weight: 800; cursor: pointer; transition: 0.3s; animation: pulse 2s infinite; font-size: 1.1rem; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(175, 145, 100, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(175, 145, 100, 0); } 100% { box-shadow: 0 0 0 0 rgba(175, 145, 100, 0); } }
 
         /* --- واجهة الدخول --- */
         .login-view { display: none; height: 100vh; justify-content: center; align-items: center; padding: 20px; }
-        .login-card { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); padding: 30px; border-radius: 25px; border: 1px solid var(--gold); text-align: center; width: 100%; max-width: 400px; }
-        .login-card input { width: 100%; padding: 15px; margin: 20px 0; border-radius: 12px; border: 2px solid var(--gold); background: #fff; color: #333; font-size: 1.1rem; text-align: center; }
+        .login-card { background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); padding: 35px; border-radius: 25px; border: 1px solid var(--gold); text-align: center; width: 100%; max-width: 400px; }
+        .login-card input { width: 100%; padding: 15px; margin: 20px 0; border-radius: 12px; border: 2px solid var(--gold); font-size: 1.2rem; text-align: center; }
 
-        /* --- شريط التنقل --- */
-        #topNav { position: fixed; top: 0; width: 100%; padding: 10px 5%; display: none; justify-content: space-between; align-items: center; background: var(--emerald); border-bottom: 2px solid var(--gold); z-index: 1000; }
+        /* --- شريط علوي --- */
+        #topNav { position: fixed; top: 0; width: 100%; padding: 10px 5%; display: none; justify-content: space-between; align-items: center; background: rgba(4,36,31,0.95); border-bottom: 2px solid var(--gold); z-index: 1000; }
 
-        /* --- الشهادة المستجيبة (Smart A4) --- */
-        #resultView { display: none; background: #f0f2f5; color: #333; padding: 80px 10px 40px 10px; }
+        /* --- الشهادة للطباعة (تحكم دقيق بالأبعاد) --- */
+        #resultView { display: none; background: #f4f4f4; padding: 80px 10px 20px; min-height: 100vh; color: #333; }
         .a4-page { 
-            background: white; width: 100%; max-width: 210mm; margin: 0 auto; 
-            padding: clamp(15px, 5vw, 40px); border: 10px double var(--emerald); 
-            box-sizing: border-box; box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            background: white; width: 100%; max-width: 190mm; margin: 0 auto; 
+            padding: 15mm; border: 8px double var(--gold); position: relative;
         }
-        .report-header { border-bottom: 3px solid var(--emerald); padding-bottom: 15px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; }
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; background: #f8f9fa; padding: 15px; border-radius: 10px; font-size: 0.9rem; }
+        .header-section { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--emerald); padding-bottom: 10px; margin-bottom: 15px; }
         
-        .table-wrapper { overflow-x: auto; }
-        .grades-table { width: 100%; border-collapse: collapse; min-width: 400px; }
-        .grades-table th { background: var(--emerald); color: var(--gold); padding: 12px; border: 1px solid #ddd; }
-        .grades-table td { padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: 700; }
+        .std-data-box { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
+            background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 15px;
+        }
+        .std-data-box div { font-size: 0.95rem; }
+        .std-data-box b { color: var(--emerald); }
 
-        /* --- Gemini AI Analyst --- */
-        .ai-float { position: fixed; bottom: 20px; left: 20px; z-index: 2000; display: none; }
-        .ai-icon { width: 60px; height: 60px; background: linear-gradient(135deg, #1a73e8, #8ab4f8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .ai-window { position: absolute; bottom: 70px; left: 0; width: min(320px, 85vw); background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; border-top: 5px solid var(--gemini-blue); }
-        .ai-body { padding: 15px; height: 280px; overflow-y: auto; font-size: 0.85rem; }
-        .gemini-msg { background: #e8f0fe; padding: 10px; border-radius: 10px; border-right: 4px solid var(--gemini-blue); margin-bottom: 10px; }
+        .grades-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        .grades-table th { background: var(--emerald); color: var(--gold); padding: 8px; border: 1px solid var(--gold); font-size: 0.9rem; }
+        .grades-table td { padding: 7px; border: 1px solid var(--gold); text-align: center; font-weight: 700; font-size: 0.95rem; }
 
-        /* --- الأوائل --- */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; z-index: 3000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 450px; text-align: center; color: #333; }
-        .rank-box { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-top: 20px; }
+        /* --- بطاقة Gemini العائمة --- */
+        .ai-float { position: fixed; bottom: 25px; left: 25px; z-index: 2000; display: none; }
+        .ai-icon { width: 60px; height: 60px; background: var(--gemini); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .ai-window { position: absolute; bottom: 75px; left: 0; width: 300px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; border-top: 5px solid var(--gemini); overflow: hidden; }
+        .ai-chat-body { padding: 15px; height: 250px; overflow-y: auto; font-size: 0.85rem; }
+        .msg-gemini { background: #e8f0fe; padding: 10px; border-radius: 10px; border-right: 4px solid var(--gemini); margin-bottom: 10px; line-height: 1.5; }
+
+        /* --- بطاقة الأوائل العائمة --- */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; z-index: 3000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; text-align: center; border: 4px solid var(--gold); animation: slideIn 0.4s ease; }
+        @keyframes slideIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .podium { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-top: 25px; }
         .rank-card { background: #f8f9fa; padding: 10px; border-radius: 10px; border: 2px solid #eee; flex: 1; }
 
         @media print {
             .no-print { display: none !important; }
             body { background: white; }
             #resultView { display: block !important; padding: 0; }
-            .a4-page { border: none; box-shadow: none; max-width: 100%; }
-        }
-
-        @media (max-width: 600px) {
-            .report-header { text-align: center; justify-content: center; }
-            .report-header div { width: 100%; }
+            .a4-page { border: 4px double var(--gold); max-width: 100%; margin: 0; box-shadow: none; }
+            @page { size: A4; margin: 10mm; }
         }
     </style>
 </head>
 <body>
 
-<nav id="topNav" class="no-print">
-    <div style="color:var(--gold); font-weight:800; font-size: 0.9rem;">مدرسة صلالة الشرقية</div>
-    <div>
-        <button onclick="openTops()" style="background:var(--gold); color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size: 0.8rem;">الأوائل 🏆</button>
-        <button onclick="location.reload()" style="background:white; color:var(--emerald); border:none; padding:6px 12px; border-radius:8px; cursor:pointer; margin-right:5px; font-size: 0.8rem;">خروج</button>
-    </div>
-</nav>
-
 <div id="welcomeView" class="welcome-screen no-print">
-    <div class="logos-area">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Oman_Ministry_of_Education_Logo.svg/1200px-Oman_Ministry_of_Education_Logo.svg.png" alt="وزارة التربية">
+    <div style="text-align: center;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Oman_Ministry_of_Education_Logo.svg/1200px-Oman_Ministry_of_Education_Logo.svg.png" height="100" alt="الوزارة">
+        <div class="platform-title">بوابة التميز الرقمية</div>
+        <p style="font-size: 1.2rem; opacity: 0.9;">مدرسة صلالة الشرقية (5-10)</p>
     </div>
-    <div class="platform-intro">
-        <h1>بوابة التميز الرقمية</h1>
-        <p>مدرسة صلالة الشرقية (5-10)<br>الفصل الدراسي الأول | 2025/2026 م</p>
-        <button class="exciting-btn" onclick="showLogin()">دخول المنصة</button>
-    </div>
-    <div style="font-size: 0.8rem; color: var(--gold); opacity: 0.8;">
-        تصميم وتطوير: <b>أ. فيصل العريبي</b>
+    <button class="exciting-btn" onclick="showLogin()">دخول النظام</button>
+    <div style="font-size: 0.85rem; color: var(--gold);">
+        الفصل الدراسي الأول | 2025/2026 م<br>
+        تصميم: <b>أ. فيصل العريبي</b>
     </div>
 </div>
 
 <div id="loginView" class="login-view no-print">
     <div class="login-card">
-        <i class="fa-solid fa-lock-open" style="font-size: 3rem; color: var(--gold); margin-bottom: 10px;"></i>
-        <h2 style="color: white; margin: 0;">التحقق من الهوية</h2>
+        <h2 style="color: white;">عرض النتائج</h2>
         <input type="text" id="stdId" placeholder="أدخل الرقم المدني">
-        <button class="exciting-btn" style="width:100%; margin:0;" onclick="startApp()">تحليل النتيجة</button>
+        <button class="exciting-btn" style="width:100%;" onclick="startApp()">تحليل البيانات</button>
     </div>
 </div>
 
+<nav id="topNav" class="no-print">
+    <div style="color:var(--gold); font-weight:800;">صلالة الشرقية</div>
+    <button onclick="openTops()" style="background:var(--gold); color:white; border:none; padding:8px 20px; border-radius:50px; cursor:pointer; font-weight:800;">الأوائل 🏆</button>
+</nav>
+
 <div class="ai-float no-print" id="aiBot">
     <div class="ai-window" id="aiWin">
-        <div style="background:var(--gemini-blue); color:white; padding:10px; display:flex; justify-content:space-between;">
+        <div style="background:var(--gemini); color:white; padding:10px; font-weight:800; display:flex; justify-content:space-between;">
             <span>Gemini Analyst</span><span style="cursor:pointer" onclick="toggleAI()">×</span>
         </div>
-        <div class="ai-body" id="chatContainer"></div>
-        <div style="display:flex; padding:8px; border-top:1px solid #eee;">
-            <input type="text" id="aiInput" placeholder="اسأل الروبوت..." style="flex:1; border:1px solid #ddd; padding:8px; border-radius:8px; font-size:0.8rem;">
-            <button onclick="askGemini()" style="background:var(--gemini-blue); color:white; border:none; padding:8px; border-radius:8px; margin-right:4px;"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
+        <div class="ai-chat-body" id="chatBox"></div>
     </div>
     <div class="ai-icon" onclick="toggleAI()"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
 </div>
 
 <div id="resultView">
     <div class="a4-page">
-        <div class="report-header">
-            <div>سلطنة عمان<br>وزارة التربية والتعليم<br><b>مدرسة صلالة الشرقية</b></div>
+        <div class="header-section">
+            <div style="font-size: 0.8rem;">سلطنة عمان<br>وزارة التربية والتعليم<br><b>مدرسة صلالة الشرقية</b></div>
             <img src="logo.png" height="60" onerror="this.style.display='none'">
-            <div style="text-align: left;">كشف الدرجات<br>الفصل الدراسي الأول<br>2025/2026 م</div>
+            <div style="text-align: left; font-size: 0.8rem;">كشف الدرجات<br>الفصل الدراسي الأول<br>2025/2026 م</div>
         </div>
-        <div class="info-grid" id="infoBox"></div>
-        <div class="table-wrapper">
-            <table class="grades-table">
-                <thead><tr><th>المادة الدراسية</th><th>الدرجة</th><th>التقدير</th></tr></thead>
-                <tbody id="tableBody"></tbody>
-            </table>
-        </div>
-        <div style="margin-top: 30px; display: flex; justify-content: space-between; font-size: 0.8rem;">
-            <div>توقيع ولي الأمر: ...........</div>
-            <div style="text-align: center;">يعتمد مدير المدرسة</div>
+        <div class="std-data-box" id="stdInfo"></div>
+        <table class="grades-table">
+            <thead>
+                <tr><th style="text-align: right;">المادة الدراسية</th><th>الدرجة</th><th>التقدير</th></tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+        <div style="margin-top: 30px; display: flex; justify-content: space-between; font-size: 0.85rem;">
+            <div>توقيع ولي الأمر: ...................</div>
+            <div style="text-align: center;">يعتمد مدير المدرسة<br><b>مدرسة صلالة الشرقية</b></div>
         </div>
     </div>
     <div class="no-print" style="text-align: center; margin-top: 20px;">
-        <button onclick="window.print()" class="exciting-btn" style="padding:12px 30px; font-size: 1rem;">طباعة النسخة الورقية</button>
+        <button onclick="window.print()" class="exciting-btn">طباعة الشهادة</button>
     </div>
 </div>
 
 <div class="modal" id="topsModal">
     <div class="modal-content">
-        <h3>لوحة الشرف 🏆</h3>
-        <div class="rank-box" id="topsList"></div>
-        <button onclick="document.getElementById('topsModal').style.display='none'" class="exciting-btn" style="font-size:0.9rem; padding:8px 20px;">إغلاق</button>
+        <h3 style="color:var(--emerald);"><i class="fa-solid fa-crown"></i> أوائل الصف</h3>
+        <div class="podium" id="topsList"></div>
+        <button onclick="document.getElementById('topsModal').style.display='none'" class="exciting-btn" style="margin-top:25px; font-size:0.9rem;">إغلاق</button>
     </div>
 </div>
 
@@ -176,7 +155,7 @@
                 const res = await fetch(f + "?v=" + Date.now());
                 const data = await res.json();
                 student = data.find(s => s["رقم_مدني"].toString() === id);
-                if(student) { classmates = data.filter(c => c["الصف"] === student["الصف"]); break; }
+                if(student) { classmates = data; break; }
             } catch(e) {}
         }
         if(student) {
@@ -184,18 +163,33 @@
             document.getElementById('topNav').style.display = 'flex';
             document.getElementById('resultView').style.display = 'block';
             document.getElementById('aiBot').style.display = 'block';
-            renderUI();
-        } else { alert("الرقم المدني غير موجود."); }
+            calculateAndRender();
+        } else { alert("الرقم المدني غير مسجل."); }
     }
 
-    function renderUI() {
-        document.getElementById('infoBox').innerHTML = `
-            <div>الاسم: <b>${student["الاسم"]}</b></div>
-            <div>الصف: <b>${student["الصف"]} / ${student["الشعبة"]}</b></div>
+    function calculateAndRender() {
+        const subjects = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        
+        // حساب المجموع والنسبة والمركز
+        const getSum = (s) => subjects.reduce((a, b) => a + parseFloat(s[b]||0), 0);
+        const studentSum = getSum(student);
+        const percentage = (studentSum / (subjects.length * 100) * 100).toFixed(1);
+        
+        const rankings = classmates
+            .map(c => ({ id: c["رقم_مدني"], total: getSum(c) }))
+            .sort((a, b) => b.total - a.total);
+        const rank = rankings.findIndex(r => r.id === student["رقم_مدني"]) + 1;
+
+        // تعبئة البيانات
+        document.getElementById('stdInfo').innerHTML = `
+            <div>اسم الطالب: <b>${student["الاسم"]}</b></div>
+            <div>الصف / الشعبة: <b>${student["الصف"]} / ${student["الشعبة"]}</b></div>
+            <div>المركز في الصف: <b>${rank}</b></div>
+            <div>النسبة المئوية: <b>${percentage}%</b></div>
         `;
-        const subs = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+
         let html = "";
-        subs.forEach(sub => {
+        subjects.forEach(sub => {
             const v = parseFloat(student[sub]);
             html += `<tr><td style="text-align:right;">${sub}</td><td>${v}</td><td>${v>=90?'ممتاز':'جيد'}</td></tr>`;
         });
@@ -205,40 +199,27 @@
     function toggleAI() {
         const win = document.getElementById('aiWin');
         if (win.style.display === 'none' || win.style.display === '') {
-            const subs = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
-            const avg = (subs.reduce((a, b) => a + parseFloat(student[b]), 0) / subs.length).toFixed(1);
-            const hints = [
-                `أهلاً ${student["الاسم"].split(' ')[0]}! معدلك الحالي ${avg} مبشر جداً.`,
-                `ذكاء Gemini يحلل درجاتك.. أنت متفوق في المواد الأساسية!`,
-                `جلسة جديدة: كيف أساعدك اليوم في رحلتك نحو المركز الأول؟`
+            const msgs = [
+                `مرحباً ${student["الاسم"].split(' ')[0]}! Gemini يحلل نتائجك: مستواك رائع ونسبتك تظهر جهداً كبيراً.`,
+                `تحليل جديد: أنت متفوق في مهاراتك الدراسية، استمر في هذا العطاء!`,
+                `رؤية Gemini: معدلك الحالي يضعك في قائمة الطلاب المتميزين بالمدرسة.`
             ];
-            document.getElementById('chatContainer').innerHTML = `<div class="gemini-msg">${hints[Math.floor(Math.random()*hints.length)]}</div>`;
+            document.getElementById('chatBox').innerHTML = `<div class="msg-gemini">${msgs[Math.floor(Math.random()*msgs.length)]}</div>`;
             win.style.display = 'flex';
         } else { win.style.display = 'none'; }
     }
 
-    function askGemini() {
-        const input = document.getElementById('aiInput');
-        if(!input.value) return;
-        document.getElementById('chatContainer').innerHTML += `<div style="text-align:left; font-size:0.75rem; margin-bottom:5px;"><b>أنت:</b> ${input.value}</div>`;
-        setTimeout(() => {
-            document.getElementById('chatContainer').innerHTML += `<div class="gemini-msg">بناءً على تحليلي لدرجاتك في ${student["الصف"]}، أنصحك بالاستمرار في هذا المستوى الرائع!</div>`;
-            document.getElementById('chatContainer').scrollTop = 9999;
-        }, 600);
-        input.value = "";
-    }
-
     function openTops() {
-        const subs = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
-        const list = classmates.map(c => ({
-            name: c["الاسم"].split(' ')[0],
-            total: subs.reduce((a, b) => a + parseFloat(c[b]||0), 0)
-        })).sort((a,b) => b.total - a.total).slice(0, 3);
-        document.getElementById('topsList').innerHTML = list.map((l, i) => `
-            <div class="rank-card">
-                <div style="font-size:1.2rem;">${['🥇','🥈','🥉'][i]}</div>
-                <div style="font-size:0.7rem; font-weight:800;">${l.name}</div>
-                <div style="font-size:0.8rem; color:var(--emerald)">${l.total}</div>
+        const subjects = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        const tops = classmates
+            .map(c => ({ name: c["الاسم"].split(' ')[0], total: subjects.reduce((a, b) => a + parseFloat(c[b]||0), 0) }))
+            .sort((a, b) => b.total - a.total).slice(0, 3);
+
+        document.getElementById('topsList').innerHTML = tops.map((l, i) => `
+            <div class="rank-card" style="border-color:${['gold','silver','#cd7f32'][i]}">
+                <div style="font-size:1.5rem;">${['🥇','🥈','🥉'][i]}</div>
+                <div style="font-weight:800; font-size:0.8rem;">${l.name}</div>
+                <div style="color:var(--emerald); font-weight:800;">${l.total}</div>
             </div>`).join('');
         document.getElementById('topsModal').style.display = 'flex';
     }
