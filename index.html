@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>بوابة صلالة الشرقية | 2026</title>
+    <title>بوابة صلالة الشرقية | تحليل ذكي فائق السرعة</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -43,35 +43,25 @@
         td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
         .grade-badge { background: var(--gold); color: var(--deep-green); padding: 3px 8px; border-radius: 5px; font-weight: 800; }
 
-        /* --- المحلل السريع --- */
-        #ai-btn { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; background: var(--gold); color: var(--deep-green); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 24px; border: none; cursor: pointer; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        /* --- المحلل الذكي الفائق --- */
+        #ai-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold); color: var(--deep-green); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 28px; border: none; cursor: pointer; z-index: 1000; box-shadow: 0 5px 20px rgba(0,0,0,0.5); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(197, 160, 89, 0); } 100% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); } }
         
-        #ai-window { position: fixed; bottom: 85px; right: 10px; left: 10px; height: 450px; background: #0a1a18; border: 1px solid var(--gold); border-radius: 20px; display: none; flex-direction: column; z-index: 1000; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .ai-header { background: var(--gold); color: var(--deep-green); padding: 12px; font-weight: 800; display: flex; justify-content: space-between; }
-        .ai-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+        #ai-window { position: fixed; bottom: 90px; right: 10px; left: 10px; height: 500px; background: #0a1a18; border: 2px solid var(--gold); border-radius: 20px; display: none; flex-direction: column; z-index: 1000; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+        .ai-header { background: var(--gold); color: var(--deep-green); padding: 15px; font-weight: 800; display: flex; justify-content: space-between; }
+        .ai-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: rgba(0,0,0,0.2); }
         
-        .bubble { padding: 10px 14px; border-radius: 15px; max-width: 85%; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; }
-        .bot { background: rgba(255,255,255,0.1); border-right: 3px solid var(--gold); align-self: flex-start; }
-        .user { background: var(--gold); color: var(--deep-green); align-self: flex-end; font-weight: 700; }
+        .bubble { padding: 15px; border-radius: 15px; max-width: 90%; font-size: 0.95rem; line-height: 1.8; white-space: pre-wrap; border: 1px solid var(--border); }
+        .bot { background: rgba(255,255,255,0.05); border-right: 4px solid var(--gold); align-self: flex-start; }
+        .user { background: var(--gold); color: var(--deep-green); align-self: flex-end; font-weight: 800; border: none; }
 
-        .ai-footer { padding: 8px; display: flex; gap: 5px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.3); }
-        .ai-footer input { flex: 1; background: transparent; border: 1px solid var(--border); padding: 10px; border-radius: 10px; color: #fff; outline: none; font-size: 0.9rem; }
-        .ai-footer button { background: var(--gold); border: none; width: 45px; border-radius: 10px; cursor: pointer; color: var(--deep-green); }
-
-        .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 800; cursor: pointer; margin: 5px; font-size: 0.9rem; }
-        .btn-gold { background: var(--gold); color: var(--deep-green); }
+        .ai-footer { padding: 10px; display: flex; gap: 8px; border-top: 1px solid var(--border); background: #061f1c; }
+        .ai-footer input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: #fff; outline: none; }
+        .ai-footer button { background: var(--gold); border: none; width: 50px; border-radius: 10px; cursor: pointer; color: var(--deep-green); font-size: 1.2rem; }
 
         .view { display: none; }
         .view.active { display: block; }
-
-        @media print {
-            .no-print, #ai-btn, #ai-window { display: none !important; }
-            #printHeader { display: block !important; }
-            body { background: white !important; color: black !important; }
-            .info-card { border: 1px solid #ddd !important; color: #000 !important; }
-            table, th, td { border: 1px solid #000 !important; color: #000 !important; }
-        }
-
+        @media print { .no-print, #ai-btn, #ai-window { display: none !important; } #printHeader { display: block !important; } body { background: white !important; color: black !important; } }
         @media (max-width: 600px) { .student-dashboard { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
@@ -80,47 +70,47 @@
 <div class="container">
     <div id="printHeader">
         <div class="header-top">
-            <div class="school-info">سلطنة عُمان - وزارة التربية والتعليم<br>مدرسة صلالة الشرقية (5-9)</div>
+            <div class="school-info">سلطنة عُمان<br>وزارة التربية والتعليم<br>مدرسة صلالة الشرقية (5-9)</div>
             <div class="logo-box"><img src="logo.png"></div>
         </div>
-        <h4 style="margin: 10px 0;">كشف درجات الطالب - الفصل الأول 2025/2026</h4>
+        <h3 style="margin: 15px 0;">كشف الدرجات الرسمي - العام الدراسي 2025/2026</h3>
     </div>
 
-    <section id="searchView" class="view active" style="text-align:center; padding-top: 80px;">
-        <img src="logo.png" style="height: 80px; margin-bottom: 15px;">
-        <h2 style="color:var(--gold)">بوابة النتائج الرقمية</h2>
-        <div style="background:var(--glass); padding:25px; border-radius:20px; border:1px solid var(--border); max-width:350px; margin:auto;">
-            <input type="text" id="civilInput" inputmode="numeric" style="width:90%; padding:12px; border-radius:8px; border:none; text-align:center; font-size:1.1rem;" placeholder="الرقم المدني">
-            <button class="btn btn-gold" style="width:90%; margin-top:15px;" onclick="searchStudent()">دخول</button>
+    <section id="searchView" class="view active" style="text-align:center; padding-top: 100px;">
+        <img src="logo.png" style="height: 100px; margin-bottom: 20px;">
+        <h1 style="color:var(--gold)">بوابة النتائج الرقمية</h1>
+        <div style="background:var(--glass); padding:30px; border-radius:20px; border:1px solid var(--border); max-width:380px; margin:auto;">
+            <input type="text" id="civilInput" inputmode="numeric" style="width:90%; padding:15px; border-radius:12px; border:none; text-align:center; font-size:1.3rem;" placeholder="أدخل الرقم المدني">
+            <button class="btn-gold" style="width:90%; margin-top:20px; padding:15px; border-radius:12px; border:none; font-weight:800; cursor:pointer;" onclick="searchStudent()">عرض النتيجة</button>
         </div>
     </section>
 
     <section id="resultView" class="view">
         <div class="student-dashboard">
-            <div class="info-card"><i class="fa-solid fa-user"></i><span class="label">الطالب</span><span class="value" id="resName">-</span></div>
-            <div class="info-card"><i class="fa-solid fa-school"></i><span class="label">الصف</span><span class="value" id="resClass">-</span></div>
-            <div class="info-card"><i class="fa-solid fa-calendar"></i><span class="label">العام</span><span class="value">2026</span></div>
-            <div class="info-card"><i class="fa-solid fa-bolt"></i><span class="label">المعدل</span><span class="value" id="resAvg">0%</span></div>
+            <div class="info-card"><i class="fa-solid fa-user-graduate"></i><span class="label">اسم الطالب</span><span class="value" id="resName">-</span></div>
+            <div class="info-card"><i class="fa-solid fa-school"></i><span class="label">الصف/الشعبة</span><span class="value" id="resClass">-</span></div>
+            <div class="info-card"><i class="fa-solid fa-calendar-alt"></i><span class="label">الفصل الدراسي</span><span class="value">الأول</span></div>
+            <div class="info-card"><i class="fa-solid fa-chart-line"></i><span class="label">المعدل العام</span><span class="value" id="resAvg">0%</span></div>
         </div>
         <div class="table-container">
             <table>
-                <thead><tr><th style="width:45%">المادة</th><th style="text-align:center">الدرجة</th><th style="text-align:center">التقدير</th></tr></thead>
+                <thead><tr><th style="width:45%">المادة الدراسية</th><th style="text-align:center">الدرجة</th><th style="text-align:center">التقدير</th></tr></thead>
                 <tbody id="resTable"></tbody>
             </table>
         </div>
-        <div class="no-print" style="text-align:center; margin-top:20px;">
-            <button class="btn btn-gold" onclick="window.print()">طباعة</button>
-            <button class="btn" style="color:#fff; border:1px solid var(--gold);" onclick="location.reload()">خروج</button>
+        <div class="no-print" style="text-align:center; margin-top:30px;">
+            <button class="btn-gold" style="padding:12px 30px; border-radius:10px; border:none; font-weight:800; cursor:pointer;" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة الشهادة</button>
+            <button onclick="location.reload()" style="background:transparent; color:#fff; border:1px solid var(--gold); padding:12px 30px; border-radius:10px; cursor:pointer; margin-right:10px;">خروج</button>
         </div>
     </section>
 </div>
 
 <button id="ai-btn" onclick="toggleChat()">🤖</button>
 <div id="ai-window">
-    <div class="ai-header"><span>المساعد الذكي</span><span onclick="toggleChat()" style="cursor:pointer">×</span></div>
+    <div class="ai-header"><span><i class="fa-solid fa-brain"></i> المحلل الذكي مادة بمادة</span><span onclick="toggleChat()" style="cursor:pointer; font-size:1.5rem;">&times;</span></div>
     <div id="ai-body" class="ai-body"></div>
     <div class="ai-footer">
-        <input type="text" id="aiInput" placeholder="اسألني أي شيء..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <input type="text" id="aiInput" placeholder="اسألني عن أي مادة..." onkeypress="if(event.key==='Enter') sendMessage()">
         <button onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
 </div>
@@ -140,7 +130,7 @@
                 if(studentData) { renderResult(); return; }
             } catch(e) {}
         }
-        alert("الرقم غير مسجل.");
+        alert("الرقم المدني غير مسجل.");
     }
 
     function renderResult() {
@@ -152,13 +142,13 @@
         
         document.getElementById('resTable').innerHTML = subs.map(s => {
             const v = parseFloat(studentData[s]);
-            return `<tr><td>${s}</td><td align="center"><span class="grade-badge">${v}</span></td><td align="center">${v>=90?'امتياز':v>=80?'جيد جداً':'مقبول'}</td></tr>`;
+            return `<tr><td>${s}</td><td align="center"><span class="grade-badge">${v}</span></td><td align="center">${v>=90?'امتياز':v>=80?'جيد جداً':v>=65?'جيد':'مقبول'}</td></tr>`;
         }).join('');
         
         document.getElementById('searchView').style.display = 'none';
         document.getElementById('resultView').classList.add('active');
         document.getElementById('ai-btn').style.display = 'flex';
-        quickAnalyze();
+        fastAnalyze();
     }
 
     function addMsg(txt, type) {
@@ -172,17 +162,21 @@
     }
 
     async function callAI(prompt, el) {
+        // تحسين البرومبت ليكون أسرع (نظام التجاوب السريع)
         const encodedPrompt = encodeURIComponent(prompt);
+        const systemMsg = encodeURIComponent("أنت مساعد مدرسة صلالة الشرقية. حلل النتائج مادة بمادة باختصار شديد. استخدم سطر لكل مادة. كن مشجعاً.");
         try {
-            // استخدام رابط GET مباشر لتحسين السرعة
-            const resp = await fetch(`https://text.pollinations.ai/${encodedPrompt}?model=openai&system=${encodeURIComponent('أنت مساعد تربوي بمدرسة صلالة الشرقية. ردودك قصيرة، مبهجة، وبنقاط واضحة.')}`);
+            const resp = await fetch(`https://text.pollinations.ai/${encodedPrompt}?model=openai&system=${systemMsg}`);
             el.innerText = await resp.text();
-        } catch(e) { el.innerText = "عذراً، المحلل مشغول. حاول مجدداً."; }
+        } catch(e) { el.innerText = "عذراً، المحلل مشغول حالياً. حاول مجدداً."; }
     }
 
-    function quickAnalyze() {
-        const el = addMsg("جاري التحليل السريع... ⚡", "bot");
-        callAI(`حلل نتيجتي باختصار شديد: ${JSON.stringify(studentData)}`, el);
+    function fastAnalyze() {
+        const el = addMsg("جاري التحليل الفوري مادة بمادة... 🚀", "bot");
+        // إعداد ملخص سريع للمواد لإرساله للـ AI
+        const subs = Object.keys(studentData).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        let summary = subs.map(s => `${s}: ${studentData[s]}`).join(', ');
+        callAI(`حلل هذه المواد مادة بمادة باختصار مشجع: ${summary}`, el);
     }
 
     function sendMessage() {
@@ -191,8 +185,8 @@
         if(!txt) return;
         inp.value = '';
         addMsg(txt, "user");
-        const el = addMsg("تفكير... 🧠", "bot");
-        callAI(`${txt} (درجاتي: ${JSON.stringify(studentData)})`, el);
+        const el = addMsg("لحظة واحدة... 🧠", "bot");
+        callAI(`${txt} (علماً أن درجاتي هي: ${JSON.stringify(studentData)})`, el);
     }
 </script>
 </body>
