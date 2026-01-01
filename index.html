@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نتائج مدرسة صلالة الشرقية 2025/2026</title>
+    <title>بوابة التميز | مدرسة صلالة الشرقية</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -21,12 +21,12 @@
             font-family: 'Almarai', sans-serif;
             margin: 0; background: var(--deep-green);
             background-image: radial-gradient(circle at top right, #0a3d34 0%, var(--deep-green) 70%);
-            color: var(--text); min-height: 100vh;
+            color: var(--text); min-height: 100vh; overflow-x: hidden;
         }
 
         .container { width: 95%; max-width: 1100px; margin: 15px auto; padding: 5px; }
 
-        /* --- هيدر الطباعة (مخفي في الموقع) --- */
+        /* --- هيدر الطباعة الرسمي --- */
         #printHeader {
             display: none;
             text-align: center;
@@ -36,9 +36,10 @@
             color: #000;
         }
         .header-top { display: flex; justify-content: space-between; align-items: center; }
-        .school-info { text-align: right; line-height: 1.6; }
+        .school-info { text-align: right; font-size: 0.9rem; line-height: 1.6; }
+        .logo-box img { height: 80px; object-fit: contain; }
 
-        /* --- لوحة البيانات (Dashboard) --- */
+        /* --- لوحة بيانات الطالب (Dashboard) --- */
         .student-dashboard {
             display: grid; grid-template-columns: repeat(4, 1fr);
             gap: 12px; margin-bottom: 20px;
@@ -46,48 +47,58 @@
 
         .info-card {
             background: var(--glass); border: 1px solid var(--border);
-            padding: 15px 5px; border-radius: 15px; text-align: center;
+            padding: 15px 5px; border-radius: 15px; text-align: center; backdrop-filter: blur(10px);
         }
         .info-card i { color: var(--gold-primary); font-size: 1.2rem; margin-bottom: 5px; }
         .info-card .label { font-size: 0.75rem; opacity: 0.8; display: block; }
         .info-card .value { font-size: 1rem; font-weight: 800; color: #fff; }
 
-        /* --- الجدول --- */
+        /* --- الجدول المعدل للهاتف --- */
         .table-container {
             background: var(--glass); border-radius: 18px; 
             border: 1px solid var(--border); overflow: hidden;
         }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        th { background: rgba(255,255,255,0.05); padding: 12px; text-align: right; color: var(--gold-soft); border-bottom: 2px solid var(--border); }
+        th { background: rgba(255,255,255,0.05); padding: 12px; text-align: right; color: var(--gold-soft); border-bottom: 2px solid var(--border); font-size: 0.9rem; }
         td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 1rem; }
+        
+        th:nth-child(1), td:nth-child(1) { width: 45%; }
+        th:nth-child(2), td:nth-child(2) { width: 25%; text-align: center; }
+        th:nth-child(3), td:nth-child(3) { width: 30%; text-align: center; }
+
         .grade-badge { background: var(--gold-primary); color: var(--deep-green); padding: 4px 10px; border-radius: 6px; font-weight: 800; }
 
-        /* --- المحلل الذكي --- */
-        #ai-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold-primary); color: var(--deep-green); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 28px; border: none; z-index: 1000; }
-        #ai-window { position: fixed; bottom: 90px; right: 10px; left: 10px; height: 450px; background: #0a1a18; border: 2px solid var(--gold-primary); border-radius: 20px; display: none; flex-direction: column; z-index: 1000; }
-        .ai-body { flex: 1; padding: 15px; overflow-y: auto; line-height: 1.8; white-space: pre-wrap; font-size: 0.95rem; }
+        /* --- المحلل الذكي بتباعد أسطر --- */
+        #ai-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold-primary); color: var(--deep-green); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 28px; border: none; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.5); cursor: pointer; }
+        #ai-window { position: fixed; bottom: 90px; right: 10px; left: 10px; height: 480px; background: #0a1a18; border: 2px solid var(--gold-primary); border-radius: 20px; display: none; flex-direction: column; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .ai-header { background: var(--gold-primary); color: var(--deep-green); padding: 15px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
+        .ai-body { flex: 1; padding: 15px; overflow-y: auto; line-height: 2; white-space: pre-wrap; font-size: 1rem; color: #f0f0f0; background: rgba(0,0,0,0.2); }
 
-        .btn { padding: 12px 25px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; margin: 10px; }
+        .btn { padding: 12px 25px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; margin: 10px; transition: 0.3s; }
         .btn-gold { background: var(--gold-primary); color: var(--deep-green); }
+        .btn-gold:hover { transform: scale(1.05); }
 
         .view { display: none; }
         .view.active { display: block; }
 
-        /* --- إعدادات الطباعة الرسمية --- */
+        /* --- إعدادات الطباعة --- */
         @media print {
             body { background: white !important; color: black !important; }
             .no-print, #ai-btn, #ai-window { display: none !important; }
-            .container { width: 100% !important; margin: 0 !important; padding: 0 !important; }
             #printHeader { display: block !important; }
-            .info-card { border: 1px solid #ddd !important; background: none !important; color: black !important; }
+            .info-card { border: 1px solid #ddd !important; background: none !important; }
             .info-card .value, .info-card .label, .info-card i { color: black !important; }
             .table-container { border: 1px solid #000 !important; background: none !important; }
-            th { background: #eee !important; color: black !important; border-bottom: 1px solid #000 !important; }
+            th { background: #f2f2f2 !important; color: black !important; border-bottom: 1px solid #000 !important; }
             td { color: black !important; border-bottom: 1px solid #ddd !important; }
             .grade-badge { background: none !important; border: 1px solid #000 !important; color: black !important; }
+            .container { width: 100% !important; margin: 0 !important; }
         }
 
-        @media (max-width: 600px) { .student-dashboard { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) {
+            .student-dashboard { grid-template-columns: repeat(2, 1fr); }
+            th, td { padding: 10px 5px; font-size: 0.85rem; }
+        }
     </style>
 </head>
 <body>
@@ -101,43 +112,46 @@
                 المديرية العامة للتربية والتعليم بمحافظة ظفار<br>
                 <strong>مدرسة صلالة الشرقية للتعليم الأساسي (5-9)</strong>
             </div>
-            <div class="logo">
-                <i class="fa-solid fa-mosque" style="font-size: 3rem;"></i><br>
-                </div>
+            <div class="logo-box">
+                <img src="logo.png" alt="شعار المدرسة">
+            </div>
         </div>
-        <h3 style="margin-top: 15px; border-top: 1px dashed #000; padding-top: 10px;">كشف درجات الطالب - الفصل الدراسي الأول</h3>
+        <h3 style="margin-top: 20px; border-top: 1px solid #000; padding-top: 10px;">كشف درجات الطالب - الفصل الدراسي الأول</h3>
         <p>العام الدراسي: 2025 / 2026 م</p>
     </div>
 
     <section id="searchView" class="view active" style="text-align:center; padding-top: 80px;">
+        <img src="logo.png" alt="Logo" style="height: 100px; margin-bottom: 20px;">
         <h1 style="color:var(--gold-soft)">بوابة النتائج الرقمية</h1>
         <div style="background:var(--glass); padding:30px; border-radius:20px; border:1px solid var(--border); max-width:400px; margin:auto;">
-            <input type="text" id="civilInput" inputmode="numeric" style="width:90%; padding:15px; border-radius:10px; border:none; text-align:center; font-size:1.2rem;" placeholder="أدخل الرقم المدني">
-            <button class="btn btn-gold" style="width:90%;" onclick="searchStudent()">عرض النتيجة</button>
+            <input type="text" id="civilInput" inputmode="numeric" style="width:90%; padding:15px; border-radius:10px; border:none; text-align:center; font-size:1.2rem; outline:none;" placeholder="أدخل الرقم المدني">
+            <button class="btn btn-gold" style="width:90%; margin-top:20px;" onclick="searchStudent()">عرض النتيجة</button>
         </div>
     </section>
 
     <section id="resultView" class="view">
-        <h2 style="text-align:center; color:var(--gold-primary);" class="no-print">بطاقة أداء الطالب</h2>
+        <div style="text-align: center;" class="no-print">
+            <img src="logo.png" alt="Logo" style="height: 60px; margin-bottom: 10px;">
+        </div>
         
         <div class="student-dashboard">
             <div class="info-card">
-                <i class="fa-solid fa-user"></i>
+                <i class="fa-solid fa-user-tag"></i>
                 <span class="label">اسم الطالب</span>
                 <span class="value" id="resName">-</span>
             </div>
             <div class="info-card">
-                <i class="fa-solid fa-door-open"></i>
+                <i class="fa-solid fa-layer-group"></i>
                 <span class="label">الصف / الشعبة</span>
                 <span class="value" id="resClass">-</span>
             </div>
             <div class="info-card">
-                <i class="fa-solid fa-award"></i>
-                <span class="label">الحالة الأكاديمية</span>
-                <span class="value">ناجح</span>
+                <i class="fa-solid fa-calendar-check"></i>
+                <span class="label">العام الدراسي</span>
+                <span class="value">2025 / 2026</span>
             </div>
             <div class="info-card">
-                <i class="fa-solid fa-chart-pie"></i>
+                <i class="fa-solid fa-chart-line"></i>
                 <span class="label">المعدل العام</span>
                 <span class="value" id="resAvg">0%</span>
             </div>
@@ -147,7 +161,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width:50%">المادة الدراسية</th>
+                        <th>المادة الدراسية</th>
                         <th style="text-align:center">الدرجة</th>
                         <th style="text-align:center">التقدير</th>
                     </tr>
@@ -157,7 +171,7 @@
         </div>
 
         <div class="no-print" style="text-align:center; margin-top:30px;">
-            <button class="btn btn-gold" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة كشف الدرجات</button>
+            <button class="btn btn-gold" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة الشهادة</button>
             <button class="btn" style="background:transparent; border:1px solid var(--gold-soft); color:#fff;" onclick="location.reload()">بحث جديد</button>
         </div>
     </section>
@@ -165,9 +179,9 @@
 
 <button id="ai-btn" onclick="toggleChat()">🤖</button>
 <div id="ai-window">
-    <div style="background:var(--gold-primary); color:var(--deep-green); padding:15px; font-weight:800; display:flex; justify-content:space-between;">
-        <span>المحلل الذكي - صلالة الشرقية</span>
-        <span onclick="toggleChat()" style="cursor:pointer">×</span>
+    <div class="ai-header">
+        <span>المحلل الذكي للنتائج</span>
+        <span onclick="toggleChat()" style="cursor:pointer; font-size: 1.5rem;">×</span>
     </div>
     <div id="ai-body" class="ai-body"></div>
 </div>
@@ -187,14 +201,13 @@
                 if(student) { showResult(); break; }
             } catch(e) {}
         }
-        if(!student) alert("عذراً، الرقم المدني غير موجود.");
+        if(!student) alert("الرقم المدني غير موجود.");
     }
 
     function showResult() {
         const subs = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
         const avg = (subs.reduce((a, b) => a + parseFloat(student[b] || 0), 0) / subs.length).toFixed(1);
         
-        // عرض الاسم بالكامل كما هو في الملف
         document.getElementById('resName').innerText = student["الاسم"];
         document.getElementById('resClass').innerText = `${student["الصف"]} / ${student["الشعبة"]}`;
         document.getElementById('resAvg').innerText = avg + "%";
@@ -214,14 +227,14 @@
 
     async function autoAnalyze() {
         const body = document.getElementById('ai-body');
-        body.innerText = "جاري إعداد تقرير الأداء الأكاديمي... ⏳";
+        body.innerText = "جاري تحليل نتيجتك وتنسيق التقرير... ⏳";
         try {
             const r = await fetch('https://text.pollinations.ai/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: [
-                        { role: 'system', content: 'أنت مساعد تربوي في مدرسة صلالة الشرقية. حلل الدرجات في نقاط متباعدة. قدم نصيحة لكل مادة. استخدم سطر فارغ بين كل نقطة.' },
+                        { role: 'system', content: 'أنت مساعد أكاديمي بمدرسة صلالة الشرقية. حلل الدرجات مادة مادة بوضوح. اترك سطر فارغ بين كل فقرة واجعل الخطوط متباعدة.' },
                         { role: 'user', content: `حلل هذه الدرجات للطالب ${student["الاسم"]}: ${JSON.stringify(student)}` }
                     ],
                     model: 'openai'
