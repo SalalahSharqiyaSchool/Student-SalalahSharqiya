@@ -2,90 +2,70 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>بوابة صلالة الشرقية | Pollinations AI</title>
+    <title>بوابة صلالة الشرقية | محلل المواد الذكي</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
         :root {
-            --deep-green: #051a17;
+            --deep-green: #041614;
             --gold: #c5a059;
             --ai-glow: #00f2ff;
-            --glass: rgba(255, 255, 255, 0.05);
             --text: #e0e6e6;
+            --teacher-bg: rgba(0, 242, 255, 0.1);
+            --student-bg: rgba(197, 160, 89, 0.1);
         }
 
-        body {
-            font-family: 'Almarai', sans-serif;
-            margin: 0; background: var(--deep-green);
-            color: var(--text); min-height: 100vh;
-        }
-
-        /* --- واجهات النظام --- */
-        .view { display: none; padding: 20px; animation: fadeIn 0.6s ease; }
+        body { font-family: 'Almarai', sans-serif; margin: 0; background: var(--deep-green); color: var(--text); }
+        .view { display: none; padding: 20px; animation: fadeIn 0.5s ease; }
         .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- الهيدر الرسمي للموقع --- */
-        header { padding: 15px 8%; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; }
+        /* --- الهيدر والبطاقة --- */
+        header { padding: 15px 5%; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; }
         .container { max-width: 900px; margin: auto; }
-
-        /* --- صندوق البحث --- */
-        .search-card {
-            background: var(--glass); padding: 50px; border-radius: 30px;
-            text-align: center; border: 1px solid rgba(255,255,255,0.1); margin-top: 50px;
-        }
-        input {
-            width: 100%; max-width: 300px; padding: 15px; border-radius: 12px;
-            border: 1px solid var(--gold); background: #000; color: #fff;
-            text-align: center; font-size: 1.2rem; margin-bottom: 20px; outline: none;
-        }
-
-        /* --- بطاقة الطالب والجدول --- */
         .st-card { background: rgba(255,255,255,0.03); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; background: var(--glass); border-radius: 15px; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; border-radius: 15px; overflow: hidden; }
         th { background: rgba(197, 160, 89, 0.2); padding: 15px; color: var(--gold); }
         td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; }
 
-        .btn {
-            background: linear-gradient(135deg, var(--gold), #8e6d2e);
-            color: #000; padding: 12px 25px; border: none; border-radius: 10px;
-            font-weight: 800; cursor: pointer; transition: 0.3s;
-        }
-
-        /* --- روبوت Pollinations AI العائم --- */
+        /* --- الروبوت والنافذة العائمة --- */
         #ai-robot {
-            position: fixed; bottom: 30px; right: 30px; width: 70px; height: 70px;
+            position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px;
             background: var(--ai-glow); border-radius: 50%; display: none;
-            align-items: center; justify-content: center; font-size: 2rem;
+            align-items: center; justify-content: center; font-size: 1.8rem;
             cursor: pointer; z-index: 1000; box-shadow: 0 0 20px var(--ai-glow);
-            animation: pulse 2s infinite;
         }
-        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 10px var(--ai-glow); } 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--ai-glow); } 100% { transform: scale(1); box-shadow: 0 0 10px var(--ai-glow); } }
 
         #ai-window {
-            position: fixed; bottom: 110px; right: 30px; width: 380px; height: 500px;
-            background: rgba(5, 20, 20, 0.98); border: 1px solid var(--ai-glow);
-            border-radius: 25px; display: none; flex-direction: column; z-index: 1000;
-            backdrop-filter: blur(10px); box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            position: fixed; bottom: 105px; right: 30px; width: 400px; height: 550px;
+            background: #0a1f1d; border: 1px solid var(--ai-glow);
+            border-radius: 20px; display: none; flex-direction: column; z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
         }
-        .ai-header { background: var(--ai-glow); color: #000; padding: 15px; font-weight: 900; border-radius: 25px 25px 0 0; display: flex; justify-content: space-between; }
-        .ai-body { flex: 1; overflow-y: auto; padding: 20px; font-size: 0.95rem; line-height: 1.7; scroll-behavior: smooth; }
-        .ai-footer { padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; }
-        .ai-footer input { flex: 1; margin: 0; font-size: 1rem; padding: 10px; }
-        
-        /* طباعة */
+
+        .ai-header { background: var(--ai-glow); color: #000; padding: 12px; font-weight: 800; display: flex; justify-content: space-between; border-radius: 20px 20px 0 0; }
+        .ai-tabs { display: flex; background: rgba(0,0,0,0.2); }
+        .ai-tabs button { flex: 1; padding: 10px; border: none; background: none; color: white; cursor: pointer; font-family: 'Almarai'; }
+        .ai-tabs button.active { border-bottom: 2px solid var(--ai-glow); color: var(--ai-glow); }
+
+        .chat-box { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px 15px; border-radius: 15px; max-width: 85%; line-height: 1.6; font-size: 0.9rem; }
+        .msg.teacher { background: var(--teacher-bg); border-right: 3px solid var(--ai-glow); align-self: flex-start; }
+        .msg.student { background: var(--student-bg); border-left: 3px solid var(--gold); align-self: flex-end; }
+
+        .ai-footer { padding: 10px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px; }
+        .ai-footer input { flex: 1; background: #000; border: 1px solid var(--gold); color: #fff; padding: 10px; border-radius: 8px; outline: none; }
+
+        /* الطباعة */
         @media print {
             .no-print, #ai-robot, #ai-window { display: none !important; }
             .print-only { display: block !important; }
             body { background: white !important; color: black !important; }
-            .container { max-width: 100% !important; }
-            .official-header { display: flex !important; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 10px; }
-            .header-info { font-weight: bold; font-size: 11pt; }
-            td, th { border: 1px solid #000 !important; color: #000 !important; }
+            .official-header { display: flex !important; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+            td, th { border: 1px solid #000 !important; color: black !important; }
         }
-        .print-only { display: none; }
     </style>
 </head>
 <body>
@@ -93,32 +73,31 @@
 <header class="no-print">
     <div style="display:flex; align-items:center; gap:10px;">
         <img src="logo.png" style="height:40px;" onerror="this.src='https://raw.githubusercontent.com/Omanya/DigitalPortal/main/logo.png'">
-        <span style="font-weight:800; color:var(--gold);">صلالة الشرقية الرقمية</span>
+        <span style="font-weight:800; color:var(--gold);">بوابة صلالة الشرقية</span>
     </div>
 </header>
 
 <div class="container">
     <section id="searchView" class="view active no-print">
-        <div class="search-card">
-            <h1 style="color:var(--gold);">بوابة النتائج والذكاء الاصطناعي</h1>
-            <p>أدخل الرقم المدني للاستعلام والتحليل الذكي</p>
-            <input type="number" id="civilInput" placeholder="00000000">
+        <div style="text-align:center; margin-top:100px;">
+            <i class="fa-solid fa-brain" style="font-size: 4rem; color: var(--ai-glow); margin-bottom: 20px;"></i>
+            <h2>نظام التحليل الأكاديمي الذكي</h2>
+            <input type="number" id="civilInput" placeholder="الرقم المدني">
             <br>
-            <button class="btn" onclick="startSearch()">عرض النتائج وتحليل AI</button>
+            <button class="btn" onclick="runSearch()" style="background:var(--gold); padding:12px 30px; border:none; border-radius:10px; cursor:pointer; font-weight:bold;">تحليل النتائج</button>
         </div>
     </section>
 
     <section id="resultView" class="view">
         <div class="official-header print-only">
-            <div class="header-info">سلطنة عُمان<br>وزارة التربية والتعليم<br>تعليمية ظفار - مدرسة صلالة الشرقية</div>
-            <div class="header-logo"><img src="logo.png" style="height:70px;" onerror="this.src='https://raw.githubusercontent.com/Omanya/DigitalPortal/main/logo.png'"></div>
-            <div class="header-info" style="text-align:left;">العام الدراسي 2025/2026<br>الفصل الدراسي الأول<br>إشعار نتيجة طالب</div>
+            <div>سلطنة عُمان<br>وزارة التربية والتعليم<br>مدرسة صلالة الشرقية</div>
+            <div><img src="logo.png" style="height:60px;" onerror="this.src='https://raw.githubusercontent.com/Omanya/DigitalPortal/main/logo.png'"></div>
+            <div style="text-align:left;">2025/2026 م<br>إشعار نتيجة</div>
         </div>
 
         <div class="st-card">
-            <h2 id="stName" style="color:var(--gold); margin-top:0;">...</h2>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <span>المدني: <b id="stCivil"></b></span>
+            <h2 id="stName" style="color:var(--gold); margin:0 0 10px 0;">...</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                 <span>الصف: <b id="stGrade"></b></span>
                 <span>الشعبة: <b id="stClass"></b></span>
                 <span style="color:var(--ai-glow);">المعدل: <b id="stAvg"></b></span>
@@ -126,119 +105,137 @@
         </div>
 
         <table>
-            <thead><tr><th>المادة</th><th>الدرجة</th><th>التقدير</th></tr></thead>
-            <tbody id="tableBody"></tbody>
+            <thead><tr><th>المادة الدراسية</th><th>الدرجة</th><th>التقدير</th></tr></thead>
+            <tbody id="tableContent"></tbody>
         </table>
 
         <div class="no-print" style="margin-top:20px; text-align:center;">
-            <button class="btn" onclick="window.print()">طباعة النتيجة</button>
-            <button class="btn" onclick="location.reload()" style="background:transparent; color:#fff; border:1px solid #555;">بحث جديد</button>
+            <button onclick="window.print()" style="padding:10px 20px; cursor:pointer;">طباعة الورقة الرسمية</button>
         </div>
     </section>
 </div>
 
-<div id="ai-robot" onclick="toggleAI()"><i class="fa-solid fa-microchip"></i></div>
+<div id="ai-robot" onclick="toggleAI()"><i class="fa-solid fa-chalkboard-user"></i></div>
 <div id="ai-window">
     <div class="ai-header">
-        <span><i class="fa-solid fa-robot"></i> خبير Pollinations AI</span>
-        <i class="fa-solid fa-times" onclick="toggleAI()" style="cursor:pointer;"></i>
+        <span>المعلم الافتراضي (Pollinations AI)</span>
+        <i class="fa-solid fa-xmark" onclick="toggleAI()" style="cursor:pointer;"></i>
     </div>
-    <div id="aiContent" class="ai-body">
-        <div id="aiStatus" style="color:var(--ai-glow);">جاري استدعاء الذكاء الاصطناعي لتحليل نتائجك...</div>
-        <div id="aiResponse"></div>
+    <div class="ai-tabs">
+        <button id="tab1" class="active" onclick="showTab('analysis')">تحليل مادة بمادة</button>
+        <button id="tab2" onclick="showTab('chat')">حوار المعلم والطالب</button>
+    </div>
+    <div id="box-analysis" class="chat-box">
+        <p id="analysis-status">جاري فحص السجلات الأكاديمية...</p>
+    </div>
+    <div id="box-chat" class="chat-box" style="display:none;">
+        <div class="msg teacher">أهلاً بك يا بطل! أنا معلمك الافتراضي. اسألني عن أي مادة تريد تطوير نفسك فيها.</div>
     </div>
     <div class="ai-footer">
-        <input type="text" id="aiInput" placeholder="اسأل الخبير الذكي...">
-        <button class="btn" onclick="askAI()" style="padding:10px;"><i class="fa-solid fa-paper-plane"></i></button>
+        <input type="text" id="aiInp" placeholder="اكتب رسالتك واضغط Enter...">
+        <button onclick="sendChat()" style="background:var(--ai-glow); border:none; padding:10px; border-radius:5px; cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
 </div>
 
 <script>
-    let studentData = null;
+    let currentData = null;
 
-    async function startSearch() {
+    async function runSearch() {
         const civil = document.getElementById('civilInput').value.trim();
-        if(!civil) return alert("يرجى إدخال الرقم");
+        if(!civil) return alert("أدخل الرقم المدني");
 
         const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
-        let found = null;
+        let student = null;
 
         for(let f of files) {
             try {
                 const res = await fetch(f + "?v=" + Date.now());
                 const data = await res.json();
-                found = data.find(s => s["رقم_مدني"].toString() === civil);
-                if(found) break;
+                student = data.find(s => s["رقم_مدني"].toString() === civil);
+                if(student) break;
             } catch(e) {}
         }
 
-        if(found) {
-            studentData = found;
-            displayResults(found);
+        if(student) {
+            currentData = student;
+            render(student);
             document.getElementById('ai-robot').style.display = 'flex';
-            fetchPollinationsAnalysis(found);
-        } else { alert("الرقم غير مسجل"); }
+            analyzeSubjectsOneByOne(student);
+        } else { alert("لم يتم العثور على الطالب"); }
     }
 
-    function displayResults(data) {
-        const keys = Object.keys(data).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
-        let total = 0, rows = '';
+    function render(s) {
+        const keys = Object.keys(s).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        let rows = '', total = 0;
         keys.forEach(k => {
-            const v = parseFloat(data[k]) || 0;
+            const v = parseFloat(s[k]) || 0;
             total += v;
-            let تقدير = v >= 90 ? 'امتياز' : v >= 80 ? 'جيد جداً' : v >= 50 ? 'مقبول' : 'ضعيف';
-            rows += `<tr><td>${k}</td><td><b>${v}</b></td><td>${تقدير}</td></tr>`;
+            rows += `<tr><td>${k}</td><td><b>${v}</b></td><td>${v >= 90 ? 'امتياز' : v >= 50 ? 'مقبول' : 'ضعيف'}</td></tr>`;
         });
-
-        document.getElementById('stName').innerText = data["الاسم"];
-        document.getElementById('stCivil').innerText = data["رقم_مدني"];
-        document.getElementById('stGrade').innerText = data["الصف"];
-        document.getElementById('stClass').innerText = data["الشعبة"];
+        document.getElementById('stName').innerText = s["الاسم"];
+        document.getElementById('stGrade').innerText = s["الصف"];
+        document.getElementById('stClass').innerText = s["الشعبة"];
         document.getElementById('stAvg').innerText = (total / keys.length).toFixed(1) + "%";
-        document.getElementById('tableBody').innerHTML = rows;
-
+        document.getElementById('tableContent').innerHTML = rows;
         document.getElementById('searchView').classList.remove('active');
         document.getElementById('resultView').classList.add('active');
     }
 
-    // --- تكامل Pollinations AI ---
-    
-    async function fetchPollinationsAnalysis(data) {
-        const avg = document.getElementById('stAvg').innerText;
-        const prompt = `أنت خبير تربوي في سلطنة عمان. حلل نتائج الطالب ${data["الاسم"]} الذي يدرس في مدرسة صلالة الشرقية. معدله ${avg}. درجاته هي: ${JSON.stringify(data)}. قدم تحليلاً ذكياً باللغة العربية يشمل نقاط القوة والضعف ونصيحة ملهمة. اجعل الرد منسقاً وجميلاً.`;
+    function toggleAI() {
+        const w = document.getElementById('ai-window');
+        w.style.display = w.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function showTab(t) {
+        document.getElementById('box-analysis').style.display = t === 'analysis' ? 'flex' : 'none';
+        document.getElementById('box-chat').style.display = t === 'chat' ? 'flex' : 'none';
+        document.getElementById('tab1').className = t === 'analysis' ? 'active' : '';
+        document.getElementById('tab2').className = t === 'chat' ? 'active' : '';
+    }
+
+    // تحليل مادة بمادة عبر Pollinations AI
+    async function analyzeSubjectsOneByOne(data) {
+        const container = document.getElementById('box-analysis');
+        const subjects = Object.keys(data).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        
+        const prompt = `أنت معلم خبير بمدرسة صلالة الشرقية. حلل درجات الطالب ${data["الاسم"]} مادة بمادة بشكل تفصيلي. الدرجات: ${JSON.stringify(data)}. اذكر اسم المادة، مستواه فيها، ونصيحة قصيرة جداً لكل مادة. استخدم أيقونات ونسق الرد في نقاط واضحة باللغة العربية.`;
         
         try {
-            const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
-            const text = await response.text();
-            document.getElementById('aiStatus').style.display = 'none';
-            document.getElementById('aiResponse').innerHTML = `<div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px;">${text.replace(/\n/g, '<br>')}</div>`;
-        } catch (e) {
-            document.getElementById('aiStatus').innerText = "عذراً، تعذر الاتصال بمحرك Pollinations AI حالياً.";
+            const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
+            const text = await res.text();
+            container.innerHTML = `<div class="msg teacher">${text.replace(/\n/g, '<br>')}</div>`;
+        } catch(e) {
+            container.innerHTML = "فشل الاتصال بالمعلم الافتراضي.";
         }
     }
 
-    async function askAI() {
-        const input = document.getElementById('aiInput');
-        const userText = input.value.trim();
-        if(!userText) return;
+    // دردشة المعلم والطالب مع مفتاح Enter
+    async function sendChat() {
+        const inp = document.getElementById('aiInp');
+        const box = document.getElementById('box-chat');
+        if(!inp.value.trim()) return;
 
-        const aiResponse = document.getElementById('aiResponse');
-        aiResponse.innerHTML += `<div style="color:var(--gold); margin-top:10px; text-align:left;">● ${userText}</div>`;
-        input.value = '';
+        const userMsg = inp.value;
+        box.innerHTML += `<div class="msg student">${userMsg}</div>`;
+        inp.value = '';
+        box.scrollTop = box.scrollHeight;
 
+        const prompt = `أنت الآن "المعلم" في مدرسة صلالة الشرقية. الطالب ${currentData["الاسم"]} (معدله ${document.getElementById('stAvg').innerText}) يسألك: "${userMsg}". أجب كمعلم حكيم ومشجع بناءً على درجاته.`;
+        
         try {
-            const prompt = `بناءً على نتائج الطالب السابقة، أجبه على هذا السؤال: ${userText}`;
-            const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
-            const text = await response.text();
-            aiResponse.innerHTML += `<div style="margin:10px 0; border-right:2px solid var(--ai-glow); padding-right:10px;">${text}</div>`;
-            document.getElementById('aiContent').scrollTop = document.getElementById('aiContent').scrollHeight;
+            const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
+            const text = await res.text();
+            box.innerHTML += `<div class="msg teacher">${text.replace(/\n/g, '<br>')}</div>`;
+            box.scrollTop = box.scrollHeight;
         } catch(e) {}
     }
 
-    function toggleAI() {
-        const win = document.getElementById('ai-window');
-        win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
-    }
+    // تفعيل مفتاح Enter للإرسال
+    document.getElementById('aiInp').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            sendChat();
+        }
+    });
 </script>
 
 </body>
