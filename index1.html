@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>بوابة صلالة الشرقية الرقمية | النتائج الدراسية</title>
+    <title>بوابة صلالة الشرقية الرقمية | الذكاء الاصطناعي</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -15,6 +15,7 @@
             --glass: rgba(255, 255, 255, 0.07);
             --border: rgba(255, 255, 255, 0.15);
             --text: #e0e6e6;
+            --ai-blue: #00d2ff;
         }
 
         body {
@@ -24,108 +25,70 @@
             background-image: radial-gradient(circle at 10% 20%, rgba(10, 61, 52, 1) 0%, #061f1c 90%);
             color: var(--text);
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* --- الهيدر الرقمي (للموقع فقط) --- */
-        header { 
-            padding: 15px 8%; 
-            border-bottom: 1px solid var(--border); 
-            backdrop-filter: blur(10px); 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
+        header { padding: 15px 8%; border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; }
         .container { max-width: 900px; margin: 30px auto; padding: 20px; }
 
         /* --- واجهة البحث --- */
-        .search-box {
-            background: var(--glass);
-            padding: 50px 20px;
-            border-radius: 25px;
-            text-align: center;
-            border: 1px solid var(--border);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-        }
+        .search-box { background: var(--glass); padding: 50px 20px; border-radius: 25px; text-align: center; border: 1px solid var(--border); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        input[type="number"] { width: 80%; max-width: 350px; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: white; text-align: center; font-size: 1.2rem; outline: none; }
 
-        input[type="number"] {
-            width: 80%;
-            max-width: 350px;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: rgba(0,0,0,0.3);
-            color: white;
-            text-align: center;
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            outline: none;
-        }
-
-        /* --- بطاقة الطالب والنتائج --- */
-        .student-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
-            border-radius: 20px; padding: 25px; border: 1px solid var(--border);
-            margin-bottom: 20px; display: flex; align-items: center; gap: 20px;
-        }
-
+        /* --- بطاقة الطالب --- */
+        .student-card { background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%); border-radius: 20px; padding: 25px; border: 1px solid var(--border); margin-bottom: 20px; display: flex; align-items: center; gap: 20px; }
         .results-table-wrapper { background: var(--glass); border-radius: 15px; overflow: hidden; border: 1px solid var(--border); }
         table { width: 100%; border-collapse: collapse; }
         th { background: rgba(197, 160, 89, 0.15); padding: 15px; text-align: right; color: var(--gold-soft); }
         td { padding: 12px 15px; border-bottom: 1px solid var(--border); }
 
         /* --- الأزرار --- */
-        .btn {
-            background: linear-gradient(135deg, #c5a059, #8e6d2e);
-            color: #061f1c; padding: 12px 30px; border-radius: 10px;
-            border: none; font-weight: 800; cursor: pointer; transition: 0.3s;
-            display: inline-flex; align-items: center; gap: 10px;
+        .btn { background: linear-gradient(135deg, #c5a059, #8e6d2e); color: #061f1c; padding: 12px 30px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+
+        /* --- روبوت الذكاء الاصطناعي العائم --- */
+        #ai-robot-btn {
+            position: fixed; bottom: 30px; left: 30px; width: 70px; height: 70px;
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            border-radius: 50%; display: none; align-items: center; justify-content: center;
+            font-size: 2rem; color: white; cursor: pointer; z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0, 210, 255, 0.4);
+            animation: pulse 2s infinite;
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(197,160,89,0.3); }
 
-        .view { display: none; opacity: 0; transition: 0.5s; }
-        .view.active { display: block; opacity: 1; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-        /* --- إعدادات الطباعة الرسمية --- */
+        #ai-card {
+            position: fixed; bottom: 110px; left: 30px; width: 350px; height: 500px;
+            background: rgba(10, 30, 30, 0.95); border: 1px solid var(--ai-blue);
+            border-radius: 20px; display: none; flex-direction: column; z-index: 1000;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(15px);
+            overflow: hidden; animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .ai-header { background: var(--ai-blue); color: #000; padding: 15px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
+        .ai-tabs { display: flex; background: rgba(255,255,255,0.1); }
+        .tab-btn { flex: 1; padding: 10px; border: none; background: none; color: white; cursor: pointer; font-family: 'Almarai'; }
+        .tab-btn.active { background: var(--ai-blue); color: black; font-weight: bold; }
+        
+        .ai-content { flex-grow: 1; overflow-y: auto; padding: 15px; font-size: 0.9rem; line-height: 1.6; }
+        .chat-input-area { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 5px; }
+        .chat-input-area input { flex-grow: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 5px; color: white; padding: 8px; outline: none; }
+
+        /* --- الطباعة الرسمية --- */
         @media print {
-            @page { size: A4; margin: 8mm; }
-            body { background: white !important; color: black !important; }
-            .no-print { display: none !important; }
+            .no-print, #ai-robot-btn, #ai-card { display: none !important; }
             .print-only { display: block !important; }
-            .container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-            
-            /* الهيدر الرسمي العماني */
-            .official-header {
-                display: flex !important;
-                justify-content: space-between;
-                align-items: center;
-                border-bottom: 2px solid black;
-                padding-bottom: 10px;
-                margin-bottom: 15px;
-            }
-            .header-side { width: 35%; font-size: 11pt; font-weight: bold; line-height: 1.5; }
-            .header-logo { width: 25%; text-align: center; }
-            .header-logo img { height: 70px; width: auto; }
-
-            .report-title { text-align: center; font-size: 15pt; font-weight: 800; margin: 10px 0; text-decoration: underline; }
-
-            .student-card { 
-                background: none !important; border: 1px solid black !important; 
-                color: black !important; padding: 10px !important; margin-bottom: 10px !important;
-            }
-            .student-card h2 { color: black !important; margin: 5px 0; }
-            
-            table { border: 1px solid black; }
-            th { background: #eee !important; color: black !important; border: 1px solid black; padding: 8px; }
-            td { border: 1px solid black; color: black !important; padding: 5px 10px; text-align: center; font-size: 10pt; }
-            td:first-child { text-align: right; }
-
-            .print-footer {
-                margin-top: 20px; display: flex !important; justify-content: space-between;
-                font-weight: bold; font-size: 10pt;
-            }
+            body { background: white !important; color: black !important; }
+            .container { max-width: 100% !important; margin: 0 !important; }
+            .official-header { display: flex !important; justify-content: space-between; align-items: center; border-bottom: 2px solid black; padding-bottom: 10px; }
+            .header-side { width: 35%; font-weight: bold; font-size: 11pt; }
+            .header-logo img { height: 70px; }
+            .report-title { text-align: center; font-size: 16pt; margin: 15px 0; text-decoration: underline; font-weight: 800; }
+            table { border: 1px solid black; width: 100%; }
+            td, th { border: 1px solid black; color: black !important; text-align: center; padding: 8px; }
         }
-
         .print-only { display: none; }
     </style>
 </head>
@@ -136,89 +99,83 @@
         <img src="logo.png" alt="Logo" style="height: 45px;" onerror="this.src='https://raw.githubusercontent.com/Omanya/DigitalPortal/main/logo.png'">
         <h1 style="color: var(--gold-soft); font-size: 1.1rem; margin: 0;">بوابة صلالة الشرقية</h1>
     </div>
-    <div style="font-size: 0.8rem; opacity: 0.7;">نظام النتائج الإلكتروني</div>
 </header>
 
 <div class="container">
-
     <section id="searchView" class="view active no-print">
         <div class="search-box">
-            <i class="fa-solid fa-graduation-cap" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 20px;"></i>
-            <h2>نظام عرض النتائج</h2>
-            <p style="opacity: 0.8; margin-bottom: 30px;">الفصل الدراسي الأول | 2025 - 2026 م</p>
-            
-            <input type="number" id="civilInput" placeholder="أدخل الرقم المدني للطالب">
+            <i class="fa-solid fa-robot" style="font-size: 3rem; color: var(--ai-blue); margin-bottom: 20px;"></i>
+            <h2>نظام النتائج بالذكاء الاصطناعي</h2>
+            <input type="number" id="civilInput" placeholder="أدخل الرقم المدني">
             <br>
-            <button class="btn" onclick="processSearch()">
-                <i class="fa-solid fa-magnifying-glass"></i> استخراج النتيجة
-            </button>
+            <button class="btn" onclick="processSearch()">استخراج النتيجة والتحليل</button>
         </div>
     </section>
 
     <section id="resultView" class="view">
-        
         <div class="official-header print-only">
-            <div class="header-side">
-                سلطنة عُمان<br>
-                وزارة التربية والتعليم<br>
-                المديرية العامة للتربية والتعليم بمحافظة ظفار<br>
-                مدرسة صلالة الشرقية (5-10)
-            </div>
-            <div class="header-logo">
-                <img src="logo.png" alt="شعار المدرسة" onerror="this.src='https://raw.githubusercontent.com/Omanya/DigitalPortal/main/logo.png'">
-            </div>
-            <div class="header-side" style="text-align: left;">
-                العام الدراسي: 2025 / 2026 م<br>
-                الفصل الدراسي الأول<br>
-                كشف درجات الطالب
-            </div>
+            <div class="header-side">سلطنة عُمان<br>وزارة التربية والتعليم<br>ظفار - مدرسة صلالة الشرقية</div>
+            <div class="header-logo"><img src="logo.png" onerror="this.src='https://raw.githubusercontent.com/Omanya/DigitalPortal/main/logo.png'"></div>
+            <div class="header-side" style="text-align: left;">2025 / 2026 م<br>الفصل الدراسي الأول<br>كشف درجات الطالب</div>
         </div>
 
-        <div class="report-title print-only">إشعار نتيجة الفصل الدراسي الأول</div>
+        <div class="report-title print-only">إشعار نتيجة الطالب</div>
 
         <div class="student-card">
             <div style="flex-grow: 1;">
-                <h2 id="stName" style="color: var(--gold-soft);">...</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem;">
-                    <span>الرقم المدني: <b id="stCivil"></b></span>
-                    <span>الصف الدراسي: <b id="stGrade"></b></span>
+                <h2 id="stName" style="color: var(--gold-soft); margin: 0 0 10px 0;">...</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <span>المدني: <b id="stCivil"></b></span>
+                    <span>الصف: <b id="stGrade"></b></span>
                     <span>الشعبة: <b id="stClass"></b></span>
-                    <span style="color: var(--gold-primary);">المعدل العام: <b id="stAvg"></b></span>
+                    <span style="color: var(--ai-blue);">المعدل: <b id="stAvg"></b></span>
                 </div>
             </div>
         </div>
 
         <div class="results-table-wrapper">
             <table>
-                <thead>
-                    <tr>
-                        <th style="width: 45%;">المادة الدراسية</th>
-                        <th style="text-align: center;">الدرجة</th>
-                        <th style="text-align: center;">التقدير</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>المادة</th><th style="text-align:center;">الدرجة</th><th style="text-align:center;">التقدير</th></tr></thead>
                 <tbody id="tableContent"></tbody>
             </table>
         </div>
 
-        <div class="print-footer print-only">
-            <div>يعتمد / مدير المدرسة</div>
-            <div style="text-align: center;">ختم المدرسة</div>
-            <div>تاريخ الاستخراج: <span id="printDate"></span></div>
-        </div>
-
-        <div class="btn-group no-print" style="margin-top: 25px; display: flex; gap: 10px; justify-content: center;">
-            <button class="btn" onclick="window.print()">
-                <i class="fa-solid fa-print"></i> طباعة الشهادة
-            </button>
-            <button class="btn" onclick="location.reload()" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--border);">
-                بحث جديد
-            </button>
+        <div class="btn-group no-print" style="margin-top: 20px; text-align:center;">
+            <button class="btn" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة الشهادة</button>
         </div>
     </section>
 </div>
 
+<div id="ai-robot-btn" onclick="toggleAICard()"><i class="fa-solid fa-robot"></i></div>
+
+<div id="ai-card">
+    <div class="ai-header">
+        <span><i class="fa-solid fa-brain"></i> المستشار الذكي</span>
+        <i class="fa-solid fa-xmark" onclick="toggleAICard()" style="cursor:pointer;"></i>
+    </div>
+    <div class="ai-tabs">
+        <button class="tab-btn active" onclick="showTab('analysis')">التحليل الذكي</button>
+        <button class="tab-btn" onclick="showTab('chat')">دردشة</button>
+    </div>
+    <div id="ai-analysis" class="ai-content">
+        <p>جاري تحليل درجاتك لإعطائك نصائح مخصصة...</p>
+    </div>
+    <div id="ai-chat" class="ai-content" style="display:none;">
+        <div id="chat-messages" style="margin-bottom: 10px;">
+            <div style="background:rgba(255,255,255,0.1); padding:8px; border-radius:10px; margin-bottom:10px;">
+                مرحباً! أنا مساعدك الذكي. اسألني أي سؤال حول نتيجتك أو نصائح للمذاكرة.
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="اكتب سؤالك هنا...">
+            <button onclick="sendMessage()" style="background:var(--ai-blue); border:none; padding:5px 10px; border-radius:5px; cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
+
 <script>
+    let studentData = null;
+
     async function processSearch() {
         const civil = document.getElementById('civilInput').value.trim();
         if(!civil) return alert("يرجى إدخال الرقم المدني");
@@ -228,44 +185,32 @@
 
         for(let f of files) {
             try {
-                // منع الكاش لضمان جلب أحدث البيانات
                 const res = await fetch(f + "?v=" + Date.now());
-                if(!res.ok) continue;
                 const data = await res.json();
                 found = data.find(s => s["رقم_مدني"].toString() === civil);
                 if(found) break;
-            } catch(e) { console.error("خطأ في ملف: " + f); }
+            } catch(e) {}
         }
 
         if(found) {
+            studentData = found;
             renderData(found);
+            document.getElementById('ai-robot-btn').style.display = 'flex';
+            generateAIAnalysis(found);
         } else {
-            alert("عذراً، الرقم المدني غير مسجل في النظام.");
+            alert("الرقم غير موجود");
         }
     }
 
     function renderData(data) {
         const keys = Object.keys(data).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
-        let total = 0;
-        let rows = '';
+        let total = 0, rows = '';
 
         keys.forEach(k => {
             const val = parseFloat(data[k]) || 0;
             total += val;
-            
-            // حساب التقدير
-            let rating = '';
-            if(val >= 90) rating = 'امتياز';
-            else if(val >= 80) rating = 'جيد جداً';
-            else if(val >= 65) rating = 'جيد';
-            else if(val >= 50) rating = 'مقبول';
-            else rating = 'ضعيف';
-
-            rows += `<tr>
-                <td>${k}</td>
-                <td style="font-weight:800; text-align:center;">${val}</td>
-                <td style="text-align:center;">${rating}</td>
-            </tr>`;
+            let rating = val >= 90 ? 'امتياز' : val >= 80 ? 'جيد جداً' : val >= 50 ? 'مقبول' : 'ضعيف';
+            rows += `<tr><td>${k}</td><td style="text-align:center; font-weight:800;">${val}</td><td style="text-align:center;">${rating}</td></tr>`;
         });
 
         document.getElementById('stName').innerText = data["الاسم"];
@@ -274,10 +219,67 @@
         document.getElementById('stClass').innerText = data["الشعبة"];
         document.getElementById('stAvg').innerText = (total / keys.length).toFixed(1) + "%";
         document.getElementById('tableContent').innerHTML = rows;
-        document.getElementById('printDate').innerText = new Date().toLocaleDateString('ar-OM');
 
         document.getElementById('searchView').classList.remove('active');
         document.getElementById('resultView').classList.add('active');
+    }
+
+    // --- منطق الذكاء الاصطناعي ---
+    function toggleAICard() {
+        const card = document.getElementById('ai-card');
+        card.style.display = card.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function showTab(tab) {
+        document.getElementById('ai-analysis').style.display = tab === 'analysis' ? 'block' : 'none';
+        document.getElementById('ai-chat').style.display = tab === 'chat' ? 'block' : 'none';
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+    }
+
+    function generateAIAnalysis(data) {
+        const keys = Object.keys(data).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        let highest = {subject: '', score: 0}, lowest = {subject: '', score: 101};
+
+        keys.forEach(k => {
+            const v = parseFloat(data[k]);
+            if(v > highest.score) highest = {subject: k, score: v};
+            if(v < lowest.score) lowest = {subject: k, score: v};
+        });
+
+        let analysisHTML = `
+            <div style="color:var(--ai-blue); font-weight:bold; margin-bottom:10px;">تحليل المستوى لعام 2025/2026:</div>
+            <p>أهلاً ${data["الاسم"].split(' ')[0]}، بناءً على درجاتك الحالية:</p>
+            <ul>
+                <li>أنت متفوق جداً في <b>${highest.subject}</b>، استمر في هذا الإبداع!</li>
+                <li>تحتاج لبذل جهد إضافي في <b>${lowest.subject}</b> لتحسين معدلك العام.</li>
+                <li>معدلك الحالي يضعك في فئة الطلاب ${parseFloat(document.getElementById('stAvg').innerText) > 80 ? 'المتميزين' : 'المجتهدين'}.</li>
+            </ul>
+            <div style="background:rgba(0,210,255,0.1); padding:10px; border-radius:10px; font-style:italic;">
+                "نصيحة AI: ركز على حل النماذج الامتحانية في مادة ${lowest.subject} قبل اختبارات الفصل الثاني."
+            </div>
+        `;
+        document.getElementById('ai-analysis').innerHTML = analysisHTML;
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if(!text) return;
+
+        const chatMessages = document.getElementById('chat-messages');
+        chatMessages.innerHTML += `<div style="text-align:left; margin-bottom:10px;"><span style="background:var(--ai-blue); color:black; padding:5px 10px; border-radius:10px;">${text}</span></div>`;
+        
+        input.value = '';
+
+        // رد الروبوت التلقائي (محاكاة ذكاء اصطناعي حقيقي)
+        setTimeout(() => {
+            let reply = "بصفتي مستشارك التعليمي، أنصحك بالتركيز على تنظيم وقتك. هل تود خطة دراسية لمادة " + (studentData ? Object.keys(studentData)[4] : "الرياضيات") + "؟";
+            if(text.includes("معدل")) reply = `معدلك هو ${document.getElementById('stAvg').innerText}، وهو معدل ${parseFloat(document.getElementById('stAvg').innerText) > 90 ? 'رائع جداً' : 'جيد وبإمكانك رفعه'}.`;
+            
+            chatMessages.innerHTML += `<div style="text-align:right; margin-bottom:10px;"><span style="background:rgba(255,255,255,0.1); padding:5px 10px; border-radius:10px; display:inline-block;">${reply}</span></div>`;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
     }
 </script>
 
