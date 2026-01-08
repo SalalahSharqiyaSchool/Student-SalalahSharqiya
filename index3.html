@@ -21,6 +21,7 @@
             color: #333;
         }
 
+        /* --- الهيدر الملكي العماني --- */
         .royal-header { 
             background: var(--royal-green);
             padding: 15px 5%; 
@@ -34,22 +35,36 @@
 
         .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
 
+        /* --- صندوق البحث --- */
         .search-box { 
             background: white; padding: 30px; border-radius: 15px; 
             box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: center; 
             border-top: 5px solid var(--royal-gold);
         }
-        /* تغيير حقل الإدخال ليدعم النص */
         input[type="text"] { 
             width: 100%; max-width: 350px; padding: 15px; border-radius: 10px; 
             border: 1px solid #ddd; margin-bottom: 20px; text-align: center; font-size: 1.1rem;
+            font-family: 'Almarai', sans-serif;
         }
         .btn-royal { 
             background: var(--royal-green); color: var(--royal-gold); 
             border: none; padding: 15px 40px; border-radius: 10px; 
             font-weight: 800; cursor: pointer; width: 100%; max-width: 350px;
+            transition: 0.3s;
         }
+        .btn-royal:hover { opacity: 0.9; transform: scale(1.02); }
 
+        /* --- قائمة الاقتراحات --- */
+        #suggestions {
+            max-width: 350px; margin: -15px auto 20px; background: white;
+            border: 1px solid #ddd; border-radius: 0 0 10px 10px;
+            display: none; text-align: right; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-height: 200px; overflow-y: auto;
+        }
+        .suggestion-item { padding: 10px 15px; cursor: pointer; border-bottom: 1px solid #eee; }
+        .suggestion-item:hover { background: #f9f9f9; color: var(--royal-green); }
+
+        /* --- بطاقة بيانات الطالب --- */
         #resultView { display: none; }
         .student-card {
             background: white; border-radius: 15px; padding: 20px;
@@ -60,11 +75,13 @@
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem; }
         .info-item b { color: var(--royal-green); }
 
+        /* --- الجدول --- */
         .table-container { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         table { width: 100%; border-collapse: collapse; }
         th { background: var(--royal-green); color: var(--royal-gold); padding: 12px; font-size: 0.9rem; }
         td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-size: 0.95rem; }
 
+        /* --- المحلل الذكي العائم --- */
         #ai-btn { 
             position: fixed; bottom: 25px; left: 25px; background: var(--royal-green); 
             color: var(--royal-gold); width: 60px; height: 60px; border-radius: 50%; 
@@ -79,12 +96,14 @@
         .ai-head { background: var(--royal-green); color: white; padding: 15px; display: flex; justify-content: space-between; }
         .ai-content { flex: 1; overflow-y: auto; padding: 15px; background: #f9f9f9; font-size: 0.9rem; line-height: 1.6; }
 
+        /* --- تعديلات الهاتف --- */
         @media (max-width: 600px) {
             .royal-header { flex-direction: column; gap: 10px; }
             .info-grid { grid-template-columns: 1fr; }
             #ai-box { width: 90%; left: 5%; bottom: 20px; height: 70%; }
         }
 
+        /* الطباعة الرسمية */
         @media print {
             .no-print, #ai-btn, #ai-box, .royal-header { display: none !important; }
             body { background: white; }
@@ -107,8 +126,11 @@
 <div class="container">
     <section id="searchView" class="no-print">
         <div class="search-box">
-            <h2 style="color: var(--royal-green);">استعلام نتائج الطلاب</h2>
-            <input type="text" id="nameInput" placeholder="أدخل اسم الطالب ثلاثي أو رباعي">
+            <h2 style="color: var(--royal-green);">استعلام النتائج بالاسم</h2>
+            <div style="position: relative;">
+                <input type="text" id="nameInput" placeholder="أدخل اسم الطالب الثلاثي أو الرباعي" autocomplete="off">
+                <div id="suggestions"></div>
+            </div>
             <button class="btn-royal" onclick="searchStudent()">عرض النتيجة</button>
         </div>
     </section>
@@ -123,9 +145,8 @@
         <div class="student-card">
             <h2 id="resName"></h2>
             <div class="info-grid">
-                <div>الجنسية: <b id="resNat"></b></div>
                 <div>حالة القيد: <b id="resStatus"></b></div>
-                <div>المستوى العام: <b id="resAvg" style="font-size: 1.1rem; color: #d35400;">تحليل المستويات...</b></div>
+                <div>المستوى العام: <b id="resLevel" style="font-size: 1.1rem; color: #d35400;"></b></div>
             </div>
         </div>
 
@@ -164,70 +185,85 @@
 
 <script>
     let currentData = null;
+    let allStudents = [];
 
-    // دالة تنظيف النص للبحث الذكي
-    function normalize(text) {
-        if (!text) return "";
-        return text.toString()
-            .replace(/[أإآ]/g, 'ا')
-            .replace(/ة/g, 'ه')
-            .replace(/ى/g, 'ي')
-            .trim();
+    // تحميل البيانات عند فتح الصفحة
+    window.onload = async () => {
+        try {
+            const res = await fetch("students_final_results.json?v=" + Date.now());
+            allStudents = await res.json();
+        } catch(e) {
+            console.error("فشل تحميل بيانات الطلاب:", e);
+        }
+    };
+
+    // نظام الاقتراحات أثناء الكتابة
+    const nameInput = document.getElementById('nameInput');
+    const suggestionsBox = document.getElementById('suggestions');
+
+    nameInput.oninput = () => {
+        const val = nameInput.value.trim();
+        if(val.length < 3) {
+            suggestionsBox.style.display = 'none';
+            return;
+        }
+        const matches = allStudents.filter(s => s.name.includes(val)).slice(0, 5);
+        if(matches.length > 0) {
+            suggestionsBox.innerHTML = matches.map(m => `<div class="suggestion-item" onclick="selectName('${m.name}')">${m.name}</div>`).join('');
+            suggestionsBox.style.display = 'block';
+        } else {
+            suggestionsBox.style.display = 'none';
+        }
+    };
+
+    function selectName(name) {
+        nameInput.value = name;
+        suggestionsBox.style.display = 'none';
+        searchStudent();
     }
 
     async function searchStudent() {
-        const userInput = document.getElementById('nameInput').value.trim();
-        if(userInput.length < 3) {
-            alert("الرجاء إدخال اسم الطالب بشكل دقيق.");
-            return;
-        }
-
-        const normalizedInput = normalize(userInput);
+        const name = nameInput.value.trim();
+        if(!name) return;
         
-        // استخدام اسم الملف الجديد الذي ينتجه كود الـ Upload
-        const files = ["students_results.json"]; 
-        let found = null;
-
-        for(let f of files) {
-            try {
-                const res = await fetch(f + "?v=" + Date.now());
-                const data = await res.json();
-                // البحث داخل حقل searchName الذي أنشأناه
-                found = data.find(s => s.searchName.includes(normalizedInput));
-                if(found) break;
-            } catch(e) {
-                console.error("خطأ في تحميل ملف البيانات:", e);
-            }
-        }
-
+        const found = allStudents.find(s => s.name === name || s.name.includes(name));
+        
         if(found) {
             currentData = found;
             document.getElementById('resName').innerText = found.name;
-            document.getElementById('resNat').innerText = found.nationality;
             document.getElementById('resStatus').innerText = found.status;
-
-            let rows = '';
-            const grades = found.grades;
             
-            // عرض المواد من هيكل JSON الجديد
-            for (let subject in grades) {
-                const score = grades[subject].score || "---";
-                const level = grades[subject].level || "---";
+            let rows = '', totalScore = 0, count = 0;
+            const subjects = Object.keys(found.results);
+            
+            subjects.forEach(sub => {
+                const score = found.results[sub].score;
+                const level = found.results[sub].level;
                 
-                rows += `<tr>
-                            <td style="text-align:right;">${subject}</td>
-                            <td>${score}</td>
-                            <td><b>${level}</b></td>
-                         </tr>`;
-            }
+                if(typeof score === 'number') {
+                    totalScore += score;
+                    count++;
+                }
+                
+                rows += `<tr><td style="text-align:right;">${sub}</td><td>${score || '-'}</td><td>${level || '-'}</td></tr>`;
+            });
+            
+            // حساب المستوى العام بناءً على المتوسط
+            const avg = count > 0 ? (totalScore / count) : 0;
+            let generalLevel = 'د';
+            if(avg >= 90) generalLevel = 'أ';
+            else if(avg >= 80) generalLevel = 'ب';
+            else if(avg >= 65) generalLevel = 'ج';
+            else if(avg >= 50) generalLevel = 'د';
+            else generalLevel = 'هـ';
 
+            document.getElementById('resLevel').innerText = generalLevel + " (" + avg.toFixed(1) + "%)";
             document.getElementById('gradesBody').innerHTML = rows;
             document.getElementById('searchView').style.display = 'none';
             document.getElementById('resultView').style.display = 'block';
             document.getElementById('ai-btn').style.display = 'flex';
-            
         } else { 
-            alert("عذراً، لم يتم العثور على نتيجة بهذا الاسم. تأكد من كتابة الاسم صحيحاً."); 
+            alert("الاسم غير موجود، يرجى التأكد من كتابة الاسم بشكل صحيح."); 
         }
     }
 
@@ -239,8 +275,8 @@
 
     async function runAI() {
         const chat = document.getElementById('aiChat');
-        chat.innerHTML = 'جاري تحليل نتيجتك كمعلم عماني...';
-        const p = `أنت معلم في سلطنة عمان، حلل درجات الطالب ${currentData.name} من مدرسة صلالة الشرقية. هذه هي درجاته ومستوياته: ${JSON.stringify(currentData.grades)}. قدم له نصيحة تربوية بناءً على مستوياته (أ، ب، ج، د).`;
+        chat.innerHTML = 'جاري تحليل نتيجتك...';
+        const p = `أنت معلم عماني، حلل درجات الطالب ${currentData.name}: ${JSON.stringify(currentData.results)}.`;
         const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(p)}`);
         const text = await res.text();
         chat.innerHTML = text.replace(/\n/g, '<br>');
@@ -252,7 +288,7 @@
         if(!inp.value) return;
         chat.innerHTML += `<div style="color:var(--royal-green); margin-top:10px;"><b>أنت:</b> ${inp.value}</div>`;
         const q = inp.value; inp.value = '';
-        const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent("بصفتك معلم عماني خبير، أجب باختصار: " + q)}`);
+        const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent("أجب كمعلم عماني: " + q)}`);
         const text = await res.text();
         chat.innerHTML += `<div style="margin-top:5px;"><b>المعلم:</b> ${text.replace(/\n/g, '<br>')}</div>`;
         chat.scrollTop = chat.scrollHeight;
