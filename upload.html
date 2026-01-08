@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>رفع درجات الطلاب</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<style>
+    body {
+        font-family: "Tajawal", Arial;
+        padding: 20px;
+        direction: rtl;
+        text-align: right;
+        background: #f2f4f7;
+    }
+
+    .header-box {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .header-box img {
+        width: 110px;
+        margin-bottom: 10px;
+    }
+
+    .header-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #003366;
+    }
+
+    .header-sub {
+        font-size: 14px;
+        color: #444;
+        margin-top: 5px;
+    }
+
+    .box {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        max-width: 450px;
+        margin: auto;
+        box-shadow: 0 0 12px #ccc;
+        text-align: center;
+    }
+
+    input[type="file"] {
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    button {
+        padding: 12px 25px;
+        background: #0057b8;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    button:hover {
+        background: #003f87;
+    }
+
+    #status {
+        margin-top: 15px;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .success { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
+    .error { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; }
+</style>
+</head>
+
+<body>
+
+<div class="header-box">
+    <img src="logo.png" alt="شعار المدرسة" onerror="this.src='https://via.placeholder.com/110?text=Logo'">
+    <div class="header-title">مدرسة صلالة الشرقية للتعليم الأساسي (5–9)</div>
+    <div class="header-sub">قسم تقنية المعلومات – نظام رفع درجات الطلاب</div>
+</div>
+
+<div class="box">
+    <h3 style="margin-bottom: 20px;">رفع درجات الطلاب (Excel → JSON)</h3>
+
+    <input type="file" id="excelFile" accept=".xlsx, .xls">
+    
+    <button onclick="convertExcel()">تحويل وتحميل ملف JSON</button>
+
+    <div id="status"></div>
+</div>
+
+<script>
+    function convertExcel() {
+        const fileInput = document.getElementById('excelFile');
+        const status = document.getElementById('status');
+        
+        if (!fileInput.files[0]) {
+            status.innerHTML = "الرجاء اختيار ملف إكسل أولاً!";
+            status.className = "error";
+            return;
+        }
+
+        status.innerHTML = "جاري المعالجة... انتظر قليلاً";
+        status.className = "";
+
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                
+                // تحويل البيانات لصفوف مصفوفة
+                const rows = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+                
+                // البحث عن صف العناوين الذي يحتوي على كلمة "الاسم" أو "اسم الطالب"
+                let headerIndex = rows.findIndex(row => row.some(cell => String(cell).includes("اسم الطالب") || String(cell).includes("الاسم")));
+                
+                if (headerIndex === -1) {
+                    throw new Error("لم يتم العثور على عمود (اسم الطالب). تأكد من تنسيق الملف.");
+                }
+
+                const headers = rows[headerIndex];
+                const students = [];
+
+                // استخراج البيانات ابتداءً من الصف بعد العنوان
+                for (let i = headerIndex + 1; i < rows.length; i++) {
+                    const row = rows[i];
+                    const name = row[headers.findIndex(h => String(h).includes("اسم الطالب") || String(h).includes("الاسم"))];
+
+                    if (name && String(name).trim().length > 5) {
+                        let grades = {};
+                        // قائمة بالمواد التي سنبحث عنها
+                        const subjects = ["التربية الإسلامية", "اللغة العربية", "اللغة الإنجليزية", "الرياضيات", "العلوم", "الدراسات الاجتماعية", "المهارات الحياتية"];
+                        
+                        subjects.forEach(sub => {
+                            let subIdx = headers.findIndex(h => String(h).includes(sub));
+                            if (subIdx !== -1) {
+                                grades[sub] = {
+                                    "score": row[subIdx] || "---",
+                                    "level": row[subIdx + 1] || "---"
+                                };
+                            }
+                        });
+
+                        students.push({
+                            "name": String(name).trim(),
+                            "status": "مستجد",
+                            "grades": grades
+                        });
+                    }
+                }
+
+                if (students.length === 0) {
+                    throw new Error("لم يتم العثور على أي بيانات طلاب في الملف.");
+                }
+
+                // تحميل الملف الناتج
+                downloadJSON(students);
+                
+                status.innerHTML = `تم التحويل بنجاح! تم تجهيز بيانات ${students.length} طالب. افحص مجلد التنزيلات.`;
+                status.className = "success";
+
+            } catch (err) {
+                status.innerHTML = "خطأ: " + err.message;
+                status.className = "error";
+                console.error(err);
+            }
+        };
+
+        reader.onerror = function() {
+            status.innerHTML = "فشل قراءة الملف من الجهاز.";
+            status.className = "error";
+        };
+
+        reader.readAsArrayBuffer(file);
+    }
+
+    function downloadJSON(data) {
+        const jsonString = JSON.stringify(data, null, 4);
+        const blob = new Blob([jsonString], {type: "application/json"});
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "students_final_results.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+</script>
+
+</body>
+</html>
