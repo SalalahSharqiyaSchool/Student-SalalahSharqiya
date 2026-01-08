@@ -2,132 +2,101 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>محول ودمج النتائج الذكي</title>
+    <title>محول نتائج مدرسة صلالة الشرقية</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background: #f2f4f7; padding: 40px; text-align: center; }
-        .box { background: white; padding: 30px; border-radius: 15px; max-width: 600px; margin: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .file-input { margin: 20px 0; border: 2px dashed #0057b8; padding: 20px; border-radius: 10px; cursor: pointer; }
-        button { background: #0057b8; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; }
-        #log { margin-top: 20px; text-align: right; font-size: 13px; color: #444; max-height: 200px; overflow-y: auto; background: #eee; padding: 10px; border-radius: 5px; }
+        body { font-family: 'Tajawal', sans-serif; background: #f4f7f6; padding: 30px; text-align: center; }
+        .container { background: white; padding: 30px; border-radius: 15px; max-width: 600px; margin: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 8px solid #0057b8; }
+        .file-box { border: 2px dashed #0057b8; padding: 25px; margin: 20px 0; border-radius: 10px; cursor: pointer; }
+        button { background: #0057b8; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; width: 100%; font-weight: bold; }
+        #status { margin-top: 20px; font-weight: bold; padding: 10px; border-radius: 5px; }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h2>دمج وتحويل الصفوف (5-9)</h2>
-    <p>اختر جميع ملفات الإكسل (خامس، سادس، سابع...) معاً</p>
+<div class="container">
+    <h2>محول الدرجات الشامل (5-9)</h2>
+    <p>اختر ملفات الإكسل لجميع الصفوف معاً</p>
     
-    <div class="file-input">
-        <input type="file" id="excelFiles" accept=".xlsx, .xls" multiple>
+    <div class="file-box" onclick="document.getElementById('excelFiles').click()">
+        <span id="fileInfo">اضغط لاختيار الملفات</span>
+        <input type="file" id="excelFiles" accept=".xlsx, .xls" multiple style="display:none" onchange="updateInfo()">
     </div>
     
-    <button onclick="processAllFiles()">ابدأ الدمج والتحويل الآن</button>
-
-    <div id="status" style="margin-top:15px; font-weight:bold;"></div>
-    <div id="log"></div>
+    <button onclick="startConversion()">تحويل ودمج كافة الصفوف</button>
+    <div id="status"></div>
 </div>
 
 <script>
-    // خرائط المواقع التي كانت في كود البايثون
-    const mappingG5 = {
-        "التربية الإسلامية": [48, 46], "اللغة العربية": [43, 41], "اللغة الإنجليزية": [38, 36],
-        "الرياضيات": [33, 30], "العلوم": [28, 25], "الدراسات الاجتماعية": [23, 21],
-        "تقنية المعلومات": [19, 16], "التربية البدنية": [13, 11], "الفنون البصرية": [9, 6],
-        "الفنون الموسيقية": [3, 1]
-    };
+function updateInfo() {
+    const files = document.getElementById('excelFiles').files;
+    document.getElementById('fileInfo').innerText = `تم اختيار ${files.length} ملفات`;
+}
 
-    const mappingG6Plus = {
-        "التربية الإسلامية": [79, 77], "اللغة العربية": [74, 72], "اللغة الإنجليزية": [69, 67],
-        "الرياضيات": [64, 61], "العلوم": [59, 56], "الدراسات الاجتماعية": [54, 52],
-        "تقنية المعلومات": [50, 47], "التربية البدنية": [44, 42], "الفنون البصرية": [40, 37],
-        "الفنون الموسيقية": [34, 32]
-    };
+async function startConversion() {
+    const fileInput = document.getElementById('excelFiles');
+    const status = document.getElementById('status');
+    if (fileInput.files.length === 0) { alert("يرجى اختيار الملفات"); return; }
 
-    let allStudentsData = [];
+    status.innerHTML = "جاري المعالجة الذكية... انتظر ثواني";
+    let allData = [];
 
-    async function processAllFiles() {
-        const fileInput = document.getElementById('excelFiles');
-        const log = document.getElementById('log');
-        const status = document.getElementById('status');
-        
-        if (fileInput.files.length === 0) {
-            alert("يرجى اختيار ملف واحد على الأقل");
-            return;
-        }
+    for (let file of fileInput.files) {
+        const data = await file.arrayBuffer();
+        const workbook = XLSX.read(data, {type: 'array'});
+        const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1});
 
-        allStudentsData = [];
-        log.innerHTML = "بدء المعالجة...<br>";
-        
-        for (let file of fileInput.files) {
-            log.innerHTML += `جاري قراءة: ${file.name}...<br>`;
-            
-            // استخراج رقم الصف من اسم الملف
-            const gradeMatch = file.name.match(/(\d+)/);
-            const gradeNum = gradeMatch ? parseInt(gradeMatch[1]) : 0;
-            const mapping = gradeNum >= 6 ? mappingG6Plus : mappingG5;
-            const nameCols = gradeNum >= 6 ? [84, 83, 85] : [53, 52, 54];
+        // 1. البحث عن صف العناوين (Header)
+        let hIdx = rows.findIndex(r => r.some(c => String(c).includes("اسم الطالب")));
+        if (hIdx === -1) continue;
 
-            await processSingleFile(file, mapping, nameCols, gradeNum);
-        }
+        const headers = rows[hIdx];
+        const nameCol = headers.findIndex(h => String(h).includes("اسم الطالب"));
+        const gradeMatch = file.name.match(/(\d+)/);
+        const gradeTitle = gradeMatch ? "الصف " + gradeMatch[1] : "غير محدد";
 
-        downloadFinalJSON();
-        status.innerHTML = `<span style="color:green;">تم دمج ${allStudentsData.length} طالب بنجاح! افحص التنزيلات.</span>`;
-    }
-
-    function processSingleFile(file, mapping, nameCols, gradeNum) {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, {type: 'array'});
-                const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1});
-
-                rows.forEach(row => {
-                    const rowStr = row.map(c => String(c)).join(" ");
-                    if (rowStr.includes("مستجد") || rowStr.includes("منقول")) {
-                        let nameCandidate = "";
-                        for (let col of nameCols) {
-                            let val = String(row[col] || "").trim();
-                            if (val.length > 5 && isNaN(val)) {
-                                nameCandidate = val;
-                                break;
-                            }
-                        }
-
-                        if (nameCandidate) {
-                            let results = {};
-                            for (let [sub, cols] of Object.entries(mapping)) {
-                                results[sub] = {
-                                    score: row[cols[0]] || "",
-                                    level: row[cols[1]] || ""
-                                };
-                            }
-                            allStudentsData.push({
-                                name: nameCandidate,
-                                status: rowStr.includes("منقول") ? "منقول" : "مستجد",
-                                grade: "الصف " + gradeNum,
-                                results: results
-                            });
-                        }
-                    }
-                });
-                resolve();
-            };
-            reader.readAsArrayBuffer(file);
+        // 2. تحديد أماكن المواد ديناميكياً
+        const subjects = ["التربية الإسلامية", "اللغة العربية", "اللغة الإنجليزية", "الرياضيات", "العلوم", "الدراسات الاجتماعية", "تقنية المعلومات", "المهارات الحياتية"];
+        let subMap = {};
+        subjects.forEach(sub => {
+            let col = headers.findIndex(h => String(h).includes(sub));
+            if (col !== -1) subMap[sub] = col;
         });
+
+        // 3. قراءة الطلاب
+        for (let i = hIdx + 1; i < rows.length; i++) {
+            const row = rows[i];
+            const name = String(row[nameCol] || "").trim();
+            const rowStr = row.join(" ");
+
+            if (name.length > 8 && (rowStr.includes("مستجد") || rowStr.includes("منقول"))) {
+                let results = {};
+                for (let [sub, col] of Object.entries(subMap)) {
+                    // نأخذ الدرجة، والمستوى نبحث عنه في الخلايا المجاورة (قبل أو بعد)
+                    let score = row[col] || "---";
+                    let level = "---";
+                    // في البوابة، المستوى غالباً يكون حرفاً واحداً (أ، ب، ج) بجانب الدرجة
+                    [col-2, col-1, col+1, col+2].forEach(nearCol => {
+                        let val = String(row[nearCol] || "").trim();
+                        if (val.length === 1 && /[أ-ي]/.test(val)) level = val;
+                    });
+
+                    results[sub] = { score: score, level: level };
+                }
+                allData.push({ name: name, grade: gradeTitle, status: rowStr.includes("منقول") ? "منقول" : "مستجد", results: results });
+            }
+        }
     }
 
-    function downloadFinalJSON() {
-        const blob = new Blob([JSON.stringify(allStudentsData, null, 4)], {type: "application/json"});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = "students_final_results.json";
-        a.click();
-    }
+    // تحميل الملف
+    const blob = new Blob([JSON.stringify(allData, null, 4)], {type: "application/json"});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = "students_final_results.json";
+    a.click();
+    status.innerHTML = `<span style="color:green;">نجح الدمج! تم استخراج ${allData.length} طالب من كافة الصفوف.</span>`;
+}
 </script>
-
 </body>
 </html>
