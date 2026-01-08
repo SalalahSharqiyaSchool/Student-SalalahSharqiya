@@ -1,96 +1,111 @@
 import pandas as pd
 import json
 import os
+import re
+import glob
 
-def convert_excel_to_json(file_path, output_path):
-    # قراءة ملف الإكسل (دعم .xls و .xlsx)
-    df = pd.read_excel(file_path, header=None)
+def convert_all_excel_to_single_json(input_folder, output_file):
+    """
+    يبحث عن كافة ملفات الإكسل في المجلد ويحولها إلى ملف JSON واحد مدمج
+    """
+    all_students_data = []
+    excluded_keywords = ["عماني", "ذكر", "أنثى", "الجنسية", "الاسم", "مستجد", "منقول", "الجنس"]
     
-    # تحويل كافة الخلايا إلى نصوص لتسهيل البحث عن الكلمات المفتاحية
-    df_clean = df.astype(str).apply(lambda x: x.str.strip())
+    # تعريف المواد ومواقعها (نفس التنسيق المعتمد)
+    subjects_mapping = {
+        "التربية الإسلامية": (48, 46),
+        "اللغة العربية": (43, 41),
+        "اللغة الإنجليزية": (38, 36),
+        "الرياضيات": (33, 30),
+        "العلوم": (28, 25),
+        "الدراسات الاجتماعية": (23, 21),
+        "تقنية المعلومات": (19, 16),
+        "التربية البدنية": (13, 11),
+        "الفنون البصرية": (9, 6),
+        "الفنون الموسيقية": (3, 1)
+    }
 
-    students_data = []
+    # البحث عن كافة ملفات .xls و .xlsx في المجلد
+    excel_files = glob.glob(os.path.join(input_folder, "*.xls*"))
     
-    # 1. البحث التلقائي عن عمود "الاسم" وعمود "حالة القيد"
-    # سنبحث في أول 10 صفوف عن الصف الذي يحتوي على ترويسة الجدول
-    name_col = -1
-    status_col = -1
-    
-    for r in range(len(df_clean)):
-        row_list = df_clean.iloc[r].tolist()
-        for c, cell in enumerate(row_list):
-            if "اسم الطالب" in cell or "الاسم" == cell:
-                name_col = c
-            if "حالة القيد" in cell or "مستجد" in cell or "منقول" in cell:
-                status_col = c
-        if name_col != -1: break # وجدنا الترويسة
+    if not excel_files:
+        print("No Excel files found in the folder.")
+        return 0
 
-    # 2. تحديد أماكن المواد (بحث ديناميكي)
-    # سنقوم بمسح الصف الذي وجدنا فيه الاسم لنعرف أماكن المواد
-    subjects_mapping = {}
-    header_row = df_clean.iloc[r].tolist()
-    
-    potential_subjects = [
-        "التربية الإسلامية", "اللغة العربية", "اللغة الإنجليزية", 
-        "الرياضيات", "العلوم", "الدراسات الاجتماعية", 
-        "تقنية المعلومات", "التربية البدنية", "الفنون البصرية", 
-        "الفنون الموسيقية", "المهارات الحياتية"
-    ]
+    print(f"Found {len(excel_files)} Excel files. Starting conversion...")
 
-    for c, cell in enumerate(header_row):
-        for sub in potential_subjects:
-            if sub in cell:
-                # عادة الدرجة هي نفس العمود أو بجانبه والمستوى بجانبه
-                # في نظام عمان: العمود الأول للمادة هو الدرجة، والثاني هو المستوى
-                subjects_mapping[sub] = (c, c-2 if c-2 >=0 else c-1) # تعديل تقريبي حسب شكل الكشف
-
-    # 3. استخراج البيانات
-    for index, row in df.iterrows():
-        # نتخطى صفوف الترويسة
-        if index <= r: continue
+    for file_path in excel_files:
+        file_name = os.path.basename(file_path)
+        print(f"--- Processing: {file_name} ---")
         
-        student_name = str(row[name_col]).strip() if name_col != -1 else ""
-        status = str(row[status_col]).strip() if status_col != -1 else "مستجد"
+        # استنتاج الصف من اسم الملف
+        grade_match = re.search(r'(\d+)', file_name)
+        grade_name = f"الصف {grade_match.group(1)}" if grade_match else "غير محدد"
         
-        # التأكد أن هذا الصف يحتوي على طالب فعلي وليس صفاً فارغاً
-        if len(student_name) < 8 or "اسم الطالب" in student_name or student_name == "nan":
-            continue
-
-        results = {}
-        for subject, cols in subjects_mapping.items():
-            # الدرجة غالباً تكون هي الرقم، والمستوى هو الحرف (أ، ب، ج)
-            val1 = row[cols[0]]
-            val2 = row[cols[1]]
+        try:
+            df = pd.read_excel(file_path, header=None)
+            file_students_count = 0
             
-            # تحديد أيهما الدرجة وأيهما المستوى
-            score = val1 if not str(val1).isalpha() else val2
-            level = val2 if str(val2).isalpha() else val1
+            for index, row in df.iterrows():
+                row_str_list = [str(cell).strip() for cell in row.tolist()]
+                
+                if "منقول" in row_str_list or "مستجد" in row_str_list:
+                    status = "منقول" if "منقول" in row_str_list else "مستجد"
+                    
+                    # استخراج الاسم (البحث في الأعمدة المحتملة)
+                    name_candidate = ""
+                    for col_idx in [53, 52, 54]:
+                        if col_idx < len(row):
+                            val = str(row[col_idx]).strip()
+                            if len(val) > 5 and not val.isdigit() and val not in excluded_keywords:
+                                name_candidate = val
+                                break
+                    
+                    if name_candidate:
+                        results = {}
+                        for subject, (score_col, level_col) in subjects_mapping.items():
+                            if score_col < len(row) and level_col < len(row):
+                                score = row[score_col]
+                                level = row[level_col]
+                                try:
+                                    if pd.notnull(score):
+                                        s_str = str(score).replace(' ', '')
+                                        if s_str.replace('.','',1).isdigit():
+                                            score_val = float(s_str)
+                                            if score_val.is_integer(): score_val = int(score_val)
+                                        else: score_val = s_str
+                                    else: score_val = ""
+                                except: score_val = str(score) if pd.notnull(score) else ""
+                                    
+                                level_val = str(level).strip() if pd.notnull(level) else ""
+                                results[subject] = {"score": score_val, "level": level_val}
+                        
+                        all_students_data.append({
+                            "name": name_candidate,
+                            "status": status,
+                            "grade": grade_name,
+                            "results": results
+                        })
+                        file_students_count += 1
+            
+            print(f"Done: {file_students_count} students extracted from {grade_name}")
+            
+        except Exception as e:
+            print(f"Error processing {file_name}: {e}")
 
-            results[subject] = {
-                "score": str(score) if pd.notnull(score) else "---",
-                "level": str(level) if pd.notnull(level) else "---"
-            }
-
-        students_data.append({
-            "name": student_name,
-            "searchName": student_name.replace("أ","ا").replace("إ","ا").replace("ة","ه"), # للبحث السهل
-            "status": status,
-            "grades": results
-        })
-
-    # حفظ الملف
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(students_data, f, ensure_ascii=False, indent=4)
+    # حفظ كافة البيانات في ملف واحد
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(all_students_data, f, ensure_ascii=False, indent=4)
     
-    return len(students_data)
+    return len(all_students_data)
 
 if __name__ == "__main__":
-    # قم بتغيير المسار حسب الملف الذي ترفعه (سادس، سابع، الخ)
-    input_file = "/home/ubuntu/upload/report.xls" 
-    output_file = "/home/ubuntu/students_final_results.json"
+    # الكود سيبحث في المجلد الحالي الذي يتواجد فيه
+    current_directory = os.getcwd()
+    output_json = "students_final_results.json"
     
-    try:
-        count = convert_excel_to_json(input_file, output_file)
-        print(f"تم بنجاح معالجة {count} طالب.")
-    except Exception as e:
-        print(f"خطأ: {e}")
+    total = convert_all_excel_to_single_json(current_directory, output_json)
+    print(f"\n========================================")
+    print(f"Success! Total students merged: {total}")
+    print(f"Output file: {output_json}")
+    print(f"========================================")
