@@ -2,40 +2,52 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>محول نتائج مدرسة صلالة الشرقية - منفرد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محول نتائج مدرسة صلالة الشرقية - ذكي</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background: #f4f7f6; padding: 30px; text-align: center; }
-        .container { background: white; padding: 30px; border-radius: 15px; max-width: 600px; margin: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 8px solid #0057b8; }
-        .file-box { border: 2px dashed #0057b8; padding: 25px; margin: 20px 0; border-radius: 10px; cursor: pointer; background: #fafafa; }
-        .file-box:hover { background: #f0f7ff; }
-        button { background: #0057b8; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; width: 100%; font-weight: bold; }
-        #status { margin-top: 20px; font-weight: bold; padding: 10px; border-radius: 5px; white-space: pre-wrap; }
-        .note { font-size: 0.85rem; color: #666; margin-top: 10px; }
+        body { font-family: 'Tajawal', sans-serif; background: #f4f7f6; padding: 20px; text-align: center; color: #333; }
+        .container { background: white; padding: 30px; border-radius: 15px; max-width: 650px; margin: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 8px solid #0057b8; }
+        .file-box { border: 2px dashed #0057b8; padding: 30px; margin: 20px 0; border-radius: 10px; cursor: pointer; background: #fafafa; transition: 0.3s; }
+        .file-box:hover { background: #f0f7ff; border-color: #c5a059; }
+        button { background: #0057b8; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; width: 100%; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #0a3d34; }
+        #status { margin-top: 20px; font-weight: bold; padding: 15px; border-radius: 8px; white-space: pre-wrap; line-height: 1.6; }
+        .instructions { text-align: right; background: #fffde7; padding: 15px; border-radius: 8px; margin-top: 20px; font-size: 0.9rem; border-right: 5px solid #fbc02d; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>محول الدرجات (ملف واحد لكل صف)</h2>
-    <p>قم برفع ملف الصف الدراسي لتحويله إلى JSON</p>
+    <h2 style="color: #0057b8;">محول النتائج الذكي (ملف منفرد)</h2>
+    <p>استخدم هذا المحول لاستخراج بيانات كل صف على حدة بدقة عالية</p>
     
     <div class="file-box" onclick="document.getElementById('excelFile').click()">
-        <span id="fileInfo">اضغط هنا لاختيار ملف الإكسل</span>
+        <span id="fileInfo">📁 اضغط هنا لاختيار ملف الإكسل (Excel)</span>
         <input type="file" id="excelFile" accept=".xlsx, .xls" style="display:none" onchange="updateInfo()">
     </div>
     
-    <button id="convertBtn" onclick="startSingleConversion()">تحويل وحفظ الملف الحالي</button>
+    <button id="convertBtn" onclick="startSingleConversion()">تحويل الملف وحفظه بصيغة JSON</button>
+    
     <div id="status"></div>
-    <p class="note">سيتم حفظ الملف باسم يحتوي على رقم الصف تلقائياً</p>
+
+    <div class="instructions">
+        <b>طريقة الاستخدام:</b>
+        <ul>
+            <li>اختر ملف الإكسل الخاص بصف واحد (مثلاً الصف السادس).</li>
+            <li>اضغط تحويل، سيتم تحميل ملف اسمه <code>results_grade_6.json</code>.</li>
+            <li>كرر العملية لبقية الصفوف ثم ادمجهم يدوياً وارفعهم لـ GitHub.</li>
+        </ul>
+    </div>
 </div>
 
 <script>
+// تحديث اسم الملف المختار في الواجهة
 function updateInfo() {
     const file = document.getElementById('excelFile').files[0];
     if(file) {
-        document.getElementById('fileInfo').innerText = `الملف المختار: ${file.name}`;
+        document.getElementById('fileInfo').innerHTML = `<b>الملف المختار:</b><br>${file.name}`;
     }
 }
 
@@ -49,76 +61,99 @@ async function startSingleConversion() {
     }
 
     const file = fileInput.files[0];
-    status.innerHTML = "جاري المعالجة...";
-    status.style.color = "black";
+    status.innerHTML = "⏳ جاري البحث عن صف العناوين والطلاب...";
+    status.style.color = "#333";
+    status.style.background = "#eee";
 
     try {
         const data = await file.arrayBuffer();
         const workbook = XLSX.read(data, {type: 'array'});
-        const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1});
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(sheet, {header: 1});
 
-        // 1. البحث عن صف العناوين
-        let hIdx = rows.findIndex(r => r.some(c => String(c).includes("اسم الطالب")));
+        // 1. البحث عن صف العناوين وعمود الأسماء (بشكل مرن)
+        let hIdx = -1;
+        let nameCol = -1;
+
+        for (let i = 0; i < Math.min(rows.length, 20); i++) { // فحص أول 20 صف فقط للسرعة
+            const row = rows[i];
+            if (!row) continue;
+            for (let j = 0; j < row.length; j++) {
+                const cellValue = String(row[j] || "").trim();
+                // التحقق من وجود كلمة اسم وطالب أو الاسم فقط
+                if ((cellValue.includes("اسم") && cellValue.includes("طالب")) || cellValue === "الاسم") {
+                    hIdx = i;
+                    nameCol = j;
+                    break;
+                }
+            }
+            if (hIdx !== -1) break;
+        }
+
         if (hIdx === -1) {
-            status.innerHTML = "❌ خطأ: لم يتم العثور على عمود 'اسم الطالب' داخل الملف.";
-            status.style.color = "red";
+            status.innerHTML = "❌ خطأ: لم يتم العثور على عمود الأسماء.\nتأكد أن الملف يحتوي على خلية مكتوب فيها 'اسم الطالب'.";
+            status.style.color = "white";
+            status.style.background = "#d32f2f";
             return;
         }
 
         const headers = rows[hIdx];
-        const nameCol = headers.findIndex(h => String(h).includes("اسم الطالب"));
-        
-        // استخراج رقم الصف من اسم الملف
         const gradeMatch = file.name.match(/(\d+)/);
-        const gradeNum = gradeMatch ? gradeMatch[1] : "Unknown";
+        const gradeNum = gradeMatch ? gradeMatch[1] : "X";
         const gradeTitle = "الصف " + gradeNum;
 
-        // 2. المواد (أضفنا المهارات الحياتية والموسيقية لدعم التاسع)
+        // 2. قائمة المواد الممكنة للبحث عنها في الهيدر
         const possibleSubjects = [
             "التربية الإسلامية", "اللغة العربية", "اللغة الإنجليزية", 
             "الرياضيات", "العلوم", "الدراسات الاجتماعية", 
-            "تقنية المعلومات", "المهارات الحياتية", "التربية البدنية", 
-            "الفنون البصرية", "المهارات الموسيقية", "الفنون الموسيقية"
+            "المهارات الحياتية", "تقنية المعلومات","الاحياء", "الفيزياء","الكيمياء","الرياضة المدرسية", 
+            "الفنون التشكيلية", "المهارات الموسيقية", 
         ];
 
         let subMap = {};
         possibleSubjects.forEach(sub => {
-            let col = headers.findIndex(h => String(h).includes(sub));
+            let col = headers.findIndex(h => String(h || "").includes(sub));
             if (col !== -1) subMap[sub] = col;
         });
 
-        // 3. قراءة البيانات
+        // 3. استخراج بيانات الطلاب
         let resultsArray = [];
         for (let i = hIdx + 1; i < rows.length; i++) {
             const row = rows[i];
+            if (!row) continue;
             const name = String(row[nameCol] || "").trim();
-            const rowStr = row.join(" ");
-
-            // التأكد أن الصف يخص طالب (الاسم طويل ويحتوي على مستجد/منقول أو مقيد)
-            if (name.length > 8 && (rowStr.includes("مستجد") || rowStr.includes("منقول") || rowStr.includes("مقيد"))) {
+            
+            // شرط التمييز: الاسم يجب أن يكون طويلاً (أكثر من 10 حروف) 
+            // ويتكون من 3 كلمات على الأقل لتجنب العناوين
+            const wordCount = name.split(/\s+/).filter(w => w.length > 0).length;
+            
+            if (name.length > 10 && wordCount >= 3) {
                 let results = {};
                 for (let [sub, col] of Object.entries(subMap)) {
                     let score = row[col] || "---";
                     let level = "---";
                     
-                    // البحث عن المستوى في الخلايا المحيطة بالدرجة
-                    [col-1, col+1, col-2, col+2].forEach(nearCol => {
-                        let val = String(row[nearCol] || "").trim();
-                        if (val.length === 1 && /[أ-ي]/.test(val)) level = val;
-                    });
-
+                    // البحث عن المستوى (أ، ب، ج، د) في الخلايا المجاورة للدرجة
+                    for (let offset of [-1, 1, -2, 2]) {
+                        let nearVal = String(row[col + offset] || "").trim();
+                        if (nearVal.length === 1 && /[أ-ي]/.test(nearVal)) {
+                            level = nearVal;
+                            break;
+                        }
+                    }
                     results[sub] = { score: score, level: level };
                 }
+                
                 resultsArray.push({
                     name: name,
                     grade: gradeTitle,
-                    status: rowStr.includes("منقول") ? "منقول" : "مستجد",
+                    status: "مقيد",
                     results: results
                 });
             }
         }
 
-        // 4. التحميل
+        // 4. توليد وتحميل الملف
         if(resultsArray.length > 0) {
             const blob = new Blob([JSON.stringify(resultsArray, null, 4)], {type: "application/json"});
             const url = URL.createObjectURL(blob);
@@ -126,16 +161,20 @@ async function startSingleConversion() {
             a.href = url;
             a.download = `results_grade_${gradeNum}.json`;
             a.click();
-            status.innerHTML = `✅ تم بنجاح!\nاستخراج ${resultsArray.length} طالب من ${gradeTitle}.\nتم تحميل الملف باسم: results_grade_${gradeNum}.json`;
-            status.style.color = "green";
+            
+            status.innerHTML = `✅ تم بنجاح!\nتم استخراج ${resultsArray.length} طالب من ${gradeTitle}.\nافحص مجلد التحميلات (Downloads).`;
+            status.style.color = "white";
+            status.style.background = "#2e7d32";
         } else {
-            status.innerHTML = "⚠️ لم يتم العثور على بيانات طلاب تتطابق مع الشروط.";
-            status.style.color = "orange";
+            status.innerHTML = "⚠️ تعذر العثور على طلاب.\nتأكد أن الأسماء تبدأ بعد صف 'اسم الطالب' مباشرة.";
+            status.style.color = "black";
+            status.style.background = "#ffa000";
         }
 
     } catch (error) {
-        status.innerHTML = "❌ حدث خطأ أثناء المعالجة: " + error.message;
-        status.style.color = "red";
+        status.innerHTML = "❌ حدث خطأ فني أثناء قراءة الملف:\n" + error.message;
+        status.style.color = "white";
+        status.style.background = "#d32f2f";
     }
 }
 </script>
