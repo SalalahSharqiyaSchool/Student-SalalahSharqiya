@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>بوابة مدرسة صلالة الشرقية الرقمية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --royal-green: #0a3d34;
+            --royal-gold: #c5a059;
+            --bg-gold: #f4ece0;
+        }
+
+        body { 
+            font-family: 'Almarai', sans-serif; 
+            margin: 0; 
+            background-color: var(--bg-gold);
+            color: #333;
+        }
+
+        .royal-header { 
+            background: var(--royal-green);
+            padding: 15px 5%; 
+            border-bottom: 4px solid var(--royal-gold); 
+            display: flex; justify-content: space-between; align-items: center;
+            color: white;
+        }
+        .header-brand { display: flex; align-items: center; gap: 10px; }
+        .header-brand img { height: 50px; }
+        .header-brand h1 { margin: 0; font-size: 1.2rem; color: var(--royal-gold); }
+
+        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+
+        .search-box { 
+            background: white; padding: 30px; border-radius: 15px; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: center; 
+            border-top: 5px solid var(--royal-gold);
+        }
+        input[type="text"] { 
+            width: 100%; max-width: 400px; padding: 15px; border-radius: 10px; 
+            border: 2px solid #ddd; margin-bottom: 20px; text-align: center; font-size: 1.1rem;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus { border-color: var(--royal-green); outline: none; }
+        .btn-royal { 
+            background: var(--royal-green); color: var(--royal-gold); 
+            border: none; padding: 15px 40px; border-radius: 10px; 
+            font-weight: 800; cursor: pointer; width: 100%; max-width: 400px;
+            font-size: 1.1rem; transition: transform 0.2s;
+        }
+
+        #resultView { display: none; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .student-card {
+            background: white; border-radius: 15px; padding: 25px;
+            margin-bottom: 20px; border-right: 8px solid var(--royal-green);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .student-card h2 { margin: 0 0 10px 0; color: var(--royal-green); font-size: 1.5rem; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 1rem; }
+        .info-item b { color: var(--royal-green); }
+
+        .table-container { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--royal-green); color: var(--royal-gold); padding: 15px; font-size: 1rem; }
+        td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-size: 1.05rem; }
+        tr:nth-child(even) { background-color: #fcfcfc; }
+
+        #ai-btn { 
+            position: fixed; bottom: 25px; left: 25px; background: var(--royal-green); 
+            color: var(--royal-gold); width: 60px; height: 60px; border-radius: 50%; 
+            display: none; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1000;
+        }
+        #ai-box {
+            position: fixed; bottom: 95px; left: 20px; width: 350px; height: 450px;
+            background: white; border-radius: 15px; display: none; flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 1001; overflow: hidden; border: 1px solid #ddd;
+        }
+        .ai-head { background: var(--royal-green); color: white; padding: 15px; display: flex; justify-content: space-between; }
+        .ai-content { flex: 1; overflow-y: auto; padding: 15px; background: #f9f9f9; font-size: 0.95rem; line-height: 1.6; }
+
+        @media (max-width: 600px) {
+            .royal-header { flex-direction: column; gap: 10px; text-align: center; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+
+        @media print {
+            .no-print, #ai-btn, #ai-box, .royal-header { display: none !important; }
+            body { background: white; }
+            #resultView { display: block !important; }
+            .official-header { display: flex !important; justify-content: space-between; align-items: center; border-bottom: 3px double var(--royal-green); padding-bottom: 15px; margin-bottom: 25px; }
+            .student-card { border: 1px solid #ddd; box-shadow: none; }
+        }
+        .official-header { display: none; }
+    </style>
+</head>
+<body>
+
+<header class="royal-header no-print">
+    <div class="header-brand">
+        <img src="logo.png" onerror="this.src='https://raw.githubusercontent.com/Omanya/DigitalPortal/main/logo.png'">
+        <h1>مدرسة صلالة الشرقية (5-10)</h1>
+    </div>
+    <div style="font-size: 0.85rem; opacity: 0.9;">بوابة النتائج الرقمية الشاملة</div>
+</header>
+
+<div class="container">
+    <section id="searchView" class="no-print">
+        <div class="search-box">
+            <h2 style="color: var(--royal-green); margin-bottom: 20px;">استعلام نتائج الطلاب (5-9)</h2>
+            <p style="color: #666; margin-bottom: 20px;">أدخل اسم الطالب ثلاثياً للبحث عن النتيجة</p>
+            <input type="text" id="nameInput" placeholder="اكتب اسم الطالب هنا...">
+            <button class="btn-royal" onclick="searchStudent()">عرض كشف الدرجات</button>
+        </div>
+    </section>
+
+    <section id="resultView">
+        <div class="official-header">
+            <div style="text-align: right; font-size: 11pt;">سلطنة عُمان<br>وزارة التربية والتعليم<br>مدرسة صلالة الشرقية (5-10)</div>
+            <img src="logo.png" style="height: 70px;" onerror="this.src='https://raw.githubusercontent.com/Omanya/DigitalPortal/main/logo.png'">
+            <div style="text-align: left; font-size: 11pt;">تقرير أداء الطالب<br>الفصل الدراسي الأول<br>2025 - 2026 م</div>
+        </div>
+
+        <div class="student-card">
+            <h2 id="resName"></h2>
+            <div class="info-grid">
+                <div class="info-item">حالة القيد: <b id="resStatus"></b></div>
+                <div class="info-item">الصف الدراسي: <b id="resGrade" style="color: var(--royal-gold);"></b></div>
+                <div class="info-item">الجنسية: <b>عماني</b></div>
+                <div class="info-item" style="color: #d35400;">ملاحظة: <b>نسخة إلكترونية غير رسمية</b></div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align: right;">المادة الدراسية</th>
+                        <th>الدرجة</th>
+                        <th>المستوى</th>
+                    </tr>
+                </thead>
+                <tbody id="gradesBody"></tbody>
+            </table>
+        </div>
+
+        <div class="no-print" style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+            <button class="btn-royal" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة الشهادة (PDF)</button>
+            <span onclick="location.reload()" style="color: var(--royal-green); cursor: pointer; font-weight: bold; text-decoration: underline;">البحث عن طالب آخر</span>
+        </div>
+    </section>
+</div>
+
+<div id="ai-btn" onclick="toggleAI()"><i class="fa-solid fa-robot"></i></div>
+<div id="ai-box">
+    <div class="ai-head">
+        <span><i class="fa-solid fa-wand-magic-sparkles"></i> المستشار الذكي</span>
+        <i class="fa-solid fa-times" onclick="toggleAI()" style="cursor:pointer;"></i>
+    </div>
+    <div id="aiChat" class="ai-content"></div>
+</div>
+
+<script>
+    let currentData = null;
+
+    function normalize(text) {
+        if (!text) return "";
+        return text.toString()
+            .replace(/[أإآ]/g, 'ا')
+            .replace(/ة/g, 'ه')
+            .replace(/ى/g, 'ي')
+            .trim();
+    }
+
+    async function searchStudent() {
+        const userInput = document.getElementById('nameInput').value.trim();
+        if(userInput.length < 3) {
+            alert("الرجاء إدخال اسم الطالب بشكل واضح.");
+            return;
+        }
+
+        const normalizedInput = normalize(userInput);
+        const jsonFile = "students_final_results.json";
+
+        try {
+            const res = await fetch(jsonFile + "?v=" + Date.now());
+            if (!res.ok) throw new Error("ملف البيانات غير موجود");
+            
+            const data = await res.json();
+            
+            // البحث عن الطالب في الهيكل الجديد
+            const found = data.find(s => 
+                normalize(s.name).includes(normalizedInput)
+            );
+
+            if(found) {
+                renderStudent(found);
+            } else {
+                alert("عذراً، لم يتم العثور على طالب بهذا الاسم.");
+            }
+        } catch(e) {
+            alert("خطأ: تأكد من رفع ملف JSON بنجاح على GitHub.");
+        }
+    }
+
+    function renderStudent(student) {
+        currentData = student;
+        document.getElementById('resName').innerText = student.name;
+        document.getElementById('resStatus').innerText = student.status || "مستجد";
+        document.getElementById('resGrade').innerText = student.grade || "غير محدد";
+
+        let rows = '';
+        // الوصول للبيانات عبر حقل results الجديد
+        const marks = student.results;
+        
+        for (let subject in marks) {
+            const score = marks[subject].score || "---";
+            const level = marks[subject].level || "---";
+            
+            rows += `<tr>
+                        <td style="text-align:right; font-weight:bold;">${subject}</td>
+                        <td>${score}</td>
+                        <td style="font-weight:bold; color: var(--royal-green);">${level}</td>
+                    </tr>`;
+        }
+
+        document.getElementById('gradesBody').innerHTML = rows;
+        document.getElementById('searchView').style.display = 'none';
+        document.getElementById('resultView').style.display = 'block';
+        document.getElementById('ai-btn').style.display = 'flex';
+    }
+
+    function toggleAI() {
+        const box = document.getElementById('ai-box');
+        box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
+        if(box.style.display === 'flex' && !document.getElementById('aiChat').innerHTML) runAI();
+    }
+
+    async function runAI() {
+        const chat = document.getElementById('aiChat');
+        chat.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري تحليل مستواك...';
+        const prompt = `أنت معلم عماني، حلل نتائج الطالب ${currentData.name} في ${currentData.grade}: ${JSON.stringify(currentData.results)}. أعطه نصيحة قصيرة ومحفزة.`;
+        
+        try {
+            const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
+            const text = await res.text();
+            chat.innerHTML = `<div style="background:#eef5f4; padding:10px; border-radius:10px;">${text.replace(/\n/g, '<br>')}</div>`;
+        } catch(e) {
+            chat.innerHTML = "المستشار الذكي مشغول حالياً.";
+        }
+    }
+</script>
+
+</body>
+</html>
